@@ -24,7 +24,8 @@
 html,body{min-height:100%}
 body{font-family:var(--font);background:var(--k);color:var(--w);overflow-x:hidden;-webkit-user-select:none;user-select:none}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
-.app{max-width:480px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 18px calc(env(safe-area-inset-bottom) + 20px);position:relative;overflow-x:clip}
+button:disabled{cursor:default}
+.app{max-width:500px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 18px calc(env(safe-area-inset-bottom) + 20px);position:relative;overflow-x:clip}
 .screen{display:none;flex:1;flex-direction:column;position:relative;z-index:2}
 .screen.on{display:flex}
 
@@ -38,14 +39,30 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 .bg .slab2{position:absolute;inset:0;background:var(--w);transition:clip-path .8s cubic-bezier(.7,0,.2,1);opacity:.96}
 body[data-s="sTitle"] .slab{clip-path:polygon(0 0,100% 0,100% 30%,0 52%)}
 body[data-s="sTitle"] .slab2{clip-path:polygon(0 50%,100% 28.5%,100% 30%,0 51.5%)}
-body[data-s="sPick"] .slab,body[data-s="sBoard"] .slab{clip-path:polygon(0 0,100% 0,100% 10%,0 22%)}
-body[data-s="sPick"] .slab2,body[data-s="sBoard"] .slab2{clip-path:polygon(0 22%,100% 10%,100% 10.6%,0 22.6%)}
+body[data-s="sPick"] .slab,body[data-s="sBoard"] .slab,body[data-s="sLib"] .slab{clip-path:polygon(0 0,100% 0,100% 10%,0 22%)}
+body[data-s="sPick"] .slab2,body[data-s="sBoard"] .slab2,body[data-s="sLib"] .slab2{clip-path:polygon(0 22%,100% 10%,100% 10.6%,0 22.6%)}
 body[data-s="sMap"] .slab{clip-path:polygon(0 0,100% 0,100% 6%,0 14%)}
 body[data-s="sMap"] .slab2{clip-path:polygon(0 14%,100% 6%,100% 6.5%,0 14.5%)}
 body[data-s="sLearn"] .slab,body[data-s="sQuiz"] .slab{clip-path:polygon(0 0,100% 0,100% 4%,0 9%)}
 body[data-s="sLearn"] .slab2,body[data-s="sQuiz"] .slab2{clip-path:polygon(0 9%,100% 4%,100% 4.4%,0 9.4%)}
 body[data-s="sStage"] .slab,body[data-s="sFinal"] .slab{clip-path:polygon(0 0,100% 0,100% 24%,0 15%)}
 body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15%,100% 24%,100% 24.8%,0 15.8%)}
+body.hot .bg .dots{animation-duration:3s}
+body.hot .bg .slab{animation:hotPulse .5s ease-in-out infinite alternate}
+@keyframes hotPulse{to{filter:brightness(1.25) saturate(1.2)}}
+
+/* 桌機兩側裝飾 */
+.deco{display:none}
+@media (min-width:1000px){
+  .deco{display:block;position:fixed;inset:0;z-index:1;pointer-events:none}
+  .dnum{position:absolute;left:3vw;bottom:2vh;font-family:var(--num);font-size:min(26vw,380px);line-height:.85;color:transparent;-webkit-text-stroke:2px rgba(244,241,234,.13);transform:skewX(-8deg)}
+  .dnum.go{animation:dnumIn .6s var(--snap)}
+  @keyframes dnumIn{from{opacity:0;transform:skewX(-8deg) translateX(-120px) scale(1.3)}to{opacity:1;transform:skewX(-8deg)}}
+  .dsub{position:absolute;left:3.4vw;top:16vh;font-family:var(--num);font-size:18px;letter-spacing:.4em;color:var(--o)}
+  .tick{position:absolute;right:2.2vw;top:0;bottom:0;width:30px;overflow:hidden}
+  .tick div{writing-mode:vertical-rl;font-family:var(--num);font-size:20px;letter-spacing:.3em;color:rgba(244,241,234,.22);white-space:nowrap;animation:tickUp 30s linear infinite}
+  @keyframes tickUp{to{transform:translateY(-50%)}}
+}
 
 /* ===== 三層轉場 ===== */
 .tr{position:fixed;inset:0;z-index:60;pointer-events:none}
@@ -63,21 +80,27 @@ body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15
 .cut.on{display:block}
 .cut .dim{position:absolute;inset:0;background:rgba(14,13,12,.55);opacity:0;transition:opacity .2s}
 .cut.in .dim{opacity:1}
+.cut .lb{position:absolute;left:0;right:0;height:9vh;background:var(--k);transition:transform .25s var(--ease)}
+.cut .lb.t{top:0;transform:translateY(-100%)}
+.cut .lb.b{bottom:0;transform:translateY(100%)}
+.cut.in .lb{transform:none}
+.cut.out .lb{transition-delay:.15s}
+.cut.out .lb.t{transform:translateY(-100%)}
+.cut.out .lb.b{transform:translateY(100%)}
 .cut .band{position:absolute;left:-15%;right:-15%;top:50%;height:200px;margin-top:-100px;background:var(--k);border-top:6px solid var(--o);border-bottom:6px solid var(--o);transform:rotate(-7deg) scaleY(0);transition:transform .2s var(--ease);overflow:hidden}
 .cut.o .band{background:var(--o);border-color:var(--w)}
 .cut.in .band{transform:rotate(-7deg) scaleY(1)}
 .cut.out .band{transform:rotate(-7deg) translateX(-130%) scaleY(1);transition:transform .32s cubic-bezier(.7,0,.8,.4)}
 .cut .lines{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Cg stroke='%23f4f1ea' stroke-opacity='.18' stroke-width='2'%3E%3Cline x1='0' y1='18' x2='160' y2='18'/%3E%3Cline x1='220' y1='42' x2='400' y2='42'/%3E%3Cline x1='60' y1='77' x2='180' y2='77'/%3E%3Cline x1='250' y1='104' x2='330' y2='104'/%3E%3Cline x1='10' y1='131' x2='230' y2='131'/%3E%3Cline x1='280' y1='160' x2='390' y2='160'/%3E%3Cline x1='90' y1='186' x2='200' y2='186'/%3E%3C/g%3E%3C/svg%3E");animation:speed .35s linear infinite}
 @keyframes speed{to{background-position:-400px 0}}
-.cut .ct{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding-left:calc(11.5% + 22px);transform:translateX(70%);opacity:0;transition:transform .32s var(--snap),opacity .15s}
+.cut .ct{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding-left:calc(11.5% + 22px);padding-right:calc(11.5% + 22px);transform:translateX(70%);opacity:0;transition:transform .32s var(--snap),opacity .15s}
 .cut.in .ct{transform:none;opacity:1;transition-delay:.08s}
 .cut .ct .k{font-family:var(--num);font-size:22px;letter-spacing:.14em;color:var(--o)}
 .cut.o .ct .k{color:var(--k)}
-.cut .ct b{font-size:clamp(34px,9.5vw,60px);font-weight:900;line-height:1.1;letter-spacing:.02em;white-space:nowrap}
-.cut .ct .s{font-size:17px;font-weight:700;color:var(--w2);margin-top:4px}
+.cut .ct b{font-size:clamp(34px,9.5vw,60px);font-weight:900;line-height:1.1;letter-spacing:.02em}
+.cut .ct .s{font-size:17px;font-weight:700;color:var(--w2);margin-top:6px}
 .cut.o .ct .s{color:var(--k)}
 
-/* 閃光 */
 .flash{position:fixed;inset:0;z-index:58;background:var(--w);opacity:0;pointer-events:none}
 .flash.go{animation:flash .32s ease-out}
 .flash.bad{background:var(--o)}
@@ -86,40 +109,41 @@ body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15
 /* ===== 共用元件 ===== */
 .top{display:flex;align-items:center;gap:10px;padding:16px 0 12px}
 .grow{flex:1}
-.tbtn{height:40px;min-width:40px;padding:0 12px;background:var(--k);color:var(--w);border:2px solid var(--w);font-weight:900;font-size:15px;display:grid;place-items:center;transition:transform .1s}
+.tbtn{height:40px;min-width:40px;padding:0 12px;background:var(--k);color:var(--w);border:2px solid var(--w);font-weight:900;font-size:15px;display:grid;place-items:center;transition:transform .1s;white-space:nowrap}
 .tbtn:active{transform:translate(2px,2px)}
 .tag{display:inline-block;background:var(--k);color:var(--w);font-weight:900;font-size:13px;letter-spacing:.12em;padding:5px 12px;transform:skewX(-10deg)}
 .tag>span{display:inline-block;transform:skewX(10deg)}
 .tag.o{background:var(--o)}
-.btn{display:block;width:100%;position:relative;background:var(--w);color:var(--k);font-weight:900;font-size:20px;letter-spacing:.06em;padding:18px 20px;box-shadow:6px 6px 0 var(--o);transition:transform .08s,box-shadow .08s}
+.btn{display:block;width:100%;position:relative;background:var(--w);color:var(--k);font-weight:900;font-size:20px;letter-spacing:.06em;padding:18px 20px;box-shadow:6px 6px 0 var(--o);transition:transform .08s,box-shadow .08s,opacity .2s}
 .btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--o)}
 .btn:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--o)}
 .btn.o{background:var(--o);color:var(--w);box-shadow:6px 6px 0 var(--w)}
 .btn.o:hover{box-shadow:8px 8px 0 var(--w)}
 .btn.line{background:var(--k);color:var(--w);border:2px solid var(--w);box-shadow:6px 6px 0 var(--k3)}
+.btn:disabled{opacity:.3;pointer-events:none}
 .btn+.btn{margin-top:18px}
 .btn .arr{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-family:var(--num);font-size:22px}
 .btn.pulse{animation:pulseBtn 1.6s ease-in-out infinite}
 @keyframes pulseBtn{0%,100%{box-shadow:6px 6px 0 var(--o)}50%{box-shadow:10px 10px 0 var(--o)}}
+.btn.o.pulse{animation-name:pulseBtnO}
+@keyframes pulseBtnO{0%,100%{box-shadow:6px 6px 0 var(--w)}50%{box-shadow:10px 10px 0 var(--w)}}
 
 .in1,.in2,.in3,.in4,.in5,.in6{animation:slideIn .55s var(--ease) both}
 .in2{animation-delay:.07s}.in3{animation-delay:.14s}.in4{animation-delay:.21s}.in5{animation-delay:.28s}.in6{animation-delay:.35s}
 @keyframes slideIn{from{opacity:0;transform:translateX(60px) skewX(-8deg)}to{opacity:1;transform:none}}
-.fromL{animation-name:slideInL}
 @keyframes slideInL{from{opacity:0;transform:translateX(-60px) skewX(8deg)}to{opacity:1;transform:none}}
-
-/* 逐字落下 */
-.ch{display:inline-block;white-space:pre;animation:chIn .42s var(--snap) both;animation-delay:calc(var(--i) * 22ms + var(--d,0ms))}
+.ch{display:inline-block;white-space:pre;animation:chIn .42s var(--snap) both;animation-delay:calc(var(--i) * 18ms + var(--d,0ms))}
 @keyframes chIn{from{opacity:0;transform:translateY(-.7em) rotate(-14deg) scale(1.5)}to{opacity:1;transform:none}}
+@media (pointer:fine){.tilt{transform:perspective(1000px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .18s ease-out}}
 
-/* ===== 標題畫面 ===== */
+/* ===== 標題 ===== */
 .title{justify-content:space-between;padding:7vh 0 4vh;cursor:pointer}
 .seal{width:112px;height:112px;border:6px solid var(--k);color:var(--k);display:grid;place-items:center;transform:rotate(-8deg);position:relative;background:var(--w);animation:sealIn .8s var(--snap) .2s both}
 .seal::before{content:"";position:absolute;inset:6px;border:2px solid var(--k)}
 .seal b{font-size:62px;font-weight:900;line-height:1}
 @keyframes sealIn{from{transform:rotate(-40deg) scale(3);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:1}}
 .title h1{line-height:1;margin-top:auto}
-.title h1 .a{display:block;font-size:92px;font-weight:900;letter-spacing:.02em;--d:.45s}
+.title h1 .a{display:block;font-size:92px;font-weight:900;letter-spacing:.02em}
 .title h1 .b{display:inline-block;margin-top:14px;background:var(--o);color:var(--w);font-size:42px;font-weight:900;padding:6px 18px 8px;transform:rotate(-3deg) skewX(-8deg);animation:barIn .5s var(--snap) .9s both}
 @keyframes barIn{from{transform:translateX(-120%) rotate(-3deg) skewX(-8deg)}to{transform:rotate(-3deg) skewX(-8deg)}}
 .title .tag2{font-family:var(--num);font-size:16px;letter-spacing:.3em;color:var(--o);margin-top:22px;animation:slideIn .5s var(--ease) 1.1s both}
@@ -148,7 +172,7 @@ body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15
 .linkbtn{display:block;margin:18px auto 0;font-size:15px;font-weight:900;color:var(--w);border-bottom:2px solid var(--o);padding:2px 0}
 
 /* ===== 地圖 ===== */
-.aging{background:var(--w);color:var(--k);padding:18px 18px 16px;margin-bottom:24px;clip-path:var(--cut)}
+.aging{background:var(--w);color:var(--k);padding:18px 18px 16px;margin-bottom:14px;clip-path:var(--cut)}
 .aging .row{display:flex;justify-content:space-between;align-items:flex-end}
 .aging .lbl{font-size:14px;font-weight:900;letter-spacing:.1em}
 .aging .rank{font-size:20px;font-weight:900;margin-top:2px}
@@ -160,37 +184,43 @@ body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15
 .cells i.on:nth-child(7n){background:var(--k)}
 @keyframes cellPop{from{transform:skewX(-14deg) scaleY(2.2)}to{transform:skewX(-14deg)}}
 .daymarks{display:flex;justify-content:space-between;font-family:var(--num);font-size:12px;color:var(--mute);margin-top:6px}
-.path{display:flex;flex-direction:column;gap:14px;padding-bottom:24px}
-.stage{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--k2);border:2px solid var(--k3);padding:14px 16px 14px 0;position:relative;overflow:hidden;transition:transform .18s var(--snap),border-color .12s}
+.libbtn{display:flex;align-items:center;gap:12px;width:100%;background:var(--k);border:2px solid var(--w);padding:12px 16px;margin-bottom:22px;text-align:left;transition:transform .15s var(--snap)}
+.libbtn:hover{transform:translateX(6px)}
+.libbtn b{font-size:17px;font-weight:900}
+.libbtn span{margin-left:auto;font-family:var(--num);font-size:22px;color:var(--o)}
+.libbtn small{display:block;font-size:12px;color:var(--mute);font-weight:700}
+.path{display:flex;flex-direction:column;gap:12px;padding-bottom:24px}
+.stage{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--k2);border:2px solid var(--k3);padding:12px 16px 12px 0;position:relative;overflow:hidden;transition:transform .18s var(--snap),border-color .12s}
 .stage:nth-child(even){animation-name:slideInL}
 .stage:hover{transform:translateX(8px) scale(1.015);border-color:var(--w)}
 .stage:active{transform:translateX(2px) scale(.99)}
-.stage .n{font-family:var(--num);font-size:64px;line-height:.85;width:84px;text-align:center;flex:none;color:transparent;-webkit-text-stroke:2px var(--w);margin-left:-4px;transform:skewX(-8deg)}
+.stage .n{font-family:var(--num);font-size:58px;line-height:.85;width:80px;text-align:center;flex:none;color:transparent;-webkit-text-stroke:2px var(--w);margin-left:-4px;transform:skewX(-8deg)}
 .stage .t{flex:1;min-width:0}
 .stage .no{font-size:12px;font-weight:900;letter-spacing:.14em;color:var(--o)}
-.stage .tt{display:block;font-size:20px;font-weight:900;line-height:1.3}
-.stage .st{display:block;font-size:14px;color:var(--mute);margin-top:2px}
-.stage .stars{font-size:18px;letter-spacing:2px;color:var(--o);flex:none}
+.stage .tt{display:block;font-size:19px;font-weight:900;line-height:1.3}
+.stage .st{display:block;font-size:13px;color:var(--mute);margin-top:2px}
+.stage .stars{font-size:17px;letter-spacing:2px;color:var(--o);flex:none}
 .stage .stars s{text-decoration:none;color:var(--k3)}
 .stage.locked{opacity:.38}
 .stage.locked .stars{font-size:12px;font-weight:900;letter-spacing:.1em;color:var(--mute)}
 .stage.next{background:var(--o);border-color:var(--o)}
-.stage.next .n{-webkit-text-stroke:0;color:var(--w)}
+.stage.next .n{-webkit-text-stroke:0;color:var(--w);animation:nBob 1.4s ease-in-out infinite}
 .stage.next .no{color:var(--k)}
 .stage.next .st{color:var(--w)}
 .stage.next .stars s{color:var(--o-d)}
 .stage.next::after{content:"NEXT";position:absolute;right:-30px;top:10px;background:var(--k);color:var(--w);font-family:var(--num);font-size:13px;letter-spacing:.1em;padding:2px 34px;transform:rotate(35deg)}
-.stage.next .n{animation:nBob 1.4s ease-in-out infinite}
 @keyframes nBob{50%{transform:skewX(-8deg) translateY(-4px)}}
 .stage.final{background:var(--w);border-color:var(--w);color:var(--k)}
-.stage.final .n{-webkit-text-stroke:2px var(--k);font-size:50px}
+.stage.final .n{-webkit-text-stroke:2px var(--k);font-size:46px}
 .stage.final .st{color:var(--k)}
+.stage.final.next{background:var(--o);border-color:var(--o)}
 
 /* ===== 學習卡 ===== */
 .bars{display:flex;gap:5px;flex:1}
 .bars i{flex:1;height:8px;background:var(--k3);transform:skewX(-20deg);transition:background .2s}
 .bars i.on{background:var(--w)}
-.bars i.cur{background:var(--o)}
+.bars i.cur{background:var(--k);box-shadow:inset 0 0 0 2px var(--w);animation:curBlink .9s steps(2) infinite}
+@keyframes curBlink{50%{background:var(--w)}}
 .learn{flex:1;display:flex;flex-direction:column}
 .lwrap{flex:1;display:flex;flex-direction:column;position:relative}
 .lcard{flex:1;background:var(--w);color:var(--k);padding:26px 22px 24px;clip-path:var(--cut);display:flex;flex-direction:column;position:relative;animation:cardIn .5s var(--snap)}
@@ -200,32 +230,34 @@ body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15
 .lcard .pg{position:absolute;right:18px;top:10px;font-family:var(--num);font-size:72px;line-height:1;color:transparent;-webkit-text-stroke:2px var(--w2)}
 .lcard .tag{align-self:flex-start;margin-bottom:16px}
 .lcard h3{font-size:30px;font-weight:900;line-height:1.35;margin-bottom:18px;position:relative}
-.lcard h3 mark{background:none;color:inherit;box-shadow:inset 0 -.36em 0 rgba(235,77,0,.45)}
+mark{background:none;color:inherit;box-shadow:inset 0 -.36em 0 rgba(235,77,0,.45)}
 .lcard .body{font-size:18px;line-height:1.85;color:#3c3732;animation:slideIn .5s var(--ease) .25s both}
 .lcard .body b{color:var(--k);font-weight:900}
-.lcard .facts{display:grid;gap:8px}
-.lcard .facts div{display:flex;align-items:center;gap:14px;background:var(--k);color:var(--w);padding:12px 16px;animation:slideIn .45s var(--ease) both;animation-delay:calc(.25s + var(--i) * .08s)}
-.lcard .facts div span:first-child{display:none}
-.lcard .facts div span:last-child{flex:1;min-width:0;font-size:17px;font-weight:700;line-height:1.5}
-.lcard .facts div b{display:block;font-size:12px;font-weight:900;letter-spacing:.14em;color:var(--o)}
-.lcard .duo{display:grid;gap:10px}
-.lcard .duo div{padding:14px 16px;font-size:17px;line-height:1.6;position:relative;animation:slideIn .45s var(--ease) both}
-.lcard .duo .no{background:var(--w2);color:var(--mute);text-decoration:line-through;text-decoration-color:var(--o);animation-delay:.25s}
-.lcard .duo .ok{background:var(--k);color:var(--w);font-weight:700;animation-delay:.45s}
-.lcard .duo div::before{display:block;font-size:12px;font-weight:900;letter-spacing:.14em;margin-bottom:4px;text-decoration:none}
-.lcard .duo .no::before{content:"✕ 不要這樣";color:var(--k)}
-.lcard .duo .ok::before{content:"○ 這樣寫";color:var(--o)}
+.facts{display:grid;gap:8px}
+.facts div{display:flex;align-items:center;gap:14px;background:var(--k);color:var(--w);padding:11px 16px;animation:slideIn .45s var(--ease) both;animation-delay:calc(.25s + var(--i,0) * .07s)}
+.facts div span:first-child{display:none}
+.facts div span:last-child{flex:1;min-width:0;font-size:16px;font-weight:700;line-height:1.5}
+.facts div b{display:block;font-size:12px;font-weight:900;letter-spacing:.14em;color:var(--o)}
+.duo{display:grid;gap:10px}
+.duo div{padding:14px 16px;font-size:17px;line-height:1.6;position:relative;animation:slideIn .45s var(--ease) both}
+.duo .no{background:var(--w2);color:var(--mute);text-decoration:line-through;text-decoration-color:var(--o);animation-delay:.25s}
+.duo .ok{background:var(--k);color:var(--w);font-weight:700;animation-delay:.45s}
+.duo div::before{display:block;font-size:12px;font-weight:900;letter-spacing:.14em;margin-bottom:4px;text-decoration:none}
+.duo .no::before{content:"✕ 不要這樣";color:var(--k)}
+.duo .ok::before{content:"○ 這樣寫";color:var(--o)}
 .lcard .post{border:2px solid var(--k);padding:16px 18px;white-space:pre-line;font-size:17px;line-height:1.8;position:relative;animation:slideIn .5s var(--ease) .25s both}
 .lcard .post::before{content:"貼文範例";position:absolute;top:-11px;left:14px;background:var(--w);padding:0 6px;font-size:12px;font-weight:900;letter-spacing:.12em}
-.lcard .tip{margin-top:auto;padding-top:18px;font-size:15px;line-height:1.65;color:#5b544c;display:flex;gap:10px;animation:slideIn .5s var(--ease) .5s both}
-.lcard .tip::before{content:"TIP";font-family:var(--num);font-size:14px;background:var(--o);color:var(--w);padding:1px 7px;height:fit-content;letter-spacing:.06em}
+.tip{margin-top:auto;padding-top:18px;font-size:15px;line-height:1.65;color:#5b544c;display:flex;gap:10px;animation:slideIn .5s var(--ease) .5s both}
+.tip::before{content:"TIP";font-family:var(--num);font-size:14px;background:var(--o);color:var(--w);padding:1px 7px;height:fit-content;letter-spacing:.06em}
 .learnnav{display:flex;gap:16px;margin-top:22px}
 .learnnav .btn{flex:1}
 .learnnav .back{flex:0 0 64px;padding:18px 0;margin:0}
 
-/* ===== 答題 ===== */
-.qhead{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+/* ===== 答題 HUD ===== */
+.qhead{display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .qnum{font-family:var(--num);font-size:42px;line-height:1;transform:skewX(-8deg)}
+.qnum.go{animation:qnumIn .45s var(--snap)}
+@keyframes qnumIn{from{transform:skewX(-8deg) scale(2.4);opacity:0}to{transform:skewX(-8deg);opacity:1}}
 .qnum small{font-size:18px;color:var(--mute)}
 .combo{font-family:var(--num);font-size:18px;letter-spacing:.06em;background:var(--o);color:var(--w);padding:2px 10px;transform:skewX(-10deg) scale(0);transition:transform .25s var(--snap)}
 .combo.show{transform:skewX(-10deg) scale(1)}
@@ -234,45 +266,160 @@ body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15
 .score span{display:inline-block}
 .score span.bump{animation:bump .35s var(--snap)}
 @keyframes bump{40%{transform:scale(1.4);color:var(--o)}}
-.timer{position:relative;width:54px;height:54px;flex:none}
-.timer svg{transform:rotate(-90deg)}
-.timer circle{fill:none;stroke-width:7}
-.timer .tb{stroke:var(--k3)}
-.timer .tf{stroke:var(--w);transition:stroke-dashoffset 1s linear}
-.timer.low .tf{stroke:var(--o)}
-.timer b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--num);font-size:22px}
-.timer.low b{color:var(--o);animation:beat .5s infinite}
-@keyframes beat{50%{transform:scale(1.25)}}
-.qcard{background:var(--w);color:var(--k);padding:22px 20px 24px;margin-bottom:20px;clip-path:var(--cut);animation:qIn .45s var(--snap)}
+.hintbtn{font-size:13px;font-weight:900;padding:6px 10px;border:2px solid var(--o);color:var(--o);transform:skewX(-8deg);white-space:nowrap}
+.hintbtn:disabled{border-color:var(--k3);color:var(--k3)}
+.fuse{height:6px;background:var(--k3);margin:0 0 14px;transform:skewX(-20deg);overflow:hidden}
+.fuse i{display:block;height:100%;width:100%;background:var(--w);transform-origin:left}
+.fuse.low i{background:var(--o);animation-name:fuse,fuseBlink!important}
+@keyframes fuse{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@keyframes fuseBlink{50%{opacity:.4}}
+.typetag{font-family:var(--num);font-size:12px;letter-spacing:.12em;color:var(--o);margin-left:8px}
+
+.qcard{background:var(--w);color:var(--k);padding:20px 20px 22px;margin-bottom:18px;clip-path:var(--cut);animation:qIn .45s var(--snap)}
 @keyframes qIn{from{opacity:0;transform:scale(1.15) rotate(-3deg)}to{opacity:1;transform:none}}
 .qcard .tag{margin-bottom:12px}
-.qcard h3{font-size:24px;font-weight:900;line-height:1.5}
+.qcard h3{font-size:23px;font-weight:900;line-height:1.5}
 .qcard .quote{margin-top:14px;background:var(--k);color:var(--w);padding:14px 16px;font-size:19px;font-weight:700;line-height:1.6;border-left:6px solid var(--o);animation:slideIn .45s var(--ease) .3s both}
+.qcard .note{margin-top:12px;background:var(--k);color:var(--w);font-size:14px;font-weight:700;padding:8px 12px;border-left:6px solid var(--o);line-height:1.6}
+.qcard .blank{display:inline-block;min-width:3.5em;text-align:center;border-bottom:4px solid var(--o);color:var(--o);padding:0 4px;transition:all .2s}
+.qcard .blank.ok{background:var(--o);color:var(--w);border-color:var(--o);animation:bump .4s var(--snap)}
+.qcard .blank.ng{background:var(--k);color:var(--w);border-color:var(--k);text-decoration:line-through}
 .qcard.glitch{animation:glitch .4s steps(2)}
-@keyframes glitch{0%{transform:translate(0);clip-path:var(--cut)}20%{transform:translate(-8px,2px);clip-path:polygon(0 0,100% 0,100% 30%,0 30%,0 45%,100% 45%,100% 100%,0 100%)}40%{transform:translate(8px,-2px);clip-path:polygon(0 0,100% 0,100% 60%,0 60%,0 72%,100% 72%,100% 100%,0 100%)}60%{transform:translate(-4px,0)}100%{transform:translate(0);clip-path:var(--cut)}}
-.opts{display:grid;gap:12px}
-.opts.tf{grid-template-columns:1fr 1fr;gap:14px}
+@keyframes glitch{0%{transform:translate(0)}20%{transform:translate(-8px,2px);clip-path:polygon(0 0,100% 0,100% 30%,0 30%,0 45%,100% 45%,100% 100%,0 100%)}40%{transform:translate(8px,-2px);clip-path:polygon(0 0,100% 0,100% 60%,0 60%,0 72%,100% 72%,100% 100%,0 100%)}60%{transform:translate(-4px,0)}100%{transform:translate(0);clip-path:var(--cut)}}
+.hintbox{margin-top:12px;background:var(--o);color:var(--w);padding:10px 14px;font-size:15px;line-height:1.6;animation:slideIn .35s var(--snap)}
+.hintbox::before{content:"手冊提示　";font-weight:900}
+.hintbox b{color:var(--k)}
+
+/* ===== 題型共用 ===== */
+.opts{display:grid;gap:12px;position:relative}
 .opt{position:relative;display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--k2);border:2px solid var(--w);padding:13px 14px;font-size:18px;font-weight:700;line-height:1.45;
   animation:optR .45s var(--snap) both;transition:transform .12s var(--ease),box-shadow .12s,background .15s,opacity .2s}
 .opt:nth-child(even){animation-name:optL}
-.opt:nth-child(1){animation-delay:.25s}.opt:nth-child(2){animation-delay:.31s}.opt:nth-child(3){animation-delay:.37s}.opt:nth-child(4){animation-delay:.43s}
+.opt:nth-child(1){animation-delay:.2s}.opt:nth-child(2){animation-delay:.26s}.opt:nth-child(3){animation-delay:.32s}.opt:nth-child(4){animation-delay:.38s}.opt:nth-child(5){animation-delay:.44s}.opt:nth-child(6){animation-delay:.5s}
 @keyframes optR{from{opacity:0;transform:translateX(110%) skewX(-12deg)}to{opacity:1;transform:none}}
 @keyframes optL{from{opacity:0;transform:translateX(-110%) skewX(12deg)}to{opacity:1;transform:none}}
 .opt::after{content:"";position:absolute;left:-16px;top:50%;margin-top:-9px;border:9px solid transparent;border-left:12px solid var(--o);opacity:0;transform:translateX(-8px);transition:all .15s var(--snap)}
-.opt:hover{transform:translateX(8px);box-shadow:-6px 6px 0 var(--o)}
-.opt:hover::after{opacity:1;transform:none}
+.opt:not(:disabled):hover{transform:translateX(8px);box-shadow:-6px 6px 0 var(--o)}
+.opt:not(:disabled):hover::after{opacity:1;transform:none}
 .opt:active{transform:translateX(4px) scale(.98)}
 .opt .k{width:34px;height:34px;background:var(--w);color:var(--k);display:grid;place-items:center;font-family:var(--num);font-size:19px;flex:none;transform:skewX(-10deg)}
-.opts.tf .opt{flex-direction:column;justify-content:center;text-align:center;padding:22px 10px 18px;gap:8px;font-size:20px;font-weight:900}
-.opts.tf .opt .k{width:auto;height:auto;background:none;color:var(--w);transform:none;font-family:var(--font);font-size:56px;line-height:1;font-weight:900}
-.opts.tf .opt:last-child{background:var(--o);border-color:var(--o)}
-.opts.tf .opt::after{display:none}
-.opt.dim{opacity:.2;transform:scale(.97)}
-.opt.right{background:var(--w)!important;color:var(--k);border-color:var(--w)!important;box-shadow:-8px 8px 0 var(--o);transform:translateX(8px) scale(1.03)}
+.opt.dim{opacity:.22}
+.opt.right{background:var(--w)!important;color:var(--k);border-color:var(--w)!important;box-shadow:-8px 8px 0 var(--o);transform:translateX(8px) scale(1.02);opacity:1}
 .opt.right .k{background:var(--o);color:var(--w)}
-.opts.tf .opt.right .k{background:none;color:var(--o)}
 .opt.wrong{animation:shake .4s!important;text-decoration:line-through;text-decoration-color:var(--o);text-decoration-thickness:3px;opacity:.6}
+.opt.miss{border-style:dashed;border-color:var(--o);opacity:1}
+.opt.miss::before{content:"漏選";position:absolute;right:10px;top:-10px;background:var(--o);color:var(--w);font-size:12px;font-weight:900;padding:1px 8px}
 @keyframes shake{20%,60%{transform:translateX(-12px)}40%,80%{transform:translateX(12px)}}
+.submit{margin-top:10px}
+
+/* 判斷題 */
+.t-tf{grid-template-columns:1fr 1fr;gap:14px}
+.t-tf .opt{flex-direction:column;justify-content:center;text-align:center;padding:22px 10px 18px;gap:8px;font-size:20px;font-weight:900}
+.t-tf .opt .k{width:auto;height:auto;background:none;color:var(--w);transform:none;font-family:var(--font);font-size:56px;line-height:1;font-weight:900}
+.t-tf .opt:last-child{background:var(--o);border-color:var(--o)}
+.t-tf .opt::after{display:none}
+.t-tf .opt.right .k{background:none;color:var(--o)}
+
+/* 二選一 */
+.t-ab{gap:30px}
+.t-ab .opt{padding:22px 18px 22px 16px;font-size:19px;min-height:96px}
+.t-ab .opt .k{width:46px;height:46px;font-size:26px}
+.t-ab .vs{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) rotate(-8deg);background:var(--o);color:var(--w);font-family:var(--num);font-size:26px;padding:2px 14px;z-index:2;animation:vsIn .5s var(--snap) .5s both;pointer-events:none}
+@keyframes vsIn{from{transform:translate(-50%,-50%) rotate(-30deg) scale(3);opacity:0}to{transform:translate(-50%,-50%) rotate(-8deg);opacity:1}}
+
+/* 多選 */
+.t-multi .opt .k{background:none;border:2px solid var(--w);color:transparent;font-family:var(--font);font-size:20px;font-weight:900}
+.t-multi .opt.sel{background:var(--o);border-color:var(--o)}
+.t-multi .opt.sel .k{background:var(--w);color:var(--o);border-color:var(--w)}
+.t-multi .opt.right .k,.t-multi .opt.miss .k{color:var(--o)}
+
+/* 排順序 */
+.slots{display:grid;gap:8px}
+.slot{display:flex;align-items:center;gap:12px;min-height:54px;border:2px dashed var(--k3);padding:8px 12px;text-align:left;font-size:16px;font-weight:700;line-height:1.45;transition:all .2s var(--snap)}
+.slot .no{font-family:var(--num);font-size:24px;color:var(--mute);width:24px;flex:none;transform:skewX(-8deg)}
+.slot.fill{border:2px solid var(--w);background:var(--k2);animation:slotIn .3s var(--snap)}
+.slot.fill .no{color:var(--o)}
+@keyframes slotIn{from{transform:scale(1.08)}to{transform:none}}
+.slot.right{background:var(--w);color:var(--k);border-color:var(--w)}
+.slot.wrong{border-color:var(--o);text-decoration:line-through;text-decoration-color:var(--o)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{background:var(--w);color:var(--k);font-weight:700;font-size:15px;padding:9px 12px;line-height:1.4;text-align:left;box-shadow:4px 4px 0 var(--o);transition:transform .12s,opacity .2s;animation:slideIn .4s var(--snap) both}
+.chip:nth-child(2){animation-delay:.06s}.chip:nth-child(3){animation-delay:.12s}.chip:nth-child(4){animation-delay:.18s}
+.chip:hover{transform:translate(-2px,-2px)}
+.chip.used{opacity:0;pointer-events:none;transform:scale(.8)}
+
+/* 填空 */
+.t-fill{display:flex;flex-wrap:wrap;gap:12px}
+.t-fill .opt{width:auto;flex:1 1 40%;justify-content:center;font-size:20px;font-weight:900}
+.t-fill .opt .k{display:none}
+
+/* 抓漏 */
+.spot{background:var(--w);color:var(--k);padding:10px 8px;display:grid;gap:4px;animation:slideIn .45s var(--ease) .2s both}
+.ln{display:flex;gap:10px;align-items:flex-start;text-align:left;padding:10px 10px;font-size:17px;font-weight:700;line-height:1.55;border:2px solid transparent;transition:all .15s}
+.ln .no{font-family:var(--num);font-size:14px;color:var(--mute);padding-top:3px;flex:none}
+.ln:hover{background:var(--w2)}
+.ln.sel{background:var(--k);color:var(--w);border-color:var(--o);box-shadow:-5px 0 0 var(--o)}
+.ln.sel .no{color:var(--o)}
+.ln.hit{background:var(--o);color:var(--w)}
+.ln.hit::after{content:"抓到了";margin-left:auto;font-size:12px;font-weight:900;background:var(--k);padding:1px 6px;white-space:nowrap}
+.ln.missed{border:2px dashed var(--o)}
+.ln.missed::after{content:"漏掉";margin-left:auto;font-size:12px;font-weight:900;background:var(--o);color:var(--w);padding:1px 6px;white-space:nowrap}
+.ln.false{text-decoration:line-through;text-decoration-color:var(--o);background:var(--w2)}
+.ln.false::after{content:"誤判";margin-left:auto;font-size:12px;font-weight:900;background:var(--k);color:var(--w);padding:1px 6px;white-space:nowrap}
+
+/* 配對 */
+.match{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mcol{display:grid;gap:10px;align-content:start}
+.mi{position:relative;min-height:64px;padding:10px 12px 10px 12px;background:var(--k2);border:2px solid var(--w);text-align:left;font-size:15px;font-weight:700;line-height:1.45;transition:all .15s var(--snap);animation:slideIn .4s var(--snap) both}
+.mcol:first-child .mi{animation-name:slideInL}
+.mi.r{background:var(--w);color:var(--k)}
+.mi.act{background:var(--o);border-color:var(--o);color:var(--w);transform:scale(1.04)}
+.mi .pn{position:absolute;top:-10px;right:-6px;width:26px;height:26px;display:grid;place-items:center;font-family:var(--num);font-size:16px;background:var(--o);color:var(--w);transform:skewX(-10deg);animation:bump .3s var(--snap)}
+.mi.r .pn{background:var(--k)}
+.mcol:first-child .mi .pn{right:auto;left:-6px}
+.mi.right{outline:3px solid var(--o);outline-offset:2px}
+.mi.wrong{opacity:.55;text-decoration:line-through;text-decoration-color:var(--o)}
+.mhelp{grid-column:1/-1;font-size:13px;color:var(--mute);text-align:center}
+
+/* 快篩 */
+.rapid{background:var(--w);color:var(--k);padding:20px 18px;min-height:190px;display:flex;flex-direction:column;position:relative;overflow:hidden;clip-path:var(--cut)}
+.rapid .cnt{font-family:var(--num);font-size:16px;letter-spacing:.12em;color:var(--o)}
+.rapid .st{font-size:24px;font-weight:900;line-height:1.5;margin:auto 0;animation:rapidIn .3s var(--snap)}
+@keyframes rapidIn{from{opacity:0;transform:translateX(60px) scale(1.1)}to{opacity:1;transform:none}}
+.rapid .rf{position:absolute;left:0;bottom:0;height:8px;width:100%;background:var(--o);transform-origin:left}
+.rapid .rf.run{animation:fuse 5s linear forwards}
+.rapid .mk{position:absolute;right:16px;top:12px;font-size:42px;font-weight:900;line-height:1;animation:bump .3s var(--snap)}
+.rbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.rbtns button{padding:20px 8px;font-size:22px;font-weight:900;border:2px solid var(--w);background:var(--k2);transition:transform .1s}
+.rbtns button:last-child{background:var(--o);border-color:var(--o)}
+.rbtns button:active{transform:scale(.95)}
+.rlist{display:grid;gap:6px;margin-top:4px}
+.rlist div{display:flex;gap:10px;align-items:center;background:var(--k2);padding:8px 12px;font-size:15px;font-weight:700;border-left:5px solid var(--k3);animation:slideIn .3s var(--ease) both}
+.rlist div.ok{border-left-color:var(--o)}
+.rlist div.ng{border-left-color:var(--w);opacity:.75}
+.rlist div span{margin-left:auto;font-size:12px;white-space:nowrap;color:var(--mute)}
+
+/* 組文 */
+.bpost{background:var(--w);color:var(--k);padding:14px 16px;display:grid;gap:6px;min-height:120px;position:relative;margin-bottom:6px}
+.bpost::before{content:"你的貼文";position:absolute;top:-10px;left:12px;background:var(--o);color:var(--w);font-size:12px;font-weight:900;padding:1px 8px;letter-spacing:.1em}
+.bpost p{font-size:16px;font-weight:700;line-height:1.55;padding:4px 0;border-bottom:2px dashed var(--w2);min-height:30px;color:var(--mute)}
+.bpost p.set{color:var(--k);border-bottom-color:transparent;animation:slotIn .3s var(--snap)}
+.bpost p.right{box-shadow:-6px 0 0 var(--o);padding-left:8px}
+.bpost p.wrong{text-decoration:line-through;text-decoration-color:var(--o)}
+.bgrp{display:grid;gap:6px}
+.bgrp h5{font-size:13px;font-weight:900;letter-spacing:.14em;color:var(--o)}
+.bgrp .opt{padding:10px 12px;font-size:15px}
+.bgrp .opt.sel{background:var(--o);border-color:var(--o)}
+
+/* 分類 */
+.srow{background:var(--k2);border:2px solid var(--k3);padding:10px 12px;display:grid;gap:8px;animation:slideIn .4s var(--snap) both}
+.srow p{font-size:16px;font-weight:700;line-height:1.5}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1;min-width:0;font-size:13px;font-weight:900;padding:7px 6px;border:2px solid var(--w2);color:var(--w2);transition:all .12s}
+.seg button.sel{background:var(--o);border-color:var(--o);color:var(--w)}
+.srow.right{border-color:var(--o)}
+.srow.wrong{border-color:var(--w);border-style:dashed}
+.srow .fix{font-size:13px;color:var(--o);font-weight:900}
 
 /* 印章 */
 .stamp{position:fixed;left:50%;top:42%;z-index:57;pointer-events:none;opacity:0}
@@ -288,14 +435,16 @@ body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15
 /* 回饋面板 */
 .fb{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;transform:translateY(110%);transition:transform .4s var(--snap)}
 .fb.show{transform:none}
-.fb .in{width:100%;max-width:480px;background:var(--o);color:var(--w);padding:22px 20px calc(env(safe-area-inset-bottom) + 22px);clip-path:polygon(0 18px,100% 0,100% 100%,0 100%)}
+.fb .in{width:100%;max-width:500px;max-height:72vh;overflow:auto;background:var(--o);color:var(--w);padding:22px 20px calc(env(safe-area-inset-bottom) + 22px);clip-path:polygon(0 18px,100% 0,100% 100%,0 100%)}
 .fb.bad .in{background:var(--w);color:var(--k)}
 .fb .ttl{display:flex;align-items:center;gap:12px;font-size:30px;font-weight:900;padding-top:10px}
 .fb .ttl .pts{margin-left:auto;font-family:var(--num);font-size:26px;background:var(--k);color:var(--w);padding:0 10px;transform:skewX(-10deg)}
-.fb.bad .ttl .pts{display:none}
-.fb .exp{font-size:17px;line-height:1.75;margin:10px 0 18px}
+.fb .exp{font-size:16px;line-height:1.75;margin:10px 0 18px}
 .fb .exp b{font-weight:900;box-shadow:inset 0 -.35em 0 rgba(14,13,12,.22)}
 .fb.bad .exp b{box-shadow:inset 0 -.35em 0 rgba(235,77,0,.4)}
+.ans{display:block;background:rgba(14,13,12,.08);padding:10px 12px;margin-bottom:8px;font-size:15px;line-height:1.7}
+.fb:not(.bad) .ans{background:rgba(14,13,12,.15)}
+.ans ol,.ans ul{padding-left:1.3em}
 .fb .btn{background:var(--k);color:var(--w);box-shadow:6px 6px 0 var(--o-d)}
 .fb.bad .btn{box-shadow:6px 6px 0 var(--o)}
 
@@ -303,7 +452,6 @@ body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15
 .result{padding-top:4vh}
 .grade{display:flex;align-items:center;gap:18px;margin:6px 0 10px}
 .grade .L{font-family:var(--num);font-size:150px;line-height:.9;color:var(--w);text-shadow:8px 8px 0 var(--k);transform:skewX(-10deg);animation:gradeIn .7s var(--snap) .3s both}
-.grade .L.S{color:var(--w);-webkit-text-stroke:0}
 @keyframes gradeIn{0%{opacity:0;transform:skewX(-10deg) scale(4) rotate(-20deg)}100%{opacity:1;transform:skewX(-10deg)}}
 .grade .side{flex:1}
 .grade .side small{font-family:var(--num);letter-spacing:.2em;font-size:14px;color:var(--k)}
@@ -326,10 +474,11 @@ body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15
 .review h4{font-size:14px;font-weight:900;letter-spacing:.12em;color:var(--mute);margin-bottom:10px}
 .review .it{background:var(--k2);border-left:5px solid var(--o);padding:14px 16px;margin-bottom:10px}
 .review .it .q{font-size:16px;font-weight:900;line-height:1.55}
-.review .it .a{font-size:15px;color:var(--o);margin-top:6px;font-weight:900}
-.review .it .e{font-size:15px;color:var(--w2);margin-top:4px;line-height:1.7}
+.review .it .ans{background:rgba(244,241,234,.06);margin:8px 0 6px;color:var(--w)}
+.review .it .ans b{color:var(--o)}
+.review .it .e{font-size:15px;color:var(--w2);line-height:1.7}
 
-/* ===== 排行榜 ===== */
+/* ===== 排行榜／圖鑑 ===== */
 .board{display:flex;flex-direction:column;gap:10px}
 .brow{display:flex;align-items:center;gap:14px;background:var(--k2);border:2px solid var(--k3);padding:12px 16px 12px 0;animation:slideIn .5s var(--snap) both}
 .brow:nth-child(even){animation-name:slideInL}
@@ -339,12 +488,24 @@ body[data-s="sStage"] .slab2,body[data-s="sFinal"] .slab2{clip-path:polygon(0 15
 .brow .who span{display:block;font-size:13px;color:var(--mute);margin-top:2px}
 .brow .pts{text-align:right;font-family:var(--num);font-size:32px;line-height:1}
 .brow .pts small{display:block;font-family:var(--font);font-size:11px;font-weight:900;color:var(--mute);letter-spacing:.1em}
-.brow.first{background:var(--o);border-color:var(--o);transform-origin:left}
+.brow.first{background:var(--o);border-color:var(--o)}
 .brow.first .pos{-webkit-text-stroke:0;color:var(--w)}
 .brow.first .who span,.brow.first .pts small{color:var(--k)}
 .brow.me{border-color:var(--w)}
 .brow.none{opacity:.45}
 .boardnote{font-size:14px;color:var(--mute);line-height:1.7;margin:18px 0 24px}
+.libsec{margin-bottom:22px}
+.libsec h3{display:flex;align-items:baseline;gap:10px;font-size:20px;font-weight:900;margin-bottom:10px}
+.libsec h3 span{font-family:var(--num);font-size:30px;color:var(--o);transform:skewX(-8deg)}
+.libsec h3 small{margin-left:auto;font-family:var(--num);font-size:16px;color:var(--mute)}
+.libcard{background:var(--w);color:var(--k);padding:14px 16px;margin-bottom:8px;clip-path:var(--cut)}
+.libcard .kk{font-size:12px;font-weight:900;color:var(--o);letter-spacing:.1em}
+.libcard h4{font-size:17px;font-weight:900;line-height:1.45;margin:2px 0 6px}
+.libcard .bd{font-size:15px;line-height:1.7;color:#3c3732}
+.libcard .bd .facts div{padding:7px 12px;animation:none}
+.libcard .bd .duo div{padding:8px 12px;font-size:15px;animation:none}
+.libcard .bd .post{white-space:pre-line;border-left:4px solid var(--k);padding-left:10px}
+.libcard.lock{background:var(--k2);color:var(--mute);clip-path:none;border:2px dashed var(--k3)}
 
 canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:56}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.stamp,.cut,.tr{display:none!important}}
@@ -352,15 +513,15 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:56}
 </head>
 <body data-s="sTitle">
 <div class="bg"><div class="dots"></div><div class="slab"></div><div class="slab2"></div><div class="mark">酿</div></div>
+<div class="deco"><div class="dsub" id="dsub">AGING ACADEMY</div><div class="dnum" id="dnum">酿</div><div class="tick"><div>AGING ACADEMY ◆ 酿牛熟成學院 ◆ AGING ACADEMY ◆ 酿牛熟成學院 ◆ AGING ACADEMY ◆ 酿牛熟成學院 ◆ AGING ACADEMY ◆ 酿牛熟成學院 ◆ </div></div></div>
 <div class="tr" id="tr"><i></i><i></i><i></i></div>
-<div class="cut" id="cut"><div class="dim"></div><div class="band"><div class="lines"></div><div class="ct"><span class="k" id="cutK"></span><b id="cutB"></b><span class="s" id="cutS"></span></div></div></div>
+<div class="cut" id="cut"><div class="dim"></div><i class="lb t"></i><i class="lb b"></i><div class="band"><div class="lines"></div><div class="ct"><span class="k" id="cutK"></span><b id="cutB"></b><span class="s" id="cutS"></span></div></div></div>
 <div class="flash" id="flash"></div>
 <div class="stamp" id="stamp"><b id="stampT">正解</b></div>
 <canvas id="fx"></canvas>
 
 <div class="app" id="app">
 
-<!-- 標題 -->
 <section class="screen title on" id="sTitle">
   <div class="seal"><b>酿</b></div>
   <div>
@@ -370,7 +531,6 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:56}
   <div class="press"><b>點擊開始</b><small>TAP TO START</small></div>
 </section>
 
-<!-- 選角 -->
 <section class="screen" id="sPick">
   <div class="top"><span class="grow"></span><button class="tbtn" id="sound">音效 開</button></div>
   <div class="headline in1"><small>STEP 1</small><h2>選擇挑戰者</h2></div>
@@ -379,7 +539,6 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:56}
   <button class="linkbtn in6" id="pickBoard">看排行榜 →</button>
 </section>
 
-<!-- 地圖 -->
 <section class="screen" id="sMap">
   <div class="top">
     <button class="tbtn" id="mapBack" aria-label="換挑戰者">←</button>
@@ -395,10 +554,10 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:56}
     <div class="cells" id="cells"></div>
     <div class="daymarks"><span>0</span><span>7</span><span>14</span><span>21</span><span>28</span></div>
   </div>
+  <button class="libbtn in3" id="libBtn"><span style="margin:0;font-size:26px;color:var(--w)">◆</span><b>知識圖鑑<small>看過的學習卡都收在這裡，隨時複習</small></b><span id="libCount">0/0</span></button>
   <div class="path" id="path"></div>
 </section>
 
-<!-- 學習卡 -->
 <section class="screen" id="sLearn">
   <div class="top">
     <button class="tbtn" id="learnClose" aria-label="回地圖">✕</button>
@@ -413,23 +572,22 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:56}
   </div>
 </section>
 
-<!-- 答題 -->
 <section class="screen" id="sQuiz">
   <div class="top">
     <button class="tbtn" id="quizClose" aria-label="離開">✕</button>
     <div class="bars" id="qdots"></div>
   </div>
   <div class="qhead">
-    <div class="timer" id="timer" hidden><svg width="54" height="54"><circle class="tb" cx="27" cy="27" r="23"/><circle class="tf" id="tf" cx="27" cy="27" r="23" stroke-dasharray="144.5" stroke-dashoffset="0"/></svg><b id="tnum">20</b></div>
     <div class="qnum" id="qcount"></div>
     <span class="combo" id="combo"></span>
+    <button class="hintbtn" id="hintBtn" hidden>翻手冊 ×2</button>
     <div class="score" id="scoreP" hidden><small>分數</small><span id="scoreN">0</span></div>
   </div>
-  <div class="qcard" id="qcard"></div>
+  <div class="fuse" id="fuse" hidden><i></i></div>
+  <div class="qcard tilt" id="qcard"></div>
   <div class="opts" id="opts"></div>
 </section>
 
-<!-- 關卡結算 -->
 <section class="screen result" id="sStage">
   <div class="grade"><span class="L" id="stGrade">A</span><div class="side"><small>RESULT</small><h2 id="stTitle">過關！</h2></div></div>
   <div class="starrow" id="stStars"><span>★</span><span>★</span><span>★</span></div>
@@ -439,7 +597,6 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:56}
   <button class="btn line" id="stRetry">再玩一次這關</button>
 </section>
 
-<!-- 大考結算 -->
 <section class="screen result" id="sFinal">
   <div class="grade"><span class="L" id="fGrade">S</span><div class="side"><small>FINAL RESULT</small><h2 id="fTitle">熟成大考完成！</h2></div></div>
   <p class="sub" id="fSub"></p>
@@ -455,7 +612,6 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:56}
   <button class="btn line" id="fMap">回到關卡</button>
 </section>
 
-<!-- 排行榜 -->
 <section class="screen" id="sBoard">
   <div class="top">
     <button class="tbtn" id="boardBack" aria-label="返回">←</button>
@@ -467,12 +623,17 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:56}
   <p class="boardnote" id="boardNote"></p>
 </section>
 
+<section class="screen" id="sLib">
+  <div class="top"><button class="tbtn" id="libBack" aria-label="返回">←</button><span class="grow"></span></div>
+  <div class="headline in1"><small id="libSum">已收集</small><h2>知識圖鑑</h2></div>
+  <div id="lib"></div>
+</section>
+
 </div>
 
-<!-- 答題回饋 -->
 <div class="fb" id="fb"><div class="in">
   <div class="ttl"><span id="fbT">答對了！</span><span class="pts" id="fbP">+100</span></div>
-  <p class="exp" id="fbE"></p>
+  <div class="exp" id="fbE"></div>
   <button class="btn" id="fbNext">繼續</button>
 </div></div>
 
@@ -481,49 +642,53 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:56}
 /* 共用排行榜：Google Apps Script 網頁應用程式，五個人的分數存在同一處 */
 const BOARD_URL='https://script.google.com/macros/s/AKfycbyZ0g8oskCf27rtheK976wS0nUfPg3p_25olhbMBVyKQocvj-rVTr25DIVFB634sIu-/exec';
 const PLAYERS=['YoYo','RAE','Ryson','Livia','Joanne'];
+const TYPE_HOW={ab:'兩句比一比，選比較好的',multi:'可能不只一個答案，全部選出來',order:'依序點選，排出正確順序',fill:'選一個詞，填進空格',
+  spot:'點出文章裡有問題的句子',match:'先點左邊，再點右邊，配成一對',rapid:'每句只有 5 秒，快速判斷',build:'每段選一句，組成一篇文',sort:'把每一句放進正確的類別'};
+const TLIM={spot:40,match:40,build:45,sort:45};
+const STAGE_N=6, MAX_STARS=STAGES.length*3;
 
 /* ====== 狀態 ====== */
-const KEY='nn-academy-v2';
+const KEY='nn-academy-v3';
 let G={player:'',players:{},sound:true};
 try{Object.assign(G,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
-const prof=n=>G.players[n]||(G.players[n]={name:n,stars:{},best:0,right:0,total:0});
-let S=G.player?prof(G.player):{name:'',stars:{},best:0};
+const prof=n=>{const p=G.players[n]||(G.players[n]={name:n,stars:{},best:0,right:0,total:0});p.seen=p.seen||{};p.tseen=p.tseen||{};return p};
+let S=G.player?prof(G.player):prof('_guest');
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(G))}catch(e){}};
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,'0');
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const starsOf=p=>STAGES.reduce((s,x)=>s+((p.stars||{})[x.id]||0),0);
-const days=()=>Math.round(starsOf(S)/(STAGES.length*3)*28);
+const days=()=>Math.round(starsOf(S)/MAX_STARS*28);
 const rankOf=d=>RANKS.filter(r=>d>=r[0]).pop();
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const buzz=ms=>{try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}};
+const strip=h=>h.replace(/<[^>]+>/g,'');
 
-/* 逐字落下：把元素裡的文字拆成一個個字 */
 function kin(el,delay){
   if(!el||reduce)return;let i=0;
   if(delay)el.style.setProperty('--d',delay+'ms');
   (function walk(n){[...n.childNodes].forEach(c=>{
     if(c.nodeType===3){const f=document.createDocumentFragment();[...c.textContent].forEach(ch=>{const s=document.createElement('span');s.className='ch';s.style.setProperty('--i',i++);s.textContent=ch;f.appendChild(s)});c.replaceWith(f)}
-    else if(c.nodeType===1&&c.tagName!=='BR')walk(c)})})(el);
+    else if(c.nodeType===1&&c.tagName!=='BR'&&!c.classList.contains('blank'))walk(c)})})(el);
 }
+function deco(num,sub){const d=$('dnum');if(!d)return;if(d.textContent!==num){d.textContent=num;d.classList.remove('go');void d.offsetWidth;d.classList.add('go')}$('dsub').textContent=sub||'AGING ACADEMY'}
 
-/* ====== 畫面切換：三層斜片刷過 ====== */
+/* ====== 畫面切換 ====== */
 function show(id,instant){
-  const go=()=>{document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));document.body.dataset.s=id;window.scrollTo(0,0)};
+  const go=()=>{document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));document.body.dataset.s=id;window.scrollTo(0,0);
+    if(id==='sTitle')deco('酿');else if(id==='sPick')deco('P1','SELECT');else if(id==='sMap')deco('MAP','STAGE SELECT');else if(id==='sBoard')deco('TOP','RANKING');else if(id==='sLib')deco('LIB','KNOWLEDGE')};
   if(instant||reduce){go();return Promise.resolve()}
   const t=$('tr');t.classList.remove('go');void t.offsetWidth;t.classList.add('go');beep('swoosh');
   return new Promise(r=>setTimeout(()=>{go();r()},430));
 }
-
-/* ====== 插入特寫 ====== */
 async function cutin(k,b,s,o,hold){
   if(reduce)return;
   const c=$('cut');$('cutK').textContent=k||'';$('cutB').textContent=b||'';$('cutS').textContent=s||'';
   c.className='cut on'+(o?' o':'');void c.offsetWidth;
   c.classList.add('in');beep('cut');buzz(30);
   await sleep(hold||900);
-  c.classList.add('out');await sleep(330);
+  c.classList.add('out');await sleep(380);
   c.className='cut';
 }
 
@@ -548,6 +713,7 @@ function beep(type){
     if(type==='ok')return tone([[784,0],[1175,.07],[1568,.14]],'triangle',.13,.2);
     if(type==='bad')return tone([[220,0],[164,.1]],'square',.08,.25);
     if(type==='tap')return tone([[700,0]],'triangle',.08,.08);
+    if(type==='sel')return tone([[900,0],[1200,.04]],'triangle',.06,.07);
     if(type==='hover')return tone([[1200,0]],'triangle',.03,.05);
     if(type==='tick')return tone([[1000,0]],'square',.03,.05);
     if(type==='count')return tone([[1400,0]],'triangle',.04,.04);
@@ -555,25 +721,35 @@ function beep(type){
     if(type==='grade'){noise(.3,3000,200,.3,'lowpass');return tone([[65,0],[98,.02]],'sawtooth',.12,.4)}
   }catch(e){}
 }
-document.addEventListener('pointerover',e=>{const b=e.target.closest('.opt,.stage,.pc');if(b&&!b._h){b._h=1;beep('hover');b.addEventListener('pointerleave',()=>b._h=0,{once:true})}});
+document.addEventListener('pointerover',e=>{const b=e.target.closest('.opt,.stage,.pc,.chip,.ln,.mi');if(b&&!b._h&&!b.disabled){b._h=1;beep('hover');b.addEventListener('pointerleave',()=>b._h=0,{once:true})}});
+/* 卡片隨滑鼠微傾 */
+document.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;document.querySelectorAll('.tilt,.lcard').forEach(el=>{const r=el.getBoundingClientRect();if(!r.width)return;
+  const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;const inside=Math.abs(x)<.8&&Math.abs(y)<.8;
+  el.style.setProperty('--rx',(inside?-y*6:0)+'deg');el.style.setProperty('--ry',(inside?x*8:0)+'deg')})});
 
-/* ====== 碎片 ====== */
-const cv=$('fx'),cx=cv.getContext('2d');let parts=[],raf;
-function burst(n,x,y){
-  if(reduce)return;
-  const dpr=devicePixelRatio||1;cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;
-  const cols=['#eb4d00','#f4f1ea','#0e0d0c','#eb4d00'];x=x??innerWidth/2;y=y??innerHeight*.42;
-  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=Math.random()*15+5;
-    parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-6,s:Math.random()*16+6,c:cols[i%4],r:Math.random()*6,vr:(Math.random()-.5)*.5,life:70+Math.random()*50})}
+/* ====== 碎片與衝擊波 ====== */
+const cv=$('fx'),cx=cv.getContext('2d');let parts=[],rings=[],raf;
+function fxLoop(){
+  const dpr=devicePixelRatio||1;
+  if(cv.width!==innerWidth*dpr){cv.width=innerWidth*dpr;cv.height=innerHeight*dpr}
   cancelAnimationFrame(raf);(function loop(){
     cx.setTransform(dpr,0,0,dpr,0,0);cx.clearRect(0,0,innerWidth,innerHeight);
-    parts=parts.filter(p=>p.life-->0);
+    parts=parts.filter(p=>p.life-->0);rings=rings.filter(r=>r.t<1);
+    rings.forEach(r=>{r.t+=.045;if(r.t<0)return;cx.save();cx.globalAlpha=1-r.t;cx.strokeStyle=r.c;cx.lineWidth=10*(1-r.t)+1;cx.beginPath();cx.arc(r.x,r.y,20+r.t*r.R,0,Math.PI*2);cx.stroke();cx.restore()});
     parts.forEach(p=>{p.vy+=.45;p.vx*=.97;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;
       if(p.c==='#0e0d0c'){cx.strokeStyle='#f4f1ea';cx.lineWidth=1.5}
       cx.beginPath();cx.moveTo(0,-p.s/2);cx.lineTo(p.s/2,p.s/2);cx.lineTo(-p.s/2,p.s/3);cx.closePath();cx.fill();if(p.c==='#0e0d0c')cx.stroke();cx.restore()});
-    if(parts.length)raf=requestAnimationFrame(loop);else cx.clearRect(0,0,innerWidth,innerHeight);
+    if(parts.length||rings.length)raf=requestAnimationFrame(loop);else cx.clearRect(0,0,innerWidth,innerHeight);
   })();
 }
+function burst(n,x,y){
+  if(reduce)return;
+  const cols=['#eb4d00','#f4f1ea','#0e0d0c','#eb4d00'];x=x??innerWidth/2;y=y??innerHeight*.42;
+  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=Math.random()*15+5;
+    parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-6,s:Math.random()*16+6,c:cols[i%4],r:Math.random()*6,vr:(Math.random()-.5)*.5,life:70+Math.random()*50})}
+  fxLoop();
+}
+function ring(x,y,c){if(reduce||!isFinite(x)||!isFinite(y))return;rings.push({x,y,t:0,R:Math.max(innerWidth,innerHeight)*.5,c:c||'#eb4d00'});rings.push({x,y,t:-.15,R:Math.max(innerWidth,innerHeight)*.35,c:'#f4f1ea'});fxLoop()}
 function flash(bad){const f=$('flash');f.classList.toggle('bad',!!bad);f.classList.remove('go');void f.offsetWidth;f.classList.add('go')}
 function shake(){const a=$('app');a.classList.remove('shakeScreen');void a.offsetWidth;a.classList.add('shakeScreen')}
 function stamp(text,bad){
@@ -581,10 +757,10 @@ function stamp(text,bad){
   s.classList.remove('go');void s.offsetWidth;s.classList.add('go');
   setTimeout(()=>{beep('hit');shake();buzz(bad?120:40)},190);
 }
-function countUp(el,to,ms){
-  if(reduce||!to){el.textContent=to;return}
+function countUp(el,to,ms,suffix){
+  if(reduce||!to){el.textContent=to+(suffix||'');return}
   const t0=performance.now();let last=-1;
-  (function step(t){const p=Math.min(1,(t-t0)/ms),v=Math.round(to*(1-Math.pow(1-p,3)));el.textContent=v;
+  (function step(t){const p=Math.min(1,(t-t0)/ms),v=Math.round(to*(1-Math.pow(1-p,3)));el.textContent=v+(p>=1&&suffix?suffix:'');
     const q=Math.floor(p*12);if(q!==last){last=q;beep('count')}if(p<1)requestAnimationFrame(step)})(t0);
 }
 
@@ -595,9 +771,9 @@ function renderRoster(){
   $('roster').innerHTML=PLAYERS.map((n,i)=>{const p=G.players[n],st=p?starsOf(p):0;
     return`<button class="pc in${Math.min(i+2,6)}${G.player===n?' on':''}" data-n="${n}"><span class="ini">${n[0]}</span><span class="nm">${n}</span><span class="pr">${p&&p.best?'<small>最佳</small>'+p.best:st?'<small>星星</small>★ '+st:'<small>&nbsp;</small>NEW'}</span></button>`}).join('');
   $('roster').querySelectorAll('.pc').forEach(b=>b.onclick=()=>{
-    G.player=b.dataset.n;S=prof(G.player);save();beep('tap');buzz(20);
+    G.player=b.dataset.n;S=prof(G.player);save();beep('sel');buzz(20);
     $('roster').querySelectorAll('.pc').forEach(x=>{x.classList.toggle('on',x===b);x.style.animation='none'});
-    updGo();burst(18,b.getBoundingClientRect().left+60,b.getBoundingClientRect().top+38)});
+    updGo();const r=b.getBoundingClientRect();burst(18,r.left+60,r.top+38)});
   updGo();
 }
 function updGo(){const btn=$('goMap');btn.disabled=!G.player;btn.classList.toggle('pulse',!!G.player);btn.innerHTML=(G.player?G.player+'，出發':'先選你的名字')+'<span class="arr">→</span>'}
@@ -607,6 +783,8 @@ const soundLabel=()=>$('sound').textContent='音效 '+(G.sound?'開':'關');
 $('sound').onclick=()=>{G.sound=!G.sound;save();soundLabel();beep('tap')};soundLabel();
 
 /* ====== 地圖 ====== */
+const totalCards=STAGES.reduce((s,x)=>s+x.cards.length,0);
+const seenCount=()=>STAGES.reduce((s,x)=>s+((S.seen[x.id]||[]).length),0);
 function unlocked(i){return i===0||(S.stars[STAGES[i-1].id]||0)>0}
 function renderMap(){
   $('hiName').textContent='挑戰者　'+(G.player||'');
@@ -614,6 +792,7 @@ function renderMap(){
   $('cells').innerHTML=Array.from({length:28},()=>'<i></i>').join('');
   [...$('cells').children].forEach((c,i)=>{if(i<d)setTimeout(()=>{c.classList.add('on');$('dayNum').innerHTML=(i+1)+'<small>天</small>';if(i%3===0)beep('count')},700+i*45)});
   $('rankNow').textContent=rankOf(d)[1];
+  $('libCount').textContent=seenCount()+'/'+totalCards;
   const p=$('path');p.innerHTML='';
   let nextMarked=false;
   STAGES.forEach((s,i)=>{
@@ -626,25 +805,29 @@ function renderMap(){
   });
   const allDone=STAGES.every(s=>(S.stars[s.id]||0)>0);
   const f=document.createElement('button');f.className='stage final in6'+(allDone?'':' locked')+(allDone&&!nextMarked&&!S.best?' next':'');
-  f.innerHTML=`<span class="n">FIN</span><span class="t"><span class="no">FINAL</span><span class="tt">熟成大考</span><span class="st">15 題限時搶答${S.best?'　最佳 '+S.best+' 分':''}</span></span><span class="stars">${allDone?'':'LOCKED'}</span>`;
+  f.innerHTML=`<span class="n">FIN</span><span class="t"><span class="no">FINAL　全新題型</span><span class="tt">熟成大考</span><span class="st">抓漏・配對・快篩・組文・分類${S.best?'　最佳 '+S.best:''}</span></span><span class="stars">${allDone?'':'LOCKED'}</span>`;
   f.onclick=()=>{if(!allDone){beep('bad');buzz(60);f.animate([{transform:'translateX(-10px)'},{transform:'translateX(10px)'},{transform:'none'}],{duration:260});return}startFinal()};
   p.appendChild(f);
 }
 $('mapBoard').onclick=()=>openBoard('sMap');
+$('libBtn').onclick=()=>openLib();
 
 /* ====== 學習卡 ====== */
 let cur=0,card=0;
-async function startLearn(i){cur=i;card=0;beep('tap');await cutin('STAGE '+pad(i+1),STAGES[i].title,STAGES[i].sub,false,950);renderCard();show('sLearn')}
-function renderCard(dir){
-  const s=STAGES[cur],c=s.cards[card],n=s.cards.length;
-  $('dots').innerHTML=s.cards.map((_,k)=>`<i class="${k<card?'on':k===card?'cur':''}"></i>`).join('');
-  let h=`<div class="lcard${dir<0?' back':''}"><span class="pg">${pad(card+1)}</span><span class="tag"><span>${c.kick}</span></span><h3>${c.h}</h3>`;
+async function startLearn(i){cur=i;card=0;beep('tap');await cutin('STAGE '+pad(i+1),STAGES[i].title,STAGES[i].sub,false,950);renderCard();show('sLearn');deco(pad(i+1),'STAGE')}
+function cardBody(c){
+  let h='';
   if(c.body)h+=`<div class="body">${c.body}</div>`;
   if(c.facts)h+=`<div class="facts">${c.facts.map((f,i)=>`<div style="--i:${i}"><span></span><span><b>${f[1]}</b>${f[2]}</span></div>`).join('')}</div>`;
   if(c.duo)h+=`<div class="duo">${c.duo.map(d=>`<div class="no">${d[0]}</div><div class="ok">${d[1]}</div>`).join('')}</div>`;
   if(c.post)h+=`<div class="post">${c.post}</div>`;
-  if(c.tip)h+=`<div class="tip">${c.tip}</div>`;
-  $('lcard').innerHTML=h+'</div>';
+  return h;
+}
+function renderCard(dir){
+  const s=STAGES[cur],c=s.cards[card],n=s.cards.length;
+  const seen=S.seen[s.id]=S.seen[s.id]||[];if(!seen.includes(card)){seen.push(card);save()}
+  $('dots').innerHTML=s.cards.map((_,k)=>`<i class="${k<card?'on':k===card?'cur':''}"></i>`).join('');
+  $('lcard').innerHTML=`<div class="lcard${dir<0?' back':''}"><span class="pg">${pad(card+1)}</span><span class="tag"><span>${c.kick}</span></span><h3>${c.h}</h3>${cardBody(c)}${c.tip?`<div class="tip">${c.tip}</div>`:''}</div>`;
   kin($('lcard').querySelector('h3'),120);
   $('lPrev').style.visibility=card?'visible':'hidden';
   const last=card===n-1;
@@ -657,89 +840,263 @@ $('learnClose').onclick=()=>{renderMap();show('sMap')};
 let sx=null;$('lcard').addEventListener('touchstart',e=>{sx=e.touches[0].clientX},{passive:true});
 $('lcard').addEventListener('touchend',e=>{if(sx===null)return;const dx=e.changedTouches[0].clientX-sx;sx=null;if(dx<-60)$('lNext').click();else if(dx>60)$('lPrev').click()});
 
-/* ====== 答題 ====== */
-let Q=[],qi=0,right=0,combo=0,maxCombo=0,score=0,mode='stage',wrongs=[],tmr,tleft,locked=false;
+/* ====== 知識圖鑑 ====== */
+function openLib(){
+  $('libSum').textContent='已收集 '+seenCount()+' / '+totalCards;
+  $('lib').innerHTML=STAGES.map((s,i)=>{const seen=S.seen[s.id]||[];
+    return`<div class="libsec in${Math.min(i+2,6)}"><h3><span>${pad(i+1)}</span>${s.title}<small>${seen.length}/${s.cards.length}</small></h3>${s.cards.map((c,k)=>seen.includes(k)
+      ?`<div class="libcard"><div class="kk">${c.kick}</div><h4>${c.h}</h4><div class="bd">${cardBody(c)}${c.tip?`<p style="margin-top:6px">💡 ${c.tip}</p>`:''}</div></div>`
+      :`<div class="libcard lock">？？？　闖過這一關的學習卡就會解鎖</div>`).join('')}</div>`}).join('');
+  show('sLib');
+}
+$('libBack').onclick=()=>{renderMap();show('sMap')};
+
+/* ====== 出題 ====== */
+let Q=[],qi=0,right=0,combo=0,maxCombo=0,score=0,mode='stage',wrongs=[],tmr,tleft=0,locked=false,hints=2,curSubmit=null,rapidT=null;
 function prep(q,sid){
-  if(q.t==='tf')return{...q,sid,opts:[{t:'可以發',k:'○',ok:q.a===0},{t:'踩雷了',k:'✕',ok:q.a===1}]};
-  return{...q,sid,opts:shuffle(q.o.map((t,k)=>({t,ok:k===0})))};
+  q={...q,sid};
+  if(q.t==='tf')q.opts=[{t:'可以發',k:'○',ok:q.a===0},{t:'踩雷了',k:'✕',ok:q.a===1}];
+  else if(q.t==='ab')q.opts=shuffle([{t:q.a[0],ok:true},{t:q.a[1],ok:false}]);
+  else if(q.t==='mc'||q.t==='fill')q.opts=shuffle(q.o.map((t,k)=>({t,ok:k===0})));
+  else if(q.t==='multi')q.opts=shuffle(q.o.map(x=>({t:x[0],ok:x[1]})));
+  else if(q.t==='order'){let c;do{c=shuffle(q.o.map((_,i)=>i))}while(c.every((v,i)=>v===i));q.chips=c}
+  else if(q.t==='match'){q.L=shuffle(q.pairs.map((p,i)=>i));q.R=shuffle(q.pairs.map((p,i)=>i))}
+  else if(q.t==='rapid')q.items2=shuffle(q.items);
+  else if(q.t==='build')q.slots2=q.slots.map(s=>({label:s[0],opts:shuffle(s[1].map((t,k)=>({t,ok:k===0})))}));
+  else if(q.t==='sort')q.items2=shuffle(q.items);
+  return q;
+}
+function pickVaried(pool,n){
+  const by={};shuffle(pool).forEach(q=>(by[q.t]=by[q.t]||[]).push(q));
+  const keys=shuffle(Object.keys(by)),out=[];
+  while(out.length<n&&keys.some(k=>by[k].length))for(const k of keys){if(by[k].length&&out.length<n)out.push(by[k].pop())}
+  return shuffle(out);
 }
 async function startStageQuiz(){
   mode='stage';const s=STAGES[cur];
-  Q=shuffle(s.q).slice(0,5).map(q=>prep(q,s.id));
-  await cutin('QUIZ','答題開始','5 題，答對一半以上就過關',true,800);
+  Q=pickVaried(s.q,STAGE_N).map(q=>prep(q,s.id));
+  await cutin('QUIZ','答題開始',STAGE_N+' 題，答對 4 題以上就過關',true,850);
   begin();
 }
 async function startFinal(){
   mode='final';
-  let pool=[];STAGES.forEach(s=>pool.push(...shuffle(s.q).slice(0,3).map(q=>prep(q,s.id))));
+  let pool=[];Object.entries(FINAL_PLAN).forEach(([t,n])=>shuffle(FINAL[t]).slice(0,n).forEach(q=>pool.push(prep({...q,t},'final'))));
   Q=shuffle(pool);
-  await cutin('FINAL','最終考驗','熟成大考　15 題　每題 20 秒',false,1300);
-  await cutin('','READY',' ',true,500);
-  await cutin('','GO!',' ',false,380);
+  await cutin('FINAL','最終考驗','全新題型　'+Q.length+' 題　可以翻手冊兩次',false,1400);
+  await cutin('','READY',' ',true,480);
+  await cutin('','GO!',' ',false,360);
   begin();
 }
-function begin(){qi=0;right=0;combo=0;maxCombo=0;score=0;wrongs=[];
-  $('timer').hidden=mode!=='final';$('scoreP').hidden=mode!=='final';$('scoreN').textContent=0;
-  $('combo').textContent='';$('combo').classList.remove('show');
-  show('sQuiz',document.body.dataset.s==='sQuiz');setTimeout(renderQ,document.body.dataset.s==='sQuiz'?0:430)}
-function renderQ(){
-  locked=false;const q=Q[qi];
+function begin(){qi=0;right=0;combo=0;maxCombo=0;score=0;wrongs=[];hints=2;$('fb').classList.remove('show');
+  $('scoreP').hidden=mode!=='final';$('hintBtn').hidden=mode!=='final';$('scoreN').textContent=0;updHint();
+  $('combo').textContent='';$('combo').classList.remove('show');document.body.classList.remove('hot');
+  const already=document.body.dataset.s==='sQuiz';show('sQuiz',already);setTimeout(renderQ,already?0:430)}
+function updHint(){const b=$('hintBtn');b.textContent='翻手冊 ×'+hints;b.disabled=!hints}
+function setFuse(sec){
+  const f=$('fuse'),i=f.firstChild;
+  if(!sec){f.hidden=true;return}
+  f.hidden=false;f.classList.remove('low');i.style.animation='none';void i.offsetWidth;i.style.animation=`fuse ${sec}s linear forwards`;
+}
+async function renderQ(){
+  locked=true;curSubmit=null;clearInterval(tmr);clearTimeout(rapidT);
+  const q=Q[qi];
   $('qdots').innerHTML=Q.map((_,k)=>`<i class="${k<qi?'on':k===qi?'cur':''}"></i>`).join('');
-  $('qcount').innerHTML=`${pad(qi+1)}<small> / ${pad(Q.length)}</small>`;
-  $('qcard').className='qcard';
-  $('qcard').innerHTML=`<span class="tag o"><span>${CATS[q.sid]}</span></span><h3>${q.q}</h3>${q.quote?`<div class="quote">「${q.quote}」</div>`:''}`;
+  const qc=$('qcount');qc.innerHTML=`${pad(qi+1)}<small> / ${pad(Q.length)}</small>`;qc.classList.remove('go');void qc.offsetWidth;qc.classList.add('go');
+  deco(pad(qi+1),mode==='final'?'FINAL EXAM　QUESTION':'QUESTION');
+  $('qcard').innerHTML='';$('opts').innerHTML='';$('fuse').hidden=true;
+  if(TYPE_HOW[q.t]&&!S.tseen[q.t]){S.tseen[q.t]=1;save();await cutin('NEW TYPE',TYPE_NAME[q.t],TYPE_HOW[q.t],true,1100)}
+  const cat=q.sid==='final'?'大考・'+TYPE_NAME[q.t]:CATS[q.sid];
+  let title=q.q;if(q.t==='fill')title=q.q.replace('＿＿','<span class="blank" id="blank">？</span>');
+  $('qcard').className='qcard tilt';
+  $('qcard').innerHTML=`<span class="tag o"><span>${cat}</span></span>${q.t!=='mc'&&q.t!=='tf'&&q.sid!=='final'?`<span class="typetag">${TYPE_NAME[q.t]}</span>`:''}<h3>${title}</h3>${q.quote?`<div class="quote">「${q.quote}」</div>`:''}${q.note?`<div class="note">${q.note}</div>`:''}`;
   $('qcard').style.animation='none';void $('qcard').offsetWidth;$('qcard').style.animation='';
   kin($('qcard').querySelector('h3'),80);
-  const o=$('opts');o.className='opts'+(q.t==='tf'?' tf':'');
-  o.innerHTML=q.opts.map((x,k)=>`<button class="opt" data-k="${k}"><span class="k">${q.t==='tf'?x.k:'ABCD'[k]}</span><span>${x.t}</span></button>`).join('');
-  o.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.k));
-  beep('swoosh');
-  if(mode==='final'){clearInterval(tmr);tleft=20;tick();tmr=setInterval(()=>{tleft--;tick();if(tleft<=0){clearInterval(tmr);answer(-1)}},1000)}
+  const o=$('opts');o.className='opts t-'+q.t;
+  ({mc:rChoice,tf:rChoice,ab:rChoice,fill:rChoice,multi:rMulti,order:rOrder,spot:rSpot,match:rMatch,rapid:rRapid,build:rBuild,sort:rSort})[q.t](q,o);
+  beep('swoosh');locked=false;
+  if(mode==='final'&&q.t!=='rapid'){
+    const T=TLIM[q.t]||20;tleft=T;setFuse(T);
+    tmr=setInterval(()=>{tleft--;if(tleft<=5&&tleft>0){$('fuse').classList.add('low');beep('tick')}if(tleft<=0){clearInterval(tmr);timeout()}},1000);
+  }
 }
-function tick(){$('tnum').textContent=tleft;$('tf').style.strokeDashoffset=144.5*(1-tleft/20);$('timer').classList.toggle('low',tleft<=5);if(tleft<=5&&tleft>0)beep('tick')}
-async function answer(k){
-  if(locked)return;locked=true;clearInterval(tmr);
-  const q=Q[qi],btns=[...$('opts').children],ri=q.opts.findIndex(x=>x.ok),ok=k===ri;
-  btns.forEach(b=>b.style.animation='none');
-  btns.forEach((b,i)=>{if(i===ri)b.classList.add('right');else if(i===k)b.classList.add('wrong');else b.classList.add('dim')});
-  if(k>=0&&btns[k]){const b=btns[k].style;b.animation='';}
-  let pts=0;
-  if(ok){right++;combo++;maxCombo=Math.max(maxCombo,combo);pts=100+(mode==='final'?tleft*5:0)+(combo>1?(combo-1)*20:0);score+=pts;
-    flash();beep('ok');stamp('正解');const r=btns[ri].getBoundingClientRect();burst(combo>=3?60:30,r.left+r.width/2,r.top+r.height/2)}
-  else{combo=0;flash(true);beep('bad');wrongs.push(q);stamp(k===-1?'時間到':'可惜',true);$('qcard').classList.add('glitch')}
-  const sn=$('scoreN');sn.textContent=score;sn.classList.remove('bump');void sn.offsetWidth;if(ok)sn.classList.add('bump');
+function timeout(){if(locked)return;if(curSubmit)curSubmit(true);else pickOne(-1)}
+function submitBtn(o,fn){const b=document.createElement('button');b.className='btn o submit';b.disabled=true;b.innerHTML='確認答案<span class="arr">→</span>';b.onclick=()=>fn(false);o.appendChild(b);curSubmit=fn;return b}
+function lockAll(){$('opts').querySelectorAll('button').forEach(b=>b.disabled=true)}
+
+/* 單選、判斷、二選一、填空 */
+function rChoice(q,o){
+  o.innerHTML=q.opts.map((x,k)=>`<button class="opt" data-k="${k}"><span class="k">${q.t==='tf'?x.k:'AB CD'.replace(' ','')[k]}</span><span>${x.t}</span></button>`).join('')+(q.t==='ab'?'<span class="vs">VS</span>':'');
+  o.querySelectorAll('.opt').forEach(b=>b.onclick=()=>pickOne(+b.dataset.k));
+}
+function pickOne(k){
+  if(locked)return;locked=true;const q=Q[qi],btns=[...$('opts').querySelectorAll('.opt')],ri=q.opts.findIndex(x=>x.ok);
+  btns.forEach((b,i)=>{b.disabled=true;if(i!==k)b.style.animation='none';b.classList.add(i===ri?'right':i===k?'wrong':'dim')});
+  if(q.t==='fill'){const bl=$('blank');if(bl){bl.textContent=k>=0?q.opts[k].t:q.opts[ri].t;bl.classList.add(k===ri?'ok':'ng')}}
+  judge(k===ri,k===ri?1:0,btns[ri],k===-1);
+}
+/* 多選 */
+function rMulti(q,o){
+  o.innerHTML=q.opts.map((x,k)=>`<button class="opt" data-k="${k}"><span class="k">✓</span><span>${x.t}</span></button>`).join('');
+  const sb=submitBtn(o,to=>{
+    if(locked)return;locked=true;const btns=[...o.querySelectorAll('.opt')];let good=0;
+    q.opts.forEach((x,i)=>{const s=btns[i].classList.contains('sel');if(s===x.ok)good++;btns[i].style.animation='none';btns[i].classList.remove('sel');btns[i].classList.add(x.ok&&s?'right':x.ok?'miss':s?'wrong':'dim')});
+    lockAll();judge(good===q.opts.length,good/q.opts.length,btns.find((b,i)=>q.opts[i].ok),to);
+  });
+  o.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(locked)return;b.classList.toggle('sel');beep('sel');sb.disabled=!o.querySelector('.opt.sel')});
+}
+/* 排順序 */
+function rOrder(q,o){
+  o.innerHTML=`<div class="slots">${q.o.map((_,i)=>`<button class="slot" data-i="${i}"><span class="no">${i+1}</span><span class="tx">點下面的句子放進來</span></button>`).join('')}</div><div class="chips">${q.chips.map(c=>`<button class="chip" data-c="${c}">${q.o[c]}</button>`).join('')}</div>`;
+  const slots=[...o.querySelectorAll('.slot')],chips=[...o.querySelectorAll('.chip')];
+  const sb=submitBtn(o,to=>{
+    if(locked)return;locked=true;let good=0;
+    slots.forEach((s,i)=>{const ok=+s.dataset.c===i&&s.dataset.c!==undefined;if(ok)good++;s.classList.add(ok?'right':'wrong')});
+    lockAll();judge(good===slots.length,good/slots.length,slots[0],to);
+  });
+  const upd=()=>{sb.disabled=slots.some(s=>s.dataset.c===undefined)};
+  chips.forEach(ch=>ch.onclick=()=>{if(locked)return;const s=slots.find(x=>x.dataset.c===undefined);if(!s)return;s.dataset.c=ch.dataset.c;s.querySelector('.tx').textContent=ch.textContent;s.classList.add('fill');ch.classList.add('used');beep('sel');upd()});
+  slots.forEach(s=>s.onclick=()=>{if(locked||s.dataset.c===undefined)return;chips.find(c=>c.dataset.c===s.dataset.c).classList.remove('used');delete s.dataset.c;s.querySelector('.tx').textContent='點下面的句子放進來';s.classList.remove('fill');beep('tap');upd()});
+}
+/* 抓漏 */
+function rSpot(q,o){
+  o.innerHTML=`<div class="spot">${q.lines.map((l,i)=>`<button class="ln" data-i="${i}"><span class="no">${pad(i+1)}</span><span>${l[0]}</span></button>`).join('')}</div>`;
+  const lns=[...o.querySelectorAll('.ln')];
+  const sb=submitBtn(o,to=>{
+    if(locked)return;locked=true;let good=0;
+    q.lines.forEach((l,i)=>{const s=lns[i].classList.contains('sel');if(s===!!l[1])good++;lns[i].classList.remove('sel');if(l[1])lns[i].classList.add(s?'hit':'missed');else if(s)lns[i].classList.add('false')});
+    lockAll();judge(good===q.lines.length,good/q.lines.length,lns.find((x,i)=>q.lines[i][1]),to);
+  });
+  lns.forEach(b=>b.onclick=()=>{if(locked)return;b.classList.toggle('sel');beep('sel');sb.disabled=!o.querySelector('.ln.sel')});
+}
+/* 配對 */
+function rMatch(q,o){
+  o.innerHTML=`<div class="match"><div class="mcol">${q.L.map(i=>`<button class="mi" data-l="${i}">${q.pairs[i][0]}</button>`).join('')}</div><div class="mcol">${q.R.map(i=>`<button class="mi r" data-r="${i}">${q.pairs[i][1]}</button>`).join('')}</div><p class="mhelp">先點左邊，再點右邊配成一對；點已配對的可以重來</p></div>`;
+  const Ls=[...o.querySelectorAll('[data-l]')],Rs=[...o.querySelectorAll('[data-r]')];let act=null,n=0;const pairOf=new Map();
+  const badge=(el,num)=>{let b=el.querySelector('.pn');if(num==null){b&&b.remove();return}if(!b){b=document.createElement('span');b.className='pn';el.appendChild(b)}b.textContent=num};
+  const redraw=()=>{Ls.forEach(l=>badge(l,null));Rs.forEach(r=>badge(r,null));let k=1;Ls.forEach(l=>{if(pairOf.has(l)){badge(l,k);badge(pairOf.get(l),k);k++}});sb.disabled=pairOf.size<Ls.length};
+  const sb=submitBtn(o,to=>{
+    if(locked)return;locked=true;let good=0;
+    Ls.forEach(l=>{const r=pairOf.get(l);const ok=r&&r.dataset.r===l.dataset.l;if(ok)good++;l.classList.add(ok?'right':'wrong');if(r)r.classList.add(ok?'right':'wrong')});
+    lockAll();judge(good===Ls.length,good/Ls.length,Ls[0],to);
+  });
+  Ls.forEach(l=>l.onclick=()=>{if(locked)return;if(pairOf.has(l)){pairOf.delete(l);redraw()}Ls.forEach(x=>x.classList.remove('act'));act=l;l.classList.add('act');beep('sel')});
+  Rs.forEach(r=>r.onclick=()=>{if(locked||!act)return;for(const [k,v] of pairOf)if(v===r)pairOf.delete(k);pairOf.set(act,r);act.classList.remove('act');act=null;beep('sel');redraw()});
+}
+/* 快篩 */
+function rRapid(q,o){
+  const labs=q.labels||['可以','踩雷'],res=[];let i=0;
+  o.innerHTML=`<div class="rapid"><span class="cnt" id="rcnt"></span><div class="st" id="rst"></div><span class="rf" id="rf"></span></div><div class="rbtns"><button data-v="1">${labs[0]}</button><button data-v="0">${labs[1]}</button></div>`;
+  const next=()=>{
+    if(i>=q.items2.length){
+      const good=res.filter(r=>r.ok).length;
+      o.innerHTML=`<div class="rlist">${q.items2.map((it,k)=>`<div class="${res[k].ok?'ok':'ng'}" style="animation-delay:${k*.06}s">${res[k].ok?'○':'✕'}　${it[0]}<span>${it[1]?labs[0]:labs[1]}</span></div>`).join('')}</div>`;
+      judge(good===q.items2.length,good/q.items2.length,o.firstChild,false);return;
+    }
+    $('rcnt').textContent=pad(i+1)+' / '+pad(q.items2.length);
+    const st=$('rst');st.textContent=q.items2[i][0];st.style.animation='none';void st.offsetWidth;st.style.animation='';
+    const rf=$('rf');rf.classList.remove('run');void rf.offsetWidth;rf.classList.add('run');
+    o.querySelectorAll('.rbtns button').forEach(b=>b.disabled=false);
+    clearTimeout(rapidT);rapidT=setTimeout(()=>ans(-1),5000);
+  };
+  const ans=v=>{
+    clearTimeout(rapidT);o.querySelectorAll('.rbtns button').forEach(b=>b.disabled=true);
+    const ok=v===q.items2[i][1];res.push({ok});
+    const card=o.querySelector('.rapid'),mk=document.createElement('span');mk.className='mk';mk.textContent=ok?'○':'✕';mk.style.color=ok?'#eb4d00':'#0e0d0c';card.appendChild(mk);
+    beep(ok?'sel':'bad');if(ok){const r=card.getBoundingClientRect();burst(10,r.right-40,r.top+30)}else{shake();buzz(60)}
+    setTimeout(()=>{mk.remove();i++;next()},420);
+  };
+  o.querySelectorAll('.rbtns button').forEach(b=>b.onclick=()=>{if(!locked)ans(+b.dataset.v)});
+  next();
+}
+/* 組文 */
+function rBuild(q,o){
+  const pick=q.slots2.map(()=>-1);
+  o.innerHTML=`<div class="bpost">${q.slots2.map(s=>`<p>（${s.label}：還沒選）</p>`).join('')}</div>`+q.slots2.map((s,g)=>`<div class="bgrp" data-g="${g}"><h5>${s.label}</h5>${s.opts.map((x,k)=>`<button class="opt" data-k="${k}"><span class="k">${'ABC'[k]}</span><span>${x.t}</span></button>`).join('')}</div>`).join('');
+  const ps=[...o.querySelectorAll('.bpost p')];
+  const sb=submitBtn(o,to=>{
+    if(locked)return;locked=true;let good=0;
+    q.slots2.forEach((s,g)=>{const btns=[...o.querySelectorAll(`.bgrp[data-g="${g}"] .opt`)],k=pick[g],ri=s.opts.findIndex(x=>x.ok),ok=k===ri;if(ok)good++;
+      btns.forEach((b,i)=>{b.style.animation='none';b.classList.remove('sel');b.classList.add(i===ri?(ok?'right':'miss'):i===k?'wrong':'dim')});ps[g].classList.add(ok?'right':'wrong')});
+    lockAll();judge(good===q.slots2.length,good/q.slots2.length,ps[0],to);
+  });
+  o.querySelectorAll('.bgrp').forEach(gr=>{const g=+gr.dataset.g;gr.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(locked)return;
+    gr.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');pick[g]=+b.dataset.k;
+    ps[g].textContent=q.slots2[g].opts[pick[g]].t;ps[g].classList.remove('set');void ps[g].offsetWidth;ps[g].classList.add('set');beep('sel');sb.disabled=pick.includes(-1)})});
+}
+/* 分類 */
+function rSort(q,o){
+  const pick=q.items2.map(()=>-1);
+  o.innerHTML=q.items2.map((it,i)=>`<div class="srow" style="animation-delay:${.15+i*.05}s" data-i="${i}"><p>${it[0]}</p><div class="seg">${q.bins.map((b,k)=>`<button data-k="${k}">${b}</button>`).join('')}</div></div>`).join('');
+  const rows=[...o.querySelectorAll('.srow')];
+  const sb=submitBtn(o,to=>{
+    if(locked)return;locked=true;let good=0;
+    rows.forEach((r,i)=>{const ok=pick[i]===q.items2[i][1];if(ok)good++;r.classList.add(ok?'right':'wrong');if(!ok){const f=document.createElement('div');f.className='fix';f.textContent='→ 應該是「'+q.bins[q.items2[i][1]]+'」';r.appendChild(f)}});
+    lockAll();judge(good===rows.length,good/rows.length,rows[0],to);
+  });
+  rows.forEach((r,i)=>r.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{if(locked)return;r.querySelectorAll('.seg button').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');pick[i]=+b.dataset.k;beep('sel');sb.disabled=pick.includes(-1)}));
+}
+
+/* 正確答案說明 */
+function ansHTML(q){
+  const t=q.t;
+  if(t==='mc'||t==='fill'||t==='ab'||t==='tf')return`正確答案：<b>${q.opts.find(x=>x.ok).t}</b>`;
+  if(t==='multi')return`正確答案：<b>${q.opts.filter(x=>x.ok).map(x=>x.t).join('、')}</b>`;
+  if(t==='order')return`正確順序：<ol>${q.o.map(x=>`<li>${x}</li>`).join('')}</ol>`;
+  if(t==='spot')return`有問題的句子：${q.lines.filter(l=>l[1]).map(l=>`<b>「${l[0]}」</b>`).join('、')}`;
+  if(t==='match')return`正確配對：<ul>${q.pairs.map(p=>`<li>${p[0]} → <b>${p[1]}</b></li>`).join('')}</ul>`;
+  if(t==='rapid'){const labs=q.labels||['可以','踩雷'];return`<ul>${q.items.map(it=>`<li>${it[0]}：<b>${it[1]?labs[0]:labs[1]}</b></li>`).join('')}</ul>`}
+  if(t==='build')return`好的組合：<ol>${q.slots.map(s=>`<li><b>${s[1][0]}</b></li>`).join('')}</ol>`;
+  if(t==='sort')return`<ul>${q.items.map(it=>`<li>${it[0]} → <b>${q.bins[it[1]]}</b></li>`).join('')}</ul>`;
+  return'';
+}
+
+/* ====== 判分 ====== */
+async function judge(ok,frac,anchor,timedOut){
+  locked=true;clearInterval(tmr);clearTimeout(rapidT);$('fuse').hidden=true;
+  const q=Q[qi];let pts=0;
+  if(ok){right++;combo++;maxCombo=Math.max(maxCombo,combo);pts=(mode==='final'?150:100)+(mode==='final'?Math.max(0,tleft)*4:0)+(combo>1?(combo-1)*20:0)}
+  else{combo=0;wrongs.push(q);if(mode==='final')pts=Math.round(frac*90)}
+  if(q.hinted)pts=Math.round(pts/2);
+  score+=pts;
+  document.body.classList.toggle('hot',combo>=3);
+  const r=anchor&&anchor.getBoundingClientRect?anchor.getBoundingClientRect():null,ax=r?r.left+r.width/2:innerWidth/2,ay=r?r.top+r.height/2:innerHeight/2;
+  if(ok){flash();beep('ok');stamp(combo>=3?combo+' 連對':'正解');burst(combo>=3?60:30,ax,ay);ring(ax,ay)}
+  else{flash(true);beep('bad');stamp(timedOut?'時間到':frac>=.5?'差一點':'可惜',true);$('qcard').classList.add('glitch')}
+  const sn=$('scoreN');sn.textContent=score;sn.classList.remove('bump');void sn.offsetWidth;if(pts)sn.classList.add('bump');
   const cb=$('combo');cb.textContent=combo>1?combo+' COMBO':'';cb.classList.toggle('show',combo>1);
   if(ok&&(combo===3||combo===5||combo===8||(combo>8&&combo%5===0))){await sleep(900);await cutin('COMBO',combo+' 連對！','手感正熱',true,650)}
   $('fb').classList.toggle('bad',!ok);
-  $('fbT').textContent=ok?['答對了！','太強了！','完全正確！','漂亮！'][Math.random()*4|0]:(k===-1?'時間到！':'差一點點！');
-  $('fbP').textContent='+'+pts;
-  $('fbE').innerHTML=(ok?'':'正確答案：<b>'+q.opts[ri].t+'</b><br>')+q.e;
+  $('fbT').textContent=ok?['答對了！','太強了！','完全正確！','漂亮！'][Math.random()*4|0]:(timedOut?'時間到！':frac>=.5?'差一點點！':'再想想！');
+  $('fbP').textContent='+'+pts;$('fbP').hidden=!pts;
+  $('fbE').innerHTML=(ok?'':`<span class="ans">${ansHTML(q)}</span>`)+q.e+(q.hinted?'<br><small>（用了手冊提示，分數減半）</small>':'');
   $('fbNext').innerHTML=(qi===Q.length-1?'看結果':'下一題')+'<span class="arr">→</span>';
-  setTimeout(()=>$('fb').classList.add('show'),combo>=3&&ok?150:700);
+  setTimeout(()=>{$('fb').classList.add('show');$('fb').querySelector('.in').scrollTop=0},combo>=3&&ok?150:750);
 }
-$('fbNext').onclick=()=>{beep('tap');$('fb').classList.remove('show');qi++;if(qi<Q.length)setTimeout(renderQ,220);else setTimeout(mode==='final'?finalResult:stageResult,200)};
-$('quizClose').onclick=()=>{clearInterval(tmr);$('fb').classList.remove('show');renderMap();show('sMap')};
+$('fbNext').onclick=()=>{beep('tap');$('fb').classList.remove('show');qi++;if(qi<Q.length)setTimeout(renderQ,220);else{document.body.classList.remove('hot');setTimeout(mode==='final'?finalResult:stageResult,200)}};
+$('quizClose').onclick=()=>{clearInterval(tmr);clearTimeout(rapidT);$('fb').classList.remove('show');document.body.classList.remove('hot');renderMap();show('sMap')};
+$('hintBtn').onclick=()=>{const q=Q[qi];if(locked||!hints||q.hinted)return;hints--;q.hinted=true;updHint();beep('sel');
+  const h=document.createElement('div');h.className='hintbox';h.innerHTML=HINTS[q.t]||'';$('qcard').appendChild(h)};
 
 function reviewHTML(list){
   if(!list.length)return'';
-  return`<h4>答錯的題目，再看一次</h4>`+list.map(q=>`<div class="it"><div class="q">${q.q}${q.quote?'<br>「'+q.quote+'」':''}</div><div class="a">○ ${q.opts.find(x=>x.ok).t}</div><div class="e">${q.e}</div></div>`).join('');
+  return`<h4>答錯的題目，再看一次</h4>`+list.map(q=>`<div class="it"><div class="q">${strip(q.q)}${q.quote?'<br>「'+q.quote+'」':''}${q.note?'<br><small>'+q.note+'</small>':''}</div><div class="ans">${ansHTML(q)}</div><div class="e">${q.e}</div></div>`).join('');
 }
 const gradeOf=r=>r>=1?'S':r>=.8?'A':r>=.6?'B':'C';
 async function stageResult(){
-  const s=STAGES[cur],n=Q.length,st=right===n?3:right>=n-1?2:right>=Math.ceil(n/2)?1:0;
+  const s=STAGES[cur],n=Q.length,st=right===n?3:right>=n-1?2:right>=4?1:0;
   S.stars[s.id]=Math.max(S.stars[s.id]||0,st);save();pushScore();
-  await cutin(st?'STAGE CLEAR':'RETRY',st?'過關！':'再來一次',st?'答對 '+right+' / '+n+' 題':'答對一半以上就能過關',!!st,900);
-  const g=gradeOf(right/n);$('stGrade').textContent=g;$('stGrade').className='L '+g;
+  await cutin(st?'STAGE CLEAR':'RETRY',st?'過關！':'再來一次',st?'答對 '+right+' / '+n+' 題':'答對 4 題以上就能過關',!!st,900);
+  const g=gradeOf(right/n);$('stGrade').textContent=g;
   $('stTitle').textContent=st===3?'完美過關！':st?'過關了！':'差一點，再試一次！';
-  $('stSub').innerHTML=`答對 <b style="color:#eb4d00">${right} / ${n}</b> 題`+(st?'':'　答對一半以上就能過關');
+  $('stSub').innerHTML=`答對 <b style="color:#eb4d00">${right} / ${n}</b> 題`+(st?'':'　答對 4 題以上就能過關')+'<br><small>每次出的題目和題型都不一樣</small>';
   const ss=[...$('stStars').children];ss.forEach(x=>x.classList.remove('on'));
   $('stReview').innerHTML=reviewHTML(wrongs);
   const isLast=cur===STAGES.length-1;
   $('stNext').innerHTML=(st?(isLast?'挑戰熟成大考':'下一關'):'回到關卡')+'<span class="arr">→</span>';
   $('stNext').onclick=()=>{if(!st){renderMap();show('sMap')}else if(isLast){renderMap();startFinal()}else{startLearn(cur+1)}};
   $('stRetry').onclick=()=>{startStageQuiz()};
-  await show('sStage');
-  setTimeout(()=>{beep('grade');shake();burst(40,90,innerHeight*.18)},600);
+  await show('sStage');deco(g,'RESULT');
+  setTimeout(()=>{beep('grade');shake();burst(40,90,innerHeight*.18);ring(90,innerHeight*.18)},600);
   ss.forEach((x,i)=>setTimeout(()=>{if(i<st){x.classList.add('on');beep('ok');buzz(20)}},1000+i*260));
   if(st===3)setTimeout(()=>{burst(120);beep('win')},1900);
 }
@@ -749,16 +1106,15 @@ async function finalResult(){
   S.lastScore=score;save();pushScore();
   await cutin('FINISH','考試結束','計算成績中…',true,900);
   const d=Math.round(right/n*28),r=rankOf(d),g=gradeOf(right/n);
-  $('fGrade').textContent=g;$('fGrade').className='L '+g;
+  $('fGrade').textContent=g;
   $('fRight').textContent='0';$('fScore').textContent='0';$('fCombo').textContent='0';
-  $('fTitle').textContent=(S.name?S.name+'，':'')+'熟成大考完成！';
-  $('fSub').textContent=right===n?'全部答對，太厲害了！':'答錯的題目都在下面，看完再挑戰一次吧';
+  $('fTitle').textContent=(G.player?G.player+'，':'')+'熟成大考完成！';
+  $('fSub').textContent=right===n?'全部答對，太厲害了！':'答錯的題目都在下面，看完再挑戰一次吧，每次題目都不一樣';
   $('fRank').textContent=r[1];$('fMsg').textContent=r[2];$('fDay').textContent=pad(d);
   $('fReview').innerHTML=reviewHTML(wrongs);
-  await show('sFinal');
-  setTimeout(()=>{beep('grade');shake();burst(50,90,innerHeight*.18)},600);
-  setTimeout(()=>{countUp($('fRight'),right,700);countUp($('fScore'),score,1100);countUp($('fCombo'),maxCombo,700)},900);
-  setTimeout(()=>{$('fRight').textContent=right+'/'+n},1700);
+  await show('sFinal');deco(g,'FINAL RESULT');
+  setTimeout(()=>{beep('grade');shake();burst(50,90,innerHeight*.18);ring(90,innerHeight*.18)},600);
+  setTimeout(()=>{countUp($('fRight'),right,700,'/'+n);countUp($('fScore'),score,1100);countUp($('fCombo'),maxCombo,700)},900);
   setTimeout(()=>{burst(160);beep('win')},2100);
 }
 $('fRetry').onclick=()=>startFinal();
@@ -775,14 +1131,14 @@ async function openBoard(from){
   if(BOARD_URL){
     try{const r=await fetch(BOARD_URL+'?t='+Date.now());const d=await r.json();
       const m={};(d.rows||[]).forEach(x=>{m[x.name]=x});
-      rows=PLAYERS.map(n=>{const x=m[n]||{},l=rows.find(y=>y.name===n);return{name:n,best:Math.max(+x.best||0,l.best),right:+x.right||l.right,total:+x.total||l.total,stars:Math.max(+x.stars||0,l.stars)}});shared=true}
+      rows=PLAYERS.map(n=>{const x=m[n]||{},l=rows.find(y=>y.name===n);return{name:n,best:Math.max(+x.best||0,l.best),right:+x.right||l.right,total:+x.total||l.total,stars:Math.min(MAX_STARS,Math.max(+x.stars||0,l.stars))}});shared=true}
     catch(e){}
   }
   rows.sort((a,b)=>b.best-a.best||b.stars-a.stars);
   $('board').innerHTML=rows.map((r,i)=>{const d=r.total?Math.round(r.right/r.total*28):0;
     return`<div class="brow${i===0&&r.best?' first':''}${r.name===G.player?' me':''}${r.best||r.stars?'':' none'}" style="animation-delay:${.1+i*.08}s">
       <span class="pos">${pad(i+1)}</span>
-      <span class="who"><b>${r.name}</b><span>${r.best?rankOf(d)[1]+'　答對 '+r.right+'/'+r.total:r.stars?'闖關中　★ '+r.stars+' / 15':'還沒挑戰'}</span></span>
+      <span class="who"><b>${r.name}</b><span>${r.best?rankOf(d)[1]+'　答對 '+r.right+'/'+r.total:r.stars?'闖關中　★ '+r.stars+' / '+MAX_STARS:'還沒挑戰'}</span></span>
       <span class="pts"><small>最高分</small>${r.best||'—'}</span></div>`}).join('');
   $('boardNote').textContent=BOARD_URL?(shared?'所有挑戰者的成績都在這裡，即時更新。':'暫時連不上排行榜，先顯示這台裝置的紀錄。'):'目前只顯示在這台裝置上玩過的紀錄。';
   if(rows[0]&&rows[0].best)setTimeout(()=>{beep('ok');burst(30,innerWidth/2,200)},700);
@@ -800,7 +1156,7 @@ document.addEventListener('keydown',e=>{
   if(on('sTitle')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();$('sTitle').click()}
   else if(on('sQuiz')){
     if($('fb').classList.contains('show')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();$('fbNext').click()}
-    else if(/^[1-4]$/.test(e.key)){const b=$('opts').children[+e.key-1];if(b)b.click()}
+    else if(/^[1-4]$/.test(e.key)){const t=Q[qi]&&Q[qi].t;if(['mc','tf','ab','fill'].includes(t)){const b=$('opts').querySelectorAll('.opt')[+e.key-1];if(b)b.click()}else if(t==='rapid'){const b=$('opts').querySelectorAll('.rbtns button')[+e.key-1];if(b)b.click()}}
   }else if(on('sLearn')){if(e.key==='ArrowRight'||e.key==='Enter')$('lNext').click();if(e.key==='ArrowLeft')$('lPrev').click()}
 });
 </script>
