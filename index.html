@@ -3,241 +3,327 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#1d1714">
+<meta name="theme-color" content="#0e0d0c">
 <title>酿牛熟成學院</title>
 <meta name="description" content="闖關學會酿牛和生活文，最後挑戰熟成大考。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&text=%E9%85%BF&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#1d1714; --bg2:#2a211c; --panel:#fff8ef; --panel2:#f3e7d8; --ink:#241b16; --ink2:#5c4d43; --muted:#9a8a7d;
-  --orange:#eb4d00; --orange-d:#b33a00; --gold:#ffbf3c; --gold-d:#d99512;
-  --green:#22b866; --green-d:#178a4b; --red:#ef4444; --red-d:#b91c1c; --blue:#3b82f6; --blue-d:#1d4ed8;
-  --purple:#8b5cf6; --purple-d:#6d28d9; --teal:#14b8a6; --teal-d:#0f766e; --pink:#f43f5e; --pink-d:#be123c;
+  --k:#0e0d0c; --k2:#1c1a18; --k3:#2c2925; --w:#f4f1ea; --w2:#e6e0d4; --mute:#8d867c;
+  --o:#eb4d00; --o-d:#a93700;
   --font:"Noto Sans TC","Noto Sans SC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
-  --r:22px;
+  --num:"Anton","Noto Sans TC",sans-serif;
+  --cut:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px));
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
-html,body{height:100%}
-body{font-family:var(--font);background:var(--bg);color:var(--ink);overflow-x:hidden;
-  background-image:radial-gradient(circle at 20% 0%,rgba(235,77,0,.28),transparent 45%),radial-gradient(circle at 100% 100%,rgba(255,191,60,.14),transparent 40%);
-  background-attachment:fixed}
+html,body{min-height:100%}
+body{font-family:var(--font);background:var(--k);color:var(--w);overflow-x:hidden}
 button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
-.app{max-width:480px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 16px calc(env(safe-area-inset-bottom) + 16px)}
-.screen{display:none;flex:1;flex-direction:column;animation:enter .45s cubic-bezier(.2,.9,.3,1.2)}
+.app{max-width:480px;margin:0 auto;min-height:100svh;overflow-x:clip;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 18px calc(env(safe-area-inset-bottom) + 20px);position:relative}
+.screen{display:none;flex:1;flex-direction:column;position:relative;z-index:1}
 .screen.on{display:flex}
-@keyframes enter{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
 
-/* 共用 */
-.top{display:flex;align-items:center;gap:10px;padding:14px 0}
-.iconbtn{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.08);color:#fff;display:grid;place-items:center;font-size:18px;flex:none}
-.iconbtn:active{transform:scale(.94)}
-.pillstat{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);color:#fff;border-radius:999px;padding:8px 14px;font-weight:900;font-size:15px}
+/* 背景斜切色塊（純色） */
+.slab{position:fixed;z-index:0;background:var(--o);pointer-events:none;transition:clip-path .6s cubic-bezier(.7,0,.2,1)}
+.slab{inset:0;clip-path:polygon(0 0,100% 0,100% 18%,0 34%)}
+body[data-s="sMap"] .slab{clip-path:polygon(0 0,100% 0,100% 6%,0 14%)}
+body[data-s="sLearn"] .slab,body[data-s="sQuiz"] .slab{clip-path:polygon(0 0,100% 0,100% 4%,0 9%)}
+body[data-s="sStage"] .slab,body[data-s="sFinal"] .slab{clip-path:polygon(0 0,100% 0,100% 30%,0 20%)}
+
+/* 轉場：斜切橘色刷過 */
+.wipe{position:fixed;inset:-10% -60%;z-index:50;pointer-events:none;background:var(--o);transform:translateX(-120%) skewX(-18deg)}
+.wipe::after{content:"";position:absolute;inset:0 0 0 auto;width:22%;background:var(--k)}
+.wipe.go{animation:wipe .62s cubic-bezier(.75,0,.25,1)}
+@keyframes wipe{0%{transform:translateX(-120%) skewX(-18deg)}100%{transform:translateX(120%) skewX(-18deg)}}
+
+/* 共用元件 */
+.top{display:flex;align-items:center;gap:10px;padding:16px 0 12px}
 .grow{flex:1}
-.btn{display:block;width:100%;border-radius:18px;padding:17px 20px;font-size:19px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--orange);
-  box-shadow:0 6px 0 var(--orange-d);transition:transform .08s,box-shadow .08s;position:relative}
-.btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--orange-d)}
-.btn.ghost{background:rgba(255,255,255,.1);box-shadow:0 6px 0 rgba(0,0,0,.35)}
-.btn.ghost:active{box-shadow:0 2px 0 rgba(0,0,0,.35)}
-.btn.gold{background:var(--gold);color:#3b2400;box-shadow:0 6px 0 var(--gold-d)}
-.btn.gold:active{box-shadow:0 2px 0 var(--gold-d)}
-.btn.green{background:var(--green);box-shadow:0 6px 0 var(--green-d)}
-.btn+.btn{margin-top:14px}
+.tbtn{height:40px;min-width:40px;padding:0 12px;background:var(--k);color:var(--w);border:2px solid var(--w);font-weight:900;font-size:15px;display:grid;place-items:center;transition:transform .1s}
+.tbtn:active{transform:translate(2px,2px)}
+.tag{display:inline-block;background:var(--k);color:var(--w);font-weight:900;font-size:13px;letter-spacing:.12em;padding:5px 12px;transform:skewX(-10deg)}
+.tag>span{display:inline-block;transform:skewX(10deg)}
+.tag.o{background:var(--o)}
+.tag.w{background:var(--w);color:var(--k)}
+.btn{display:block;width:100%;position:relative;background:var(--w);color:var(--k);font-weight:900;font-size:20px;letter-spacing:.06em;padding:18px 20px;
+  box-shadow:6px 6px 0 var(--o);transition:transform .08s,box-shadow .08s;clip-path:none}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--o)}
+.btn:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--o)}
+.btn.o{background:var(--o);color:var(--w);box-shadow:6px 6px 0 var(--w)}
+.btn.o:hover{box-shadow:8px 8px 0 var(--w)}
+.btn.o:active{box-shadow:2px 2px 0 var(--w)}
+.btn.line{background:var(--k);color:var(--w);border:2px solid var(--w);box-shadow:6px 6px 0 var(--k3)}
+.btn+.btn{margin-top:18px}
+.btn .arr{position:absolute;right:20px;top:50%;transform:translateY(-50%);font-family:var(--num);font-size:22px}
+
+/* 進場動畫 */
+.in1,.in2,.in3,.in4,.in5,.in6{animation:slideIn .5s cubic-bezier(.2,.8,.2,1) both}
+.in2{animation-delay:.06s}.in3{animation-delay:.12s}.in4{animation-delay:.18s}.in5{animation-delay:.24s}.in6{animation-delay:.3s}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
 
 /* 首頁 */
-.home{justify-content:center;text-align:center;color:#fff;padding:24px 0}
-.badge{display:inline-flex;gap:8px;align-items:center;align-self:center;background:rgba(255,255,255,.1);border-radius:999px;padding:7px 16px;font-size:14px;font-weight:700;color:var(--gold)}
-.logo{margin:28px auto 8px;width:132px;height:132px;border-radius:40px;background:linear-gradient(145deg,var(--orange),#ff7a2e);display:grid;place-items:center;
-  box-shadow:0 10px 0 var(--orange-d),0 24px 60px rgba(235,77,0,.45);transform:rotate(-6deg);animation:float 3.4s ease-in-out infinite}
-.logo span{font-size:68px;font-weight:900;color:#fff;transform:rotate(6deg);text-shadow:0 4px 0 rgba(0,0,0,.18)}
-@keyframes float{0%,100%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(-3deg) translateY(-8px)}}
-.home h1{font-size:44px;font-weight:900;line-height:1.15;margin-top:26px;letter-spacing:.02em}
-.home h1 em{font-style:normal;color:var(--gold)}
-.home p.lead{font-size:18px;line-height:1.7;color:rgba(255,255,255,.75);margin:14px auto 30px;max-width:20em}
-.namebox{background:rgba(255,255,255,.08);border-radius:18px;padding:6px 6px 6px 18px;display:flex;align-items:center;gap:8px;margin-bottom:18px}
-.namebox label{font-size:15px;color:rgba(255,255,255,.6);white-space:nowrap}
-.namebox input{flex:1;min-width:0;background:none;border:0;outline:0;color:#fff;font:inherit;font-size:18px;font-weight:700;padding:12px 0}
-.namebox input::placeholder{color:rgba(255,255,255,.3)}
-.homefoot{margin-top:22px;font-size:14px;color:rgba(255,255,255,.45)}
+.home{padding-top:6vh}
+.seal{width:118px;height:118px;border:6px solid var(--k);color:var(--k);display:grid;place-items:center;transform:rotate(-8deg);position:relative;background:var(--w);animation:sealIn .7s cubic-bezier(.2,1.6,.4,1) both}
+.seal::before{content:"";position:absolute;inset:6px;border:2px solid var(--k)}
+.seal b{font-size:64px;font-weight:900;line-height:1}
+@keyframes sealIn{from{transform:rotate(-30deg) scale(2.4);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:1}}
+.home h1{margin-top:14vh;line-height:1}
+.home h1 .a{display:block;font-size:76px;font-weight:900;letter-spacing:.02em}
+.home h1 .b{display:inline-block;margin-top:14px;background:var(--o);color:var(--w);font-size:40px;font-weight:900;padding:6px 16px 8px;transform:rotate(-3deg) skewX(-8deg)}
+.home .lead{font-size:18px;line-height:1.75;color:var(--w2);margin:26px 0 30px}
+.home .lead b{color:var(--w);box-shadow:inset 0 -.38em 0 var(--o-d)}
+.namebox{display:flex;align-items:center;border:2px solid var(--w);margin-bottom:22px}
+.namebox label{background:var(--w);color:var(--k);font-weight:900;font-size:15px;padding:14px 14px;white-space:nowrap;letter-spacing:.08em}
+.namebox input{flex:1;min-width:0;background:none;border:0;outline:0;color:var(--w);font:inherit;font-size:18px;font-weight:700;padding:12px 14px}
+.namebox input::placeholder{color:var(--mute)}
+.homefoot{margin-top:24px;font-size:14px;color:var(--mute)}
+
+/* 挑戰者 */
+.pickttl{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.linkbtn{font-size:14px;font-weight:900;color:var(--w);border-bottom:2px solid var(--o);padding:2px 0}
+.players{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.pcard{position:relative;background:var(--k2);border:2px solid var(--k3);padding:12px 8px 10px;text-align:center;overflow:hidden;transition:transform .1s,border-color .15s,background .15s}
+.pcard:hover{border-color:var(--w)}
+.pcard:active{transform:scale(.96)}
+.pcard .ini{display:block;font-family:var(--num);font-size:40px;line-height:1;color:transparent;-webkit-text-stroke:2px var(--w)}
+.pcard .nm{display:block;font-weight:900;font-size:15px;margin-top:6px;letter-spacing:.04em}
+.pcard .pr{display:block;font-size:11px;font-weight:700;color:var(--mute);margin-top:2px}
+.pcard.on{background:var(--o);border-color:var(--o);transform:rotate(-2deg) scale(1.04)}
+.pcard.on .ini{-webkit-text-stroke:0;color:var(--w)}
+.pcard.on .pr{color:var(--k)}
+.pcard.on::after{content:"✓";position:absolute;top:4px;right:6px;font-weight:900;font-size:14px;color:var(--k)}
+.btn:disabled{opacity:.4;pointer-events:none}
+
+/* 排行榜 */
+.board{display:flex;flex-direction:column;gap:10px}
+.brow{display:flex;align-items:center;gap:14px;background:var(--k2);border:2px solid var(--k3);padding:12px 16px 12px 0;animation:slideIn .45s cubic-bezier(.2,.8,.2,1) both}
+.brow .pos{font-family:var(--num);font-size:46px;line-height:.9;width:64px;text-align:center;flex:none;color:transparent;-webkit-text-stroke:2px var(--w)}
+.brow .who{flex:1;min-width:0}
+.brow .who b{display:block;font-size:20px;font-weight:900}
+.brow .who span{display:block;font-size:13px;color:var(--mute);margin-top:2px}
+.brow .pts{text-align:right;font-family:var(--num);font-size:32px;line-height:1}
+.brow .pts small{display:block;font-family:var(--font);font-size:11px;font-weight:900;color:var(--mute);letter-spacing:.1em}
+.brow.first{background:var(--o);border-color:var(--o)}
+.brow.first .pos{-webkit-text-stroke:0;color:var(--w)}
+.brow.first .who span,.brow.first .pts small{color:var(--k)}
+.brow.me{border-color:var(--w)}
+.brow.none{opacity:.45}
+.boardnote{font-size:14px;color:var(--mute);line-height:1.7;margin:18px 0 24px}
 
 /* 地圖 */
-.hello{color:#fff;padding:4px 2px 14px}
-.hello h2{font-size:28px;font-weight:900;line-height:1.3}
-.hello p{color:rgba(255,255,255,.65);font-size:16px;margin-top:4px}
-.aging{background:var(--panel);border-radius:var(--r);padding:18px;margin-bottom:18px;box-shadow:0 8px 0 rgba(0,0,0,.25)}
-.aging .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
-.aging b{font-size:15px;color:var(--ink2)}
-.aging .day{font-size:28px;font-weight:900;color:var(--orange)}
-.aging .day small{font-size:15px;color:var(--ink2);margin-left:2px}
-.meter{height:16px;background:var(--panel2);border-radius:999px;overflow:hidden;position:relative}
-.meter i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#ff9a5a,var(--orange));border-radius:999px;transition:width .8s cubic-bezier(.2,.9,.3,1)}
-.meter i::after{content:"";position:absolute;inset:3px 8px auto 8px;height:4px;border-radius:4px;background:rgba(255,255,255,.4)}
-.aging .rank{margin-top:10px;font-size:15px;color:var(--ink2)}
-.aging .rank b{color:var(--ink)}
-.path{display:flex;flex-direction:column;gap:14px;padding-bottom:20px}
-.stage{display:flex;align-items:center;gap:16px;background:var(--panel);border-radius:var(--r);padding:16px;text-align:left;box-shadow:0 7px 0 rgba(0,0,0,.28);transition:transform .1s;position:relative;width:100%}
-.stage:active{transform:translateY(3px)}
-.stage .ic{width:62px;height:62px;border-radius:20px;display:grid;place-items:center;font-size:32px;flex:none;box-shadow:inset 0 -5px 0 rgba(0,0,0,.18)}
-.stage .no{font-size:13px;font-weight:900;letter-spacing:.1em;color:var(--muted)}
-.stage .tt{font-size:20px;font-weight:900;line-height:1.3;color:var(--ink)}
-.stage .st{font-size:14px;color:var(--ink2);margin-top:2px}
-.stage .stars{margin-left:auto;font-size:15px;letter-spacing:1px;white-space:nowrap;flex:none}
-.stage.locked{opacity:.5;filter:grayscale(.8)}
-.stage.locked .stars::before{content:"🔒";font-size:20px}
-.stage.final{background:linear-gradient(135deg,#ffcf5c,var(--gold));box-shadow:0 7px 0 var(--gold-d)}
-.stage.final .no{color:#7a5000}
-.stage.final .st{color:#5a3c00}
-.stage.next::after{content:"開始";position:absolute;top:-10px;right:14px;background:var(--orange);color:#fff;font-size:12px;font-weight:900;padding:3px 10px;border-radius:999px;animation:bob 1.2s ease-in-out infinite}
-@keyframes bob{50%{transform:translateY(-3px)}}
+.mapttl{display:flex;align-items:flex-end;justify-content:space-between;margin:10px 0 18px}
+.mapttl h2{font-size:34px;font-weight:900;line-height:1.15}
+.mapttl h2 small{display:inline-block;font-size:14px;background:var(--k);color:var(--w);font-weight:900;padding:3px 10px;margin-bottom:8px;letter-spacing:.06em}
+.aging{background:var(--w);color:var(--k);padding:18px 18px 16px;margin-bottom:26px;clip-path:var(--cut)}
+.aging .row{display:flex;justify-content:space-between;align-items:flex-end}
+.aging .lbl{font-size:14px;font-weight:900;letter-spacing:.1em}
+.aging .rank{font-size:20px;font-weight:900;margin-top:2px}
+.aging .day{font-family:var(--num);font-size:56px;line-height:.9;color:var(--o)}
+.aging .day small{font-family:var(--font);font-size:16px;font-weight:900;color:var(--k);margin-left:4px}
+.cells{display:grid;grid-template-columns:repeat(28,1fr);gap:3px;margin-top:14px}
+.cells i{height:16px;background:var(--w2);transform:skewX(-14deg);transition:background .2s}
+.cells i.on{background:var(--o)}
+.cells i.on:nth-child(7n){background:var(--k)}
+.daymarks{display:flex;justify-content:space-between;font-family:var(--num);font-size:12px;color:var(--mute);margin-top:6px}
+.path{display:flex;flex-direction:column;gap:14px;padding-bottom:24px}
+.stage{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--k2);border:2px solid var(--k3);padding:14px 16px 14px 0;position:relative;overflow:hidden;transition:transform .12s,background .12s,border-color .12s}
+.stage:hover{transform:translateX(6px);border-color:var(--w)}
+.stage:active{transform:translateX(2px) scale(.99)}
+.stage .n{font-family:var(--num);font-size:64px;line-height:.85;width:84px;text-align:center;flex:none;color:transparent;-webkit-text-stroke:2px var(--w);margin-left:-4px}
+.stage .t{flex:1;min-width:0}
+.stage .no{font-size:12px;font-weight:900;letter-spacing:.14em;color:var(--o)}
+.stage .tt{display:block;font-size:20px;font-weight:900;line-height:1.3}
+.stage .st{display:block;font-size:14px;color:var(--mute);margin-top:2px}
+.stage .stars{font-size:18px;letter-spacing:2px;color:var(--o);flex:none}
+.stage .stars s{text-decoration:none;color:var(--k3)}
+.stage.locked{opacity:.38}
+.stage.locked .stars{font-size:12px;font-weight:900;letter-spacing:.1em;color:var(--mute)}
+.stage.next{background:var(--o);border-color:var(--o)}
+.stage.next .n{-webkit-text-stroke:0;color:var(--w)}
+.stage.next .no{color:var(--k)}
+.stage.next .st{color:var(--w)}
+.stage.next .stars s{color:var(--o-d)}
+.stage.next::after{content:"NEXT";position:absolute;right:-30px;top:10px;background:var(--k);color:var(--w);font-family:var(--num);font-size:13px;letter-spacing:.1em;padding:2px 34px;transform:rotate(35deg)}
+.stage.final{background:var(--w);border-color:var(--w);color:var(--k)}
+.stage.final .n{-webkit-text-stroke:2px var(--k);font-size:52px}
+.stage.final .st{color:var(--k)}
 
 /* 學習卡 */
-.dots{display:flex;gap:6px;flex:1}
-.dots i{flex:1;height:6px;border-radius:6px;background:rgba(255,255,255,.15);overflow:hidden;position:relative}
-.dots i.done::after{content:"";position:absolute;inset:0;background:var(--gold)}
+.bars{display:flex;gap:5px;flex:1}
+.bars i{flex:1;height:8px;background:var(--k3);transform:skewX(-20deg)}
+.bars i.on{background:var(--w)}
+.bars i.cur{background:var(--o)}
 .learn{flex:1;display:flex;flex-direction:column}
-.lcard{flex:1;background:var(--panel);border-radius:28px;padding:28px 24px;display:flex;flex-direction:column;box-shadow:0 10px 0 rgba(0,0,0,.28);animation:pop .4s cubic-bezier(.2,.9,.3,1.3)}
-@keyframes pop{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:none}}
-.lcard .em{font-size:60px;line-height:1;margin-bottom:18px}
-.lcard .kick{font-size:14px;font-weight:900;letter-spacing:.12em;color:var(--orange);margin-bottom:8px}
-.lcard h3{font-size:30px;font-weight:900;line-height:1.35;color:var(--ink);margin-bottom:16px}
-.lcard h3 mark{background:linear-gradient(transparent 55%,rgba(255,191,60,.6) 55%);color:inherit}
-.lcard .body{font-size:18px;line-height:1.8;color:var(--ink2)}
-.lcard .body b{color:var(--ink)}
-.lcard .facts{display:grid;gap:10px;margin-top:6px}
-.lcard .facts div{display:flex;gap:12px;align-items:center;background:var(--panel2);border-radius:16px;padding:12px 14px;font-size:17px;color:var(--ink)}
-.lcard .facts div span:first-child{font-size:24px;flex:none;width:30px;text-align:center}
-.lcard .facts div span:last-child{flex:1;min-width:0;line-height:1.5}
-.lcard .facts div b{display:block;font-size:13px;color:var(--muted);font-weight:700}
-.lcard .duo{display:grid;gap:10px;margin-top:4px}
-.lcard .duo div{border-radius:16px;padding:14px 16px;font-size:17px;line-height:1.6}
-.lcard .duo .no{background:#fde4e1;color:#8f2a1f}
-.lcard .duo .ok{background:#dcf5e6;color:#155c34}
-.lcard .duo div::before{display:block;font-size:12px;font-weight:900;letter-spacing:.1em;margin-bottom:4px}
-.lcard .duo .no::before{content:"✗ 不要這樣"}
-.lcard .duo .ok::before{content:"✓ 這樣寫"}
-.lcard .post{background:#fff;border:2px solid var(--panel2);border-radius:18px;padding:16px;white-space:pre-line;font-size:17px;line-height:1.75;color:var(--ink)}
-.lcard .tip{margin-top:auto;padding-top:18px;font-size:15px;color:var(--muted)}
-.learnnav{display:flex;gap:12px;margin-top:20px}
+.lcard{flex:1;background:var(--w);color:var(--k);padding:26px 22px 24px;clip-path:var(--cut);display:flex;flex-direction:column;position:relative;animation:cardIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes cardIn{from{opacity:0;transform:translateX(60px) rotate(2deg)}to{opacity:1;transform:none}}
+.lcard .pg{position:absolute;right:18px;top:12px;font-family:var(--num);font-size:64px;line-height:1;color:transparent;-webkit-text-stroke:2px var(--w2)}
+.lcard .tag{align-self:flex-start;margin-bottom:16px}
+.lcard h3{font-size:30px;font-weight:900;line-height:1.35;margin-bottom:18px;position:relative}
+.lcard h3 mark{background:none;color:inherit;box-shadow:inset 0 -.36em 0 rgba(235,77,0,.45)}
+.lcard .body{font-size:18px;line-height:1.85;color:#3c3732}
+.lcard .body b{color:var(--k);font-weight:900}
+.lcard .facts{display:grid;gap:8px}
+.lcard .facts div{display:flex;align-items:center;gap:14px;background:var(--k);color:var(--w);padding:12px 16px}
+.lcard .facts div span:first-child{display:none}
+.lcard .facts div span:last-child{flex:1;min-width:0;font-size:17px;font-weight:700;line-height:1.5}
+.lcard .facts div b{display:block;font-size:12px;font-weight:900;letter-spacing:.14em;color:var(--o)}
+.lcard .duo{display:grid;gap:10px}
+.lcard .duo div{padding:14px 16px;font-size:17px;line-height:1.6;position:relative}
+.lcard .duo .no{background:var(--w2);color:var(--mute);text-decoration:line-through;text-decoration-color:var(--o)}
+.lcard .duo .ok{background:var(--k);color:var(--w);font-weight:700}
+.lcard .duo div::before{display:block;font-size:12px;font-weight:900;letter-spacing:.14em;margin-bottom:4px;text-decoration:none}
+.lcard .duo .no::before{content:"✕ 不要這樣";color:var(--k)}
+.lcard .duo .ok::before{content:"○ 這樣寫";color:var(--o)}
+.lcard .post{border:2px solid var(--k);padding:16px 18px;white-space:pre-line;font-size:17px;line-height:1.8;position:relative}
+.lcard .post::before{content:"貼文範例";position:absolute;top:-11px;left:14px;background:var(--w);padding:0 6px;font-size:12px;font-weight:900;letter-spacing:.12em}
+.lcard .tip{margin-top:auto;padding-top:18px;font-size:15px;line-height:1.65;color:#5b544c;display:flex;gap:10px}
+.lcard .tip::before{content:"TIP";font-family:var(--num);font-size:14px;background:var(--o);color:var(--w);padding:1px 7px;height:fit-content;letter-spacing:.06em}
+.learnnav{display:flex;gap:16px;margin-top:22px}
 .learnnav .btn{flex:1}
-.learnnav .back{flex:0 0 64px;padding:17px 0}
+.learnnav .back{flex:0 0 64px;padding:18px 0;margin:0}
 
 /* 題目 */
-.qhead{display:flex;align-items:center;gap:10px;color:#fff;margin-bottom:14px}
-.qcount{font-weight:900;font-size:15px;color:rgba(255,255,255,.7)}
-.combo{margin-left:auto;font-weight:900;color:var(--gold);font-size:15px;opacity:0;transition:opacity .2s}
-.combo.show{opacity:1;animation:pulse .5s}
-@keyframes pulse{50%{transform:scale(1.25)}}
-.timer{position:relative;width:52px;height:52px;flex:none}
+.qhead{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.qnum{font-family:var(--num);font-size:40px;line-height:1}
+.qnum small{font-size:18px;color:var(--mute)}
+.combo{font-family:var(--num);font-size:18px;letter-spacing:.06em;background:var(--o);color:var(--w);padding:2px 10px;transform:skewX(-10deg) scale(0);transition:transform .25s cubic-bezier(.2,1.8,.4,1)}
+.combo.show{transform:skewX(-10deg) scale(1)}
+.score{margin-left:auto;text-align:right;font-family:var(--num);font-size:30px;line-height:1}
+.score small{display:block;font-family:var(--font);font-size:11px;font-weight:900;letter-spacing:.14em;color:var(--mute)}
+.timer{position:relative;width:54px;height:54px;flex:none}
 .timer svg{transform:rotate(-90deg)}
-.timer circle{fill:none;stroke-width:6}
-.timer .tb{stroke:rgba(255,255,255,.12)}
-.timer .tf{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .3s}
-.timer.low .tf{stroke:var(--red)}
-.timer b{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:17px;font-weight:900}
-.qcard{background:var(--panel);border-radius:28px;padding:24px 22px 26px;box-shadow:0 10px 0 rgba(0,0,0,.28);margin-bottom:18px;animation:pop .4s cubic-bezier(.2,.9,.3,1.3)}
-.qcard .cat{display:inline-block;font-size:13px;font-weight:900;color:#fff;border-radius:999px;padding:4px 12px;margin-bottom:12px}
-.qcard h3{font-size:24px;font-weight:900;line-height:1.5;color:var(--ink)}
-.qcard .quote{margin-top:14px;background:var(--panel2);border-radius:16px;padding:14px 16px;font-size:19px;font-weight:700;line-height:1.6;color:var(--ink)}
+.timer circle{fill:none;stroke-width:7}
+.timer .tb{stroke:var(--k3)}
+.timer .tf{stroke:var(--w);transition:stroke-dashoffset 1s linear}
+.timer.low .tf{stroke:var(--o)}
+.timer b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--num);font-size:22px}
+.timer.low b{color:var(--o);animation:beat .5s infinite}
+@keyframes beat{50%{transform:scale(1.2)}}
+.qcard{background:var(--w);color:var(--k);padding:22px 20px 24px;margin-bottom:20px;clip-path:var(--cut);animation:cardIn .4s cubic-bezier(.2,.8,.2,1)}
+.qcard .tag{margin-bottom:12px}
+.qcard h3{font-size:24px;font-weight:900;line-height:1.5}
+.qcard .quote{margin-top:14px;background:var(--k);color:var(--w);padding:14px 16px;font-size:19px;font-weight:700;line-height:1.6;border-left:6px solid var(--o)}
 .opts{display:grid;gap:12px}
-.opts.tf{grid-template-columns:1fr 1fr}
-.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border-radius:18px;padding:15px 16px;font-size:18px;font-weight:700;line-height:1.45;color:#fff;transition:transform .08s,box-shadow .08s,opacity .2s}
-.opt .k{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:16px;font-weight:900;flex:none}
-.opt:active{transform:translateY(4px)}
-.opt.c0{background:var(--blue);box-shadow:0 6px 0 var(--blue-d)}
-.opt.c1{background:var(--purple);box-shadow:0 6px 0 var(--purple-d)}
-.opt.c2{background:var(--teal);box-shadow:0 6px 0 var(--teal-d)}
-.opt.c3{background:var(--pink);box-shadow:0 6px 0 var(--pink-d)}
-.opts.tf .opt{flex-direction:column;justify-content:center;text-align:center;padding:22px 10px;font-size:20px;gap:6px}
-.opts.tf .opt .k{width:auto;height:auto;background:none;font-size:38px}
-.opts.tf .opt.c0{background:var(--green);box-shadow:0 6px 0 var(--green-d)}
-.opts.tf .opt.c1{background:var(--red);box-shadow:0 6px 0 var(--red-d)}
-.opt.dim{opacity:.35}
-.opt.right{background:var(--green)!important;box-shadow:0 6px 0 var(--green-d)!important;animation:bounce .5s}
-.opt.wrong{background:var(--red)!important;box-shadow:0 6px 0 var(--red-d)!important;animation:shake .45s}
-@keyframes bounce{40%{transform:scale(1.05)}}
-@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.opts.tf{grid-template-columns:1fr 1fr;gap:14px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--k2);border:2px solid var(--w);padding:13px 14px;font-size:18px;font-weight:700;line-height:1.45;
+  animation:slideIn .4s cubic-bezier(.2,.8,.2,1) both;transition:transform .08s,box-shadow .08s,background .15s,opacity .2s}
+.opt:nth-child(2){animation-delay:.05s}.opt:nth-child(3){animation-delay:.1s}.opt:nth-child(4){animation-delay:.15s}
+.opt:hover{transform:translate(-3px,-3px);box-shadow:5px 5px 0 var(--o)}
+.opt:active{transform:translate(2px,2px);box-shadow:none}
+.opt .k{width:34px;height:34px;background:var(--w);color:var(--k);display:grid;place-items:center;font-family:var(--num);font-size:19px;flex:none;transform:skewX(-10deg)}
+.opts.tf .opt{flex-direction:column;justify-content:center;text-align:center;padding:22px 10px 18px;gap:8px;font-size:20px;font-weight:900}
+.opts.tf .opt .k{width:auto;height:auto;background:none;color:var(--w);transform:none;font-family:var(--font);font-size:52px;line-height:1;font-weight:900}
+.opts.tf .opt:first-child .k{color:var(--w)}
+.opts.tf .opt:last-child{background:var(--o);border-color:var(--o)}
+.opt.dim{opacity:.25}
+.opt.right{background:var(--w)!important;color:var(--k);border-color:var(--w)!important;box-shadow:6px 6px 0 var(--o)}
+.opt.right .k{background:var(--o);color:var(--w)}
+.opts.tf .opt.right .k{background:none;color:var(--o)}
+.opt.wrong{animation:shake .4s;text-decoration:line-through;text-decoration-color:var(--o);text-decoration-thickness:3px}
+@keyframes shake{20%,60%{transform:translateX(-10px)}40%,80%{transform:translateX(10px)}}
+
+/* 印章 */
+.stamp{position:fixed;left:50%;top:42%;z-index:45;pointer-events:none;opacity:0}
+.stamp b{display:block;font-size:56px;font-weight:900;letter-spacing:.1em;padding:10px 22px 12px 32px;border:7px solid var(--o);color:var(--o);background:var(--k);position:relative;white-space:nowrap}
+.stamp b::before{content:"";position:absolute;inset:5px;border:2px solid var(--o)}
+.stamp.bad b{border-color:var(--w);color:var(--w)}
+.stamp.bad b::before{border-color:var(--w)}
+.stamp.go{animation:slam .9s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes slam{0%{opacity:0;transform:translate(-50%,-50%) rotate(-24deg) scale(2.6)}22%{opacity:1;transform:translate(-50%,-50%) rotate(-10deg) scale(1)}75%{opacity:1;transform:translate(-50%,-50%) rotate(-10deg) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(-10deg) scale(.96)}}
+.shakeScreen{animation:screenShake .25s}
+@keyframes screenShake{30%{transform:translate(4px,-3px)}60%{transform:translate(-4px,3px)}}
 
 /* 回饋面板 */
-.fb{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.9,.3,1.1)}
+.fb{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:center;transform:translateY(110%);transition:transform .38s cubic-bezier(.2,.9,.25,1)}
 .fb.show{transform:none}
-.fb .in{width:100%;max-width:480px;border-radius:28px 28px 0 0;padding:22px 20px calc(env(safe-area-inset-bottom) + 20px);background:#e7f8ee}
-.fb.bad .in{background:#fde8e6}
-.fb .ttl{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:900;color:var(--green-d)}
-.fb.bad .ttl{color:var(--red-d)}
-.fb .ttl .pts{margin-left:auto;font-size:16px;background:var(--green);color:#fff;border-radius:999px;padding:3px 12px}
+.fb .in{width:100%;max-width:480px;background:var(--o);color:var(--w);padding:22px 20px calc(env(safe-area-inset-bottom) + 22px);clip-path:polygon(0 18px,100% 0,100% 100%,0 100%)}
+.fb.bad .in{background:var(--w);color:var(--k)}
+.fb .ttl{display:flex;align-items:center;gap:12px;font-size:28px;font-weight:900;padding-top:10px}
+.fb .ttl .pts{margin-left:auto;font-family:var(--num);font-size:24px;background:var(--k);color:var(--w);padding:0 10px;transform:skewX(-10deg)}
 .fb.bad .ttl .pts{display:none}
-.fb .exp{font-size:17px;line-height:1.75;color:var(--ink);margin:10px 0 16px}
-.fb .exp b{color:var(--ink)}
-.fb .btn{background:var(--green);box-shadow:0 6px 0 var(--green-d)}
-.fb.bad .btn{background:var(--red);box-shadow:0 6px 0 var(--red-d)}
+.fb .exp{font-size:17px;line-height:1.75;margin:10px 0 18px}
+.fb .exp b{font-weight:900;box-shadow:inset 0 -.35em 0 rgba(14,13,12,.22)}
+.fb.bad .exp b{box-shadow:inset 0 -.35em 0 rgba(235,77,0,.4)}
+.fb .btn{background:var(--k);color:var(--w);box-shadow:6px 6px 0 var(--o-d)}
+.fb.bad .btn{box-shadow:6px 6px 0 var(--o)}
 
 /* 結算 */
-.result{color:#fff;text-align:center;justify-content:center;padding:20px 0}
-.result .big{font-size:76px;line-height:1;margin-bottom:6px;animation:pop .6s cubic-bezier(.2,.9,.3,1.5)}
-.result h2{font-size:34px;font-weight:900;line-height:1.3}
-.result .sub{color:rgba(255,255,255,.7);font-size:17px;margin:8px 0 22px;line-height:1.7}
-.starrow{display:flex;justify-content:center;gap:10px;margin:14px 0 6px}
-.starrow span{font-size:52px;filter:grayscale(1) brightness(.5);transform:scale(.6);transition:all .4s cubic-bezier(.2,.9,.3,1.6)}
-.starrow span.on{filter:none;transform:scale(1)}
-.scorebox{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:8px 0 22px}
-.scorebox div{background:rgba(255,255,255,.08);border-radius:18px;padding:14px 6px}
-.scorebox b{display:block;font-size:26px;font-weight:900;color:var(--gold)}
-.scorebox span{font-size:13px;color:rgba(255,255,255,.6)}
-.rankcard{background:var(--panel);color:var(--ink);border-radius:26px;padding:22px;margin:4px 0 22px;box-shadow:0 8px 0 rgba(0,0,0,.28)}
-.rankcard .lv{font-size:14px;font-weight:900;color:var(--orange);letter-spacing:.1em}
-.rankcard .nm{font-size:30px;font-weight:900;margin:4px 0}
-.rankcard p{font-size:16px;color:var(--ink2);line-height:1.7}
-.review{text-align:left;margin-bottom:22px}
-.review h4{font-size:15px;color:rgba(255,255,255,.6);margin-bottom:10px}
-.review .it{background:var(--panel);color:var(--ink);border-radius:18px;padding:14px 16px;margin-bottom:10px}
-.review .it .q{font-size:16px;font-weight:900;line-height:1.5}
-.review .it .a{font-size:15px;color:var(--green-d);margin-top:6px;font-weight:700}
-.review .it .e{font-size:15px;color:var(--ink2);margin-top:4px;line-height:1.65}
+.result{padding-top:5vh}
+.result .seal{margin:0 auto;width:auto;height:auto;padding:14px 26px;background:var(--k);border-color:var(--w);color:var(--w)}
+.result .seal::before{border-color:var(--w)}
+.result .seal b{font-size:44px;letter-spacing:.1em}
+.result h2{text-align:center;font-size:30px;font-weight:900;margin:30px 0 4px;line-height:1.35}
+.result .sub{text-align:center;color:var(--w2);font-size:17px;line-height:1.7;margin-bottom:18px}
+.starrow{display:flex;justify-content:center;gap:14px;margin:6px 0 4px}
+.starrow span{font-size:56px;line-height:1;color:var(--k3);transform:scale(.4) rotate(-40deg);transition:all .45s cubic-bezier(.2,1.8,.4,1)}
+.starrow span.on{color:var(--o);transform:none;text-shadow:4px 4px 0 var(--w)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:8px 0 20px}
+.stats div{background:var(--k2);border:2px solid var(--k3);padding:12px 8px;text-align:center}
+.stats b{display:block;font-family:var(--num);font-size:34px;line-height:1.1;color:var(--o)}
+.stats span{font-size:12px;font-weight:900;letter-spacing:.12em;color:var(--mute)}
+.rankcard{background:var(--w);color:var(--k);padding:20px 22px;margin-bottom:24px;clip-path:var(--cut);position:relative}
+.rankcard .tag{margin-bottom:8px}
+.rankcard .nm{font-size:32px;font-weight:900;line-height:1.3}
+.rankcard p{font-size:16px;color:#4a443d;line-height:1.7;margin-top:4px}
+.rankcard .big{position:absolute;right:14px;bottom:4px;font-family:var(--num);font-size:84px;line-height:1;color:transparent;-webkit-text-stroke:2px var(--w2)}
+.review{margin-bottom:24px}
+.review h4{font-size:14px;font-weight:900;letter-spacing:.12em;color:var(--mute);margin-bottom:10px}
+.review .it{background:var(--k2);border-left:5px solid var(--o);padding:14px 16px;margin-bottom:10px}
+.review .it .q{font-size:16px;font-weight:900;line-height:1.55}
+.review .it .a{font-size:15px;color:var(--o);margin-top:6px;font-weight:900}
+.review .it .e{font-size:15px;color:var(--w2);margin-top:4px;line-height:1.7}
 
-/* 倒數開場 */
-.count{position:fixed;inset:0;z-index:30;display:none;place-items:center;background:rgba(29,23,20,.92)}
+/* 倒數 */
+.count{position:fixed;inset:0;z-index:40;display:none;place-items:center;background:var(--o)}
 .count.on{display:grid}
-.count b{font-size:120px;font-weight:900;color:var(--gold);animation:zoom .8s ease-out}
-@keyframes zoom{from{transform:scale(2.2);opacity:0}to{transform:scale(1);opacity:1}}
+.count b{font-family:var(--num);font-size:200px;line-height:1;color:var(--k);animation:zoom .7s cubic-bezier(.2,1.4,.4,1)}
+.count small{position:absolute;bottom:22%;left:0;right:0;text-align:center;font-weight:900;font-size:20px;letter-spacing:.3em;color:var(--k)}
+@keyframes zoom{from{transform:scale(2.4) rotate(-10deg);opacity:0}to{transform:none;opacity:1}}
 
-canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media (min-width:520px){.app{padding-top:20px}}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:46}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.stamp{display:none}}
 </style>
 </head>
-<body>
+<body data-s="sHome">
+<div class="slab"></div>
+<div class="wipe" id="wipe"></div>
+<div class="stamp" id="stamp"><b id="stampT">正解</b></div>
 <canvas id="fx"></canvas>
-<div class="count" id="count"><b id="countN">3</b></div>
+<div class="count" id="count"><b id="countN">3</b><small>熟成大考</small></div>
 
-<div class="app">
+<div class="app" id="app">
 
 <!-- 首頁 -->
 <section class="screen home on" id="sHome">
-  <span class="badge">🎮 新人闖關遊戲</span>
-  <div class="logo"><span>酿</span></div>
-  <h1>酿牛<br><em>熟成學院</em></h1>
-  <p class="lead">5 個小關卡，玩完就懂酿牛、會寫生活文。最後挑戰熟成大考，看你熟成幾天！</p>
-  <div class="namebox"><label for="name">你的名字</label><input id="name" maxlength="10" placeholder="輸入暱稱" autocomplete="off"></div>
-  <button class="btn" id="goMap">開始闖關</button>
-  <p class="homefoot">全程約 15 分鐘 · 答錯也沒關係，看解說就學會了</p>
+  <div class="seal"><b>酿</b></div>
+  <h1 class="in2"><span class="a">酿牛</span><span class="b">熟成學院</span></h1>
+  <p class="lead in3">5 個小關卡，玩完就懂<b>酿牛</b>、會寫<b>生活文</b>。<br>最後挑戰熟成大考，看你熟成幾天！</p>
+  <div class="pickttl in4"><span class="tag o"><span>選擇挑戰者</span></span><button class="linkbtn" id="homeBoard">看排行榜 →</button></div>
+  <div class="players in4" id="players"></div>
+  <button class="btn in5" id="goMap" disabled>先選你的名字<span class="arr">→</span></button>
+  <p class="homefoot in6">全程約 15 分鐘 · 答錯也沒關係，看解說就學會了</p>
 </section>
 
 <!-- 地圖 -->
 <section class="screen" id="sMap">
   <div class="top">
-    <button class="iconbtn" id="mapHome" aria-label="回首頁">⌂</button>
+    <button class="tbtn" id="mapHome" aria-label="回首頁">←</button>
     <span class="grow"></span>
-    <span class="pillstat">⭐ <span id="starTotal">0</span></span>
-    <button class="iconbtn" id="sound" aria-label="音效開關">🔊</button>
+    <button class="tbtn" id="mapBoard">排行榜</button>
+    <button class="tbtn" id="sound">音效 開</button>
   </div>
-  <div class="hello"><h2 id="hiName">嗨，新同學</h2><p>一關一關來，每關先學再答題。</p></div>
-  <div class="aging">
-    <div class="row"><b>你的熟成進度</b><span class="day" id="dayNum">0<small>天</small></span></div>
-    <div class="meter"><i id="dayBar"></i></div>
-    <div class="rank">目前等級：<b id="rankNow">生肉新手</b></div>
+  <div class="mapttl in1"><h2><small id="hiName">嗨，新同學</small>選擇關卡</h2></div>
+  <div class="aging in2">
+    <div class="row">
+      <div><div class="lbl">你的熟成進度</div><div class="rank" id="rankNow">生肉新手</div></div>
+      <div class="day" id="dayNum">0<small>天</small></div>
+    </div>
+    <div class="cells" id="cells"></div>
+    <div class="daymarks"><span>0</span><span>7</span><span>14</span><span>21</span><span>28</span></div>
   </div>
   <div class="path" id="path"></div>
 </section>
@@ -245,13 +331,13 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
 <!-- 學習卡 -->
 <section class="screen" id="sLearn">
   <div class="top">
-    <button class="iconbtn" id="learnClose" aria-label="回地圖">✕</button>
-    <div class="dots" id="dots"></div>
+    <button class="tbtn" id="learnClose" aria-label="回地圖">✕</button>
+    <div class="bars" id="dots"></div>
   </div>
   <div class="learn">
-    <div id="lcard"></div>
+    <div id="lcard" style="flex:1;display:flex;flex-direction:column"></div>
     <div class="learnnav">
-      <button class="btn ghost back" id="lPrev" aria-label="上一張">←</button>
+      <button class="btn line back" id="lPrev" aria-label="上一張">←</button>
       <button class="btn" id="lNext">下一張</button>
     </div>
   </div>
@@ -260,14 +346,14 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
 <!-- 答題 -->
 <section class="screen" id="sQuiz">
   <div class="top">
-    <button class="iconbtn" id="quizClose" aria-label="離開">✕</button>
-    <div class="dots" id="qdots"></div>
+    <button class="tbtn" id="quizClose" aria-label="離開">✕</button>
+    <div class="bars" id="qdots"></div>
   </div>
   <div class="qhead">
-    <div class="timer" id="timer" hidden><svg width="52" height="52"><circle class="tb" cx="26" cy="26" r="22"/><circle class="tf" id="tf" cx="26" cy="26" r="22" stroke-dasharray="138.2" stroke-dashoffset="0"/></svg><b id="tnum">20</b></div>
-    <span class="qcount" id="qcount"></span>
+    <div class="timer" id="timer" hidden><svg width="54" height="54"><circle class="tb" cx="27" cy="27" r="23"/><circle class="tf" id="tf" cx="27" cy="27" r="23" stroke-dasharray="144.5" stroke-dashoffset="0"/></svg><b id="tnum">20</b></div>
+    <div class="qnum" id="qcount"></div>
     <span class="combo" id="combo"></span>
-    <span class="pillstat" id="scoreP" hidden>🔥 <span id="scoreN">0</span></span>
+    <div class="score" id="scoreP" hidden><small>分數</small><span id="scoreN">0</span></div>
   </div>
   <div class="qcard" id="qcard"></div>
   <div class="opts" id="opts"></div>
@@ -275,29 +361,42 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
 
 <!-- 關卡結算 -->
 <section class="screen result" id="sStage">
-  <div class="big" id="stEmoji">🎉</div>
+  <div class="seal"><b id="stSeal">過關</b></div>
   <h2 id="stTitle">過關！</h2>
-  <div class="starrow" id="stStars"><span>⭐</span><span>⭐</span><span>⭐</span></div>
+  <div class="starrow" id="stStars"><span>★</span><span>★</span><span>★</span></div>
   <p class="sub" id="stSub"></p>
   <div class="review" id="stReview"></div>
-  <button class="btn" id="stNext">下一關</button>
-  <button class="btn ghost" id="stRetry">再玩一次這關</button>
+  <button class="btn o" id="stNext">下一關</button>
+  <button class="btn line" id="stRetry">再玩一次這關</button>
 </section>
 
 <!-- 大考結算 -->
 <section class="screen result" id="sFinal">
-  <div class="big" id="fEmoji">🏆</div>
+  <div class="seal"><b>合格</b></div>
   <h2 id="fTitle">熟成大考完成！</h2>
   <p class="sub" id="fSub"></p>
-  <div class="scorebox">
+  <div class="stats">
     <div><b id="fRight">0</b><span>答對</span></div>
     <div><b id="fScore">0</b><span>總分</span></div>
     <div><b id="fCombo">0</b><span>最高連對</span></div>
   </div>
-  <div class="rankcard"><div class="lv" id="fLv"></div><div class="nm" id="fRank"></div><p id="fMsg"></p></div>
+  <div class="rankcard"><span class="tag o"><span>你的熟成等級</span></span><div class="nm" id="fRank"></div><p id="fMsg"></p><span class="big" id="fDay"></span></div>
   <div class="review" id="fReview"></div>
-  <button class="btn gold" id="fRetry">再挑戰一次</button>
-  <button class="btn ghost" id="fMap">回到地圖</button>
+  <button class="btn o" id="fBoard">看排行榜</button>
+  <button class="btn" id="fRetry">再挑戰一次</button>
+  <button class="btn line" id="fMap">回到關卡</button>
+</section>
+
+<!-- 排行榜 -->
+<section class="screen" id="sBoard">
+  <div class="top">
+    <button class="tbtn" id="boardBack" aria-label="返回">←</button>
+    <span class="grow"></span>
+    <button class="tbtn" id="boardRefresh">重新整理</button>
+  </div>
+  <div class="mapttl in1"><h2><small>熟成大考最高分</small>排行榜</h2></div>
+  <div class="board" id="board"></div>
+  <p class="boardnote" id="boardNote"></p>
 </section>
 
 </div>
@@ -312,13 +411,13 @@ canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
 <script>
 /* ====== 關卡內容 ====== */
 const STAGES=[
-{ id:'s1', no:'第 1 關', title:'酿牛是誰？', sub:'認識品牌和我們賣什麼', icon:'🥩', color:'#ffe1cf',
+{ id:'s1', title:'酿牛是誰？', sub:'認識品牌和我們賣什麼',
   cards:[
-   {em:'👋',kick:'歡迎加入',h:'酿牛是一個<mark>乾式熟成牛肉</mark>品牌',body:'我們把好牛肉<b>熟成好、修好、切好</b>，送到客人手上。<br>客人拆開就能煎。'},
-   {em:'🍶',kick:'名字的由來',h:'為什麼叫「<mark>酿</mark>」牛？',body:'「酿」就是<b>像釀酒一樣</b>，用時間慢慢把風味養出來。<br><br>品牌名固定寫<b>「酿牛」</b>，不是「釀牛」。打不出來就直接複製。'},
-   {em:'🏢',kick:'背後的公司',h:'酿牛來自<mark>必夫智能</mark>',facts:[['🔬','技術','用超音波影像判斷熟成進度'],['🧪','理念','科學＋工藝，讓每批品質一致'],['🥩','英文字標','VINAGE']],tip:'技術的說法很專業，寫文時用官方文字，不要自己加油添醋。'},
-   {em:'🛒',kick:'客人在哪裡',h:'我們有<mark>兩種客人</mark>',facts:[['🏠','在家料理的一般人','在 momo 購物網買得到'],['🍽️','餐廳老闆','LINE 洽詢餐飲合作']],tip:'你負責的生活文，是寫給「在家吃飯的一般人」。'},
-   {em:'🚫',kick:'最常搞錯的一件事',h:'酿牛<mark>不是餐廳</mark>',body:'我們賣的是<b>肉</b>，不是現煎牛排、不是外送、也不是便當。<br><br>所以不能寫「來店享受主廚手藝」或「我們幫你煎好」。'}
+   {kick:'歡迎加入',h:'酿牛是一個<mark>乾式熟成牛肉</mark>品牌',body:'我們把好牛肉<b>熟成好、修好、切好</b>，送到客人手上。<br>客人拆開就能煎。'},
+   {kick:'名字的由來',h:'為什麼叫「<mark>酿</mark>」牛？',body:'「酿」就是<b>像釀酒一樣</b>，用時間慢慢把風味養出來。<br><br>品牌名固定寫<b>「酿牛」</b>，不是「釀牛」。打不出來就直接複製。'},
+   {kick:'背後的公司',h:'酿牛來自<mark>必夫智能</mark>',facts:[['','技術','用超音波影像判斷熟成進度'],['','理念','科學＋工藝，讓每批品質一致'],['','英文字標','VINAGE']],tip:'技術的說法很專業，寫文時用官方文字，不要自己加油添醋。'},
+   {kick:'客人在哪裡',h:'我們有<mark>兩種客人</mark>',facts:[['','在家料理的一般人','在 momo 購物網買得到'],['','餐廳老闆','LINE 洽詢餐飲合作']],tip:'你負責的生活文，是寫給「在家吃飯的一般人」。'},
+   {kick:'最常搞錯的一件事',h:'酿牛<mark>不是餐廳</mark>',body:'我們賣的是<b>肉</b>，不是現煎牛排、不是外送、也不是便當。<br><br>所以不能寫「來店享受主廚手藝」或「我們幫你煎好」。'}
   ],
   q:[
    {q:'品牌名稱，哪個寫法才正確？',o:['酿牛','釀牛','娘牛','讓牛'],e:'固定寫<b>「酿牛」</b>。打不出來就從別的地方複製過來。'},
@@ -329,13 +428,13 @@ const STAGES=[
    {q:'一般人可以在哪裡買到酿牛？',o:['momo 購物網','只能去台北門市','便利商店熟食櫃','完全買不到'],e:'一般消費者可以在 <b>momo 購物網</b>的酿牛商店買到。'},
    {q:'哪一句會讓人誤以為酿牛是餐廳？',o:['來店就能享受主廚手藝','今晚想在家煎塊牛排','週末在家開煎','挑一塊自己想吃的肉'],e:'酿牛<b>沒有提供現煎服務</b>，「來店享受主廚手藝」會讓人誤會。'}
   ]},
-{ id:'s2', no:'第 2 關', title:'熟成是什麼？', sub:'三分鐘搞懂乾式熟成', icon:'🧊', color:'#d8ecff',
+{ id:'s2', title:'熟成是什麼？', sub:'三分鐘搞懂乾式熟成',
   cards:[
-   {em:'⏳',kick:'一句話說完',h:'乾式熟成＝<mark>控制好環境，讓時間變魔術</mark>',body:'把牛肉放在溫度、濕度、通風都控制好的熟成室裡，慢慢等它變化。'},
-   {em:'🌡️',kick:'酿牛官方簡介寫的條件',h:'熟成室裡長這樣',facts:[['❄️','溫度','0–7°C'],['💧','濕度','80–85%'],['📅','時間','約 21–28 天']],tip:'這是品牌簡介的數字。寫到個別商品時，還是要看該商品的資料。'},
-   {em:'✨',kick:'熟成之後',h:'牛肉會<mark>更嫩、風味更集中</mark>',body:'官方的說法是<b>外乾內嫩、香氣集中</b>。<br><br>但香氣每個人感受不同，不要寫成「保證吃到堅果香」。'},
-   {em:'🥩',kick:'常見部位',h:'酿牛簡介提到的部位',facts:[['1','沙朗','—'],['2','板腱','—'],['3','牛小排','—'],['4','紐約客','—']],tip:'照片看不出是哪個部位時，不要用猜的，去查商品資料。'},
-   {em:'⚠️',kick:'兩個常見誤會',h:'熟成<mark>不是</mark>把肉放久就好',duo:[['在家把肉放冰箱一個月就是乾式熟成','熟成需要專業設備和控制，不教讀者在家自己做'],['濕式熟成沒味道，懂吃的才選乾式','乾式和濕式各有風味，喜歡哪種讓讀者自己決定']]}
+   {kick:'一句話說完',h:'乾式熟成＝<mark>控制好環境，讓時間變魔術</mark>',body:'把牛肉放在溫度、濕度、通風都控制好的熟成室裡，慢慢等它變化。'},
+   {kick:'酿牛官方簡介寫的條件',h:'熟成室裡長這樣',facts:[['','溫度','0–7°C'],['','濕度','80–85%'],['','時間','約 21–28 天']],tip:'這是品牌簡介的數字。寫到個別商品時，還是要看該商品的資料。'},
+   {kick:'熟成之後',h:'牛肉會<mark>更嫩、風味更集中</mark>',body:'官方的說法是<b>外乾內嫩、香氣集中</b>。<br><br>但香氣每個人感受不同，不要寫成「保證吃到堅果香」。'},
+   {kick:'常見部位',h:'酿牛簡介提到的<mark>四個部位</mark>',facts:[['','01','沙朗'],['','02','板腱'],['','03','牛小排'],['','04','紐約客']],tip:'照片看不出是哪個部位時，不要用猜的，去查商品資料。'},
+   {kick:'兩個常見誤會',h:'熟成<mark>不是</mark>把肉放久就好',duo:[['在家把肉放冰箱一個月就是乾式熟成','熟成需要專業設備和控制，不教讀者在家自己做'],['濕式熟成沒味道，懂吃的才選乾式','乾式和濕式各有風味，喜歡哪種讓讀者自己決定']]}
   ],
   q:[
    {q:'乾式熟成最重要的關鍵是什麼？',o:['溫度、濕度、通風都控制好','把肉放越久越好','放家裡冰箱就可以','放在太陽下曬'],e:'重點是<b>受控的環境</b>，不是放久就好。'},
@@ -346,13 +445,13 @@ const STAGES=[
    {q:'讀者問「我可以在家自己乾式熟成嗎？」文章該怎麼處理？',o:['不教讀者在家隨便熟成','教他放冰箱一個月','說放室溫就好','說包保鮮膜就行'],e:'熟成需要<b>專業設備和控制</b>，不能教讀者在家自己做。'},
    {q:'想寫「這款熟成 28 天、有起司香」，要先做什麼？',o:['查這個商品的核准資料','憑感覺寫','抄網路文章','問 AI 就好'],e:'商品的天數和香氣，一律<b>查核准資料</b>，不能自己補。'}
   ]},
-{ id:'s3', no:'第 3 關', title:'我們平常發什麼文？', sub:'看懂酿牛的行銷重點', icon:'📣', color:'#ece3ff',
+{ id:'s3', title:'我們平常發什麼文？', sub:'看懂酿牛的行銷重點',
   cards:[
-   {em:'💡',kick:'品牌標語',h:'「<mark>熟成之後 才是料理的開始</mark>」',body:'包裝盒上還有一句：<b>「品味時間的美味」</b>。<br><br>酿牛的所有文章，都圍繞著「時間養出來的好味道」。'},
-   {em:'🍽️',kick:'第一種：餐廳合作文',h:'寫給<mark>餐廳老闆</mark>看的',post:'你負責料理，熟成交給我們。\n品質一致、穩定出貨，\n讓菜單上多一道會被記住的招牌。',tip:'重點是：省下設備和時間、品質穩定、菜單多一道亮點。這類文由主管負責。'},
-   {em:'🏠',kick:'第二種：生活文（你負責這個！）',h:'寫給<mark>在家吃飯的一般人</mark>',post:'週五晚上行程可以空白\n晚餐想吃什麼倒是很清楚\n\n牛排下鍋　配菜端上桌\n你這週想出去吃\n還是在家開煎？',tip:'重點是：先聊生活，再自然想到牛排。'},
-   {em:'🎯',kick:'生活文的公式',h:'<mark>先聊生活</mark>，再帶一點牛肉',facts:[['1','生活畫面','下班、週末、朋友來家裡'],['2','讀者在意的事','晚餐吃什麼、怎麼分工'],['3','接到牛排','自然出現，不硬塞'],['4','一個收尾','問一個問題就好']]},
-   {em:'#️⃣',kick:'標籤',h:'常用的標籤',body:'從這些挑適合的就好，不用全放：<br><br><b>#酿牛　#乾式熟成　#牛排　#居家料理</b><br><br>想讓打繁體字的人也搜得到，可以另外加 <b>#釀牛</b>。但內文一律寫「酿牛」。'}
+   {kick:'品牌標語',h:'「<mark>熟成之後 才是料理的開始</mark>」',body:'包裝盒上還有一句：<b>「品味時間的美味」</b>。<br><br>酿牛的所有文章，都圍繞著「時間養出來的好味道」。'},
+   {kick:'第一種：餐廳合作文',h:'寫給<mark>餐廳老闆</mark>看的',post:'你負責料理，熟成交給我們。\n品質一致、穩定出貨，\n讓菜單上多一道會被記住的招牌。',tip:'重點是：省下設備和時間、品質穩定、菜單多一道亮點。這類文由其他同事負責。'},
+   {kick:'第二種：生活文（你負責這個！）',h:'寫給<mark>在家吃飯的一般人</mark>',post:'週五晚上行程可以空白\n晚餐想吃什麼倒是很清楚\n\n牛排下鍋　配菜端上桌\n你這週想出去吃\n還是在家開煎？',tip:'重點是：先聊生活，再自然想到牛排。'},
+   {kick:'生活文的公式',h:'<mark>先聊生活</mark>，再帶一點牛肉',facts:[['','STEP 1　生活畫面','下班、週末、朋友來家裡'],['','STEP 2　讀者在意的事','晚餐吃什麼、怎麼分工'],['','STEP 3　接到牛排','自然出現，不硬塞'],['','STEP 4　一個收尾','問一個問題就好']]},
+   {kick:'標籤',h:'常用的<mark>標籤</mark>',body:'從這些挑適合的就好，不用全放：<br><br><b>#酿牛　#乾式熟成　#牛排　#居家料理</b><br><br>想讓打繁體字的人也搜得到，可以另外加 <b>#釀牛</b>。但內文一律寫「酿牛」。'}
   ],
   q:[
    {q:'酿牛的品牌標語是哪一句？',o:['熟成之後 才是料理的開始','每一口都是幸福','吃了就停不下來','全台最好吃牛排'],e:'品牌標語是<b>「熟成之後 才是料理的開始」</b>。'},
@@ -362,14 +461,14 @@ const STAGES=[
    {q:'生活文寫到最後，突然加一句「餐廳批發歡迎洽詢」，可以嗎？',o:['不行，讀者突然換人了','可以，多曝光比較好','可以，越多資訊越好','要加在開頭才對'],e:'一篇只對<b>一種讀者</b>說話，結尾不能突然換人。'},
    {q:'內文中品牌名該怎麼寫？',o:['一律寫「酿牛」','寫「釀牛」比較正確','兩個混著用','用英文就好'],e:'內文一律寫<b>「酿牛」</b>。#釀牛 只是標籤，讓人搜得到。'}
   ]},
-{ id:'s4', no:'第 4 關', title:'生活文怎麼寫？', sub:'開頭、正文、收尾一次學會', icon:'✍️', color:'#dff5e8',
+{ id:'s4', title:'生活文怎麼寫？', sub:'開頭、正文、收尾一次學會',
   cards:[
-   {em:'🎬',kick:'第一步',h:'<mark>先看素材</mark>，再寫字',body:'照片、影片先完整看過一次。<br><br>文字只能寫<b>畫面裡真的有的東西</b>。影片只有拆包裝，就不能寫「吃起來超嫩」。'},
-   {em:'🧠',kick:'好題目的兩個關卡',h:'讀者腦中<mark>有畫面</mark>嗎？',duo:[['生活值得美好滋味','有人端著盤子，等朋友拍完照才能開動']],tip:'第二關：這個畫面能自然接到牛排嗎？兩關都過才算好題目。'},
-   {em:'🪝',kick:'開頭',h:'前兩行就講清楚<mark>在聊什麼</mark>',duo:[['在繁忙的現代生活中，美食是最好的慰藉','下班最難的那題，通常是晚餐吃什麼']]},
-   {em:'🎯',kick:'收尾',h:'<mark>只留一個</mark>動作',duo:[['快留言、標記朋友、分享、私訊、立刻下單！','你們家聚餐，通常誰負責主菜？']]},
-   {em:'💬',kick:'語氣',h:'像一個<mark>懂吃肉的朋友</mark>在聊天',body:'用台灣日常的說法：下班、晚餐、朋友來家裡、開煎。<br><br>少用「味蕾饗宴」「儀式感拉滿」這種空話，換成具體的畫面。'},
-   {em:'1️⃣',kick:'最重要的一條',h:'一篇只講<mark>一件事</mark>',body:'想講三件事？那就拆成三篇。<br><br>生活、知識、優惠全塞在一起，讀者一件都記不住。'}
+   {kick:'第一步',h:'<mark>先看素材</mark>，再寫字',body:'照片、影片先完整看過一次。<br><br>文字只能寫<b>畫面裡真的有的東西</b>。影片只有拆包裝，就不能寫「吃起來超嫩」。'},
+   {kick:'好題目的兩個關卡',h:'讀者腦中<mark>有畫面</mark>嗎？',duo:[['生活值得美好滋味','有人端著盤子，等朋友拍完照才能開動']],tip:'第二關：這個畫面能自然接到牛排嗎？兩關都過才算好題目。'},
+   {kick:'開頭',h:'前兩行就講清楚<mark>在聊什麼</mark>',duo:[['在繁忙的現代生活中，美食是最好的慰藉','下班最難的那題，通常是晚餐吃什麼']]},
+   {kick:'收尾',h:'<mark>只留一個</mark>動作',duo:[['快留言、標記朋友、分享、私訊、立刻下單！','你們家聚餐，通常誰負責主菜？']]},
+   {kick:'語氣',h:'像一個<mark>懂吃肉的朋友</mark>在聊天',body:'用台灣日常的說法：下班、晚餐、朋友來家裡、開煎。<br><br>少用「味蕾饗宴」「儀式感拉滿」這種空話，換成具體的畫面。'},
+   {kick:'最重要的一條',h:'一篇只講<mark>一件事</mark>',body:'想講三件事？那就拆成三篇。<br><br>生活、知識、優惠全塞在一起，讀者一件都記不住。'}
   ],
   q:[
    {q:'哪一個開頭比較好？',o:['下班最難的那題，通常是晚餐吃什麼','在繁忙的現代生活中，美食是最好的慰藉','你是否渴望一場頂級味蕾饗宴','不會吧，還有人不知道乾式熟成'],e:'好開頭有<b>具體的生活畫面</b>。嘲笑讀者或空泛的句子都不好。'},
@@ -380,13 +479,13 @@ const STAGES=[
    {q:'文章的語氣應該像？',o:['懂吃肉的朋友在聊天','精品廣告','教授上課','業務推銷'],e:'酿牛的生活文語氣：<b>自然、在地、像朋友聊天</b>。'},
    {q:'好題目要通過哪兩關？',o:['讀者有畫面＋接得到牛排','字數夠多＋形容詞夠多','有優惠＋有贈品','有時事＋有明星'],e:'讀者<b>腦中有畫面</b>，而且<b>自然接得到酿牛</b>。'}
   ]},
-{ id:'s5', no:'第 5 關', title:'紅線別踩！', sub:'判斷這句能不能發', icon:'💥', color:'#ffe0e0',
+{ id:'s5', title:'紅線別踩！', sub:'判斷這句能不能發',
   cards:[
-   {em:'🚧',kick:'這關很重要',h:'有些事<mark>踩到就會出事</mark>',body:'其他都可以慢慢練，但下面這幾條<b>第一天就要記住</b>。'},
-   {em:'🙅',kick:'紅線 1–3',h:'不編故事、不亂改圖',facts:[['📖','不捏造','客人說、同事試吃、賣了幾盒'],['🖼️','不改商品照','肉色、油花、厚度、包裝'],['🤖','不用 AI 畫肉','只用實拍照片']]},
-   {em:'💰',kick:'紅線 4–6',h:'不亂給承諾',facts:[['🏷️','價格優惠','沒確認就不寫'],['🚚','免運、到貨','沒確認就不寫'],['📅','舊活動','不能直接拿來用']]},
-   {em:'🩺',kick:'紅線 7–8',h:'不保證、不搶跑',facts:[['🧫','食安健康','不寫「無菌」「絕對安全」「吃了增肌」'],['✋','發文權限','還沒授權就不自己發文、回客訴']]},
-   {em:'✅',kick:'但這樣可以',h:'用<mark>「如果…」</mark>就沒問題',duo:[['昨天朋友來我家，吃完立刻加訂五盒','如果朋友週末來家裡，可以把牛排排進主菜']],tip:'假設的情境可以寫，沒發生過的事不能寫成真的。'}
+   {kick:'這關很重要',h:'有些事<mark>踩到就會出事</mark>',body:'其他都可以慢慢練，但下面這幾條<b>第一天就要記住</b>。'},
+   {kick:'紅線 1–3',h:'不編故事、<mark>不亂改圖</mark>',facts:[['','不捏造','客人說、同事試吃、賣了幾盒'],['','不改商品照','肉色、油花、厚度、包裝'],['','不用 AI 畫肉','只用實拍照片']]},
+   {kick:'紅線 4–6',h:'不亂給<mark>承諾</mark>',facts:[['','價格優惠','沒確認就不寫'],['','免運、到貨','沒確認就不寫'],['','舊活動','不能直接拿來用']]},
+   {kick:'紅線 7–8',h:'不保證、<mark>不搶跑</mark>',facts:[['','食安健康','不寫「無菌」「絕對安全」「吃了增肌」'],['','發文權限','還沒授權就不自己發文、回客訴']]},
+   {kick:'但這樣可以',h:'用<mark>「如果…」</mark>就沒問題',duo:[['昨天朋友來我家，吃完立刻加訂五盒','如果朋友週末來家裡，可以把牛排排進主菜']],tip:'假設的情境可以寫，沒發生過的事不能寫成真的。'}
   ],
   q:[
    {t:'tf',q:'這句可以發嗎？',quote:'昨天客人跟我們說，吃一口就立刻回購十盒！',a:1,e:'沒有真的發生，就是<b>捏造顧客故事</b>。'},
@@ -402,75 +501,145 @@ const STAGES=[
   ]}
 ];
 const RANKS=[[0,'生肉新手','剛進熟成室，還有很多可以學！'],[7,'熟成第 7 天','開始有點味道了，再多玩幾次就更熟。'],[14,'熟成第 14 天','已經很有樣子，可以開始練習寫稿了。'],[21,'熟成第 21 天','外乾內嫩，風味出來了！'],[28,'熟成 28 天大師','完全熟成，你已經是酿牛生活文達人！']];
+const CATS={s1:'酿牛是誰',s2:'熟成知識',s3:'行銷重點',s4:'寫作技巧',s5:'紅線判斷'};
 
 /* ====== 狀態 ====== */
-const KEY='nn-academy-v1';
-let S={name:'',stars:{},best:0,sound:true};
-try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+/* 共用排行榜：填入 Google Apps Script 網址後，五個人的分數會存到同一張試算表 */
+const BOARD_URL='';
+const PLAYERS=['YoYo','RAE','Ryson','Livia','Joanne'];
+const KEY='nn-academy-v2';
+let G={player:'',players:{},sound:true};
+try{Object.assign(G,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+const prof=n=>G.players[n]||(G.players[n]={name:n,stars:{},best:0,right:0,total:0});
+let S=G.player?prof(G.player):{name:'',stars:{},best:0};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(G))}catch(e){}};
 const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
 const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const totalStars=()=>STAGES.reduce((s,x)=>s+(S.stars[x.id]||0),0);
 const days=()=>Math.round(totalStars()/(STAGES.length*3)*28);
 const rankOf=d=>RANKS.filter(r=>d>=r[0]).pop();
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0)}
+/* 換畫面：橘色斜刷過去，中途切換 */
+let busy=false;
+function show(id,instant){
+  const go=()=>{document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));document.body.dataset.s=id;window.scrollTo(0,0)};
+  if(instant||reduce){go();return}
+  const w=$('wipe');w.classList.remove('go');void w.offsetWidth;w.classList.add('go');beep('swoosh');
+  setTimeout(go,300);
+}
 
 /* ====== 音效 ====== */
 let AC;
 function beep(type){
-  if(!S.sound)return;
+  if(!G.sound)return;
   try{
     AC=AC||new (window.AudioContext||window.webkitAudioContext)();
-    const seq={ok:[[660,.0],[880,.09]],bad:[[220,0],[180,.12]],tap:[[520,0]],win:[[523,0],[659,.1],[784,.2],[1046,.3]],tick:[[900,0]]}[type];
-    seq.forEach(([f,t])=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type==='bad'?'sawtooth':'triangle';o.frequency.value=f;
-      const s=AC.currentTime+t;g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(type==='tick'?.05:.18,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+.22);
+    const t0=AC.currentTime;
+    if(type==='swoosh'){
+      const len=.3,buf=AC.createBuffer(1,AC.sampleRate*len,AC.sampleRate),d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(1-i/d.length);
+      const src=AC.createBufferSource(),f=AC.createBiquadFilter(),g=AC.createGain();
+      src.buffer=buf;f.type='bandpass';f.frequency.setValueAtTime(600,t0);f.frequency.exponentialRampToValueAtTime(3000,t0+len);g.gain.value=.12;
+      src.connect(f).connect(g).connect(AC.destination);src.start();return;
+    }
+    const seq={ok:[[784,0],[1175,.08]],bad:[[196,0],[147,.12]],tap:[[600,0]],win:[[523,0],[659,.09],[784,.18],[1046,.27],[1318,.36]],tick:[[1000,0]],stamp:[[90,0]]}[type];
+    seq.forEach(([fq,t])=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type==='bad'||type==='stamp'?'square':'triangle';o.frequency.value=fq;
+      const s=t0+t;g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(type==='tick'?.04:.14,s+.015);g.gain.exponentialRampToValueAtTime(.0001,s+(type==='stamp'?.15:.22));
       o.connect(g).connect(AC.destination);o.start(s);o.stop(s+.25)});
   }catch(e){}
 }
 
-/* ====== 彩帶 ====== */
+/* ====== 碎片特效（純色三角形） ====== */
 const cv=$('fx'),cx=cv.getContext('2d');let parts=[],raf;
-function confetti(n){
-  cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.scale(devicePixelRatio,devicePixelRatio);
-  const cols=['#eb4d00','#ffbf3c','#22b866','#3b82f6','#8b5cf6','#f43f5e'];
-  for(let i=0;i<n;i++)parts.push({x:innerWidth/2,y:innerHeight*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,r:Math.random()*6+4,c:cols[i%6],a:Math.random()*6,va:(Math.random()-.5)*.4,life:120+Math.random()*60});
+function burst(n){
+  if(reduce)return;
+  const dpr=devicePixelRatio||1;cv.width=innerWidth*dpr;cv.height=innerHeight*dpr;
+  const cols=['#eb4d00','#f4f1ea','#0e0d0c','#eb4d00'];
+  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=Math.random()*14+5;
+    parts.push({x:innerWidth/2,y:innerHeight*.42,vx:Math.cos(a)*v,vy:Math.sin(a)*v-6,s:Math.random()*14+6,c:cols[i%4],r:Math.random()*6,vr:(Math.random()-.5)*.5,life:70+Math.random()*50})}
   cancelAnimationFrame(raf);(function loop(){
-    cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);cx.clearRect(0,0,innerWidth,innerHeight);
+    cx.setTransform(dpr,0,0,dpr,0,0);cx.clearRect(0,0,innerWidth,innerHeight);
     parts=parts.filter(p=>p.life-->0);
-    parts.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;cx.save();cx.translate(p.x,p.y);cx.rotate(p.a);cx.fillStyle=p.c;cx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);cx.restore()});
+    parts.forEach(p=>{p.vy+=.45;p.vx*=.97;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;
+      if(p.c==='#0e0d0c'){cx.strokeStyle='#f4f1ea';cx.lineWidth=1.5}
+      cx.beginPath();cx.moveTo(0,-p.s/2);cx.lineTo(p.s/2,p.s/2);cx.lineTo(-p.s/2,p.s/3);cx.closePath();cx.fill();if(p.c==='#0e0d0c')cx.stroke();cx.restore()});
     if(parts.length)raf=requestAnimationFrame(loop);else cx.clearRect(0,0,innerWidth,innerHeight);
   })();
 }
+function stamp(text,bad){
+  const s=$('stamp');$('stampT').textContent=text;s.classList.toggle('bad',!!bad);
+  s.classList.remove('go');void s.offsetWidth;s.classList.add('go');
+  setTimeout(()=>{beep('stamp');const a=$('app');a.classList.remove('shakeScreen');void a.offsetWidth;a.classList.add('shakeScreen')},180);
+}
 
 /* ====== 首頁與地圖 ====== */
-$('name').value=S.name||'';
-$('goMap').onclick=()=>{S.name=$('name').value.trim();save();beep('tap');renderMap();show('sMap')};
-$('mapHome').onclick=()=>show('sHome');
-$('sound').onclick=()=>{S.sound=!S.sound;save();$('sound').textContent=S.sound?'🔊':'🔇';beep('tap')};
-$('sound').textContent=S.sound?'🔊':'🔇';
+function renderPlayers(){
+  $('players').innerHTML=PLAYERS.map(n=>{const p=G.players[n],st=p?STAGES.reduce((s,x)=>s+(p.stars[x.id]||0),0):0;
+    return`<button class="pcard${G.player===n?' on':''}" data-n="${n}"><span class="ini">${n[0]}</span><span class="nm">${n}</span><span class="pr">${p&&p.best?'最佳 '+p.best:st?'★ '+st:'新挑戰者'}</span></button>`}).join('');
+  $('players').querySelectorAll('.pcard').forEach(b=>b.onclick=()=>{G.player=b.dataset.n;S=prof(G.player);save();beep('tap');renderPlayers()});
+  const btn=$('goMap');btn.disabled=!G.player;
+  btn.innerHTML=(G.player?G.player+'，開始闖關':'先選你的名字')+'<span class="arr">→</span>';
+}
+renderPlayers();
+$('goMap').onclick=()=>{if(!G.player)return;renderMap();show('sMap')};
+$('mapHome').onclick=()=>{renderPlayers();show('sHome')};
+const soundLabel=()=>$('sound').textContent='音效 '+(G.sound?'開':'關');
+$('sound').onclick=()=>{G.sound=!G.sound;save();soundLabel();beep('tap')};soundLabel();
+
+/* ====== 排行榜 ====== */
+let boardFrom='sHome';
+function localRows(){return PLAYERS.map(n=>{const p=G.players[n]||{};return{name:n,best:p.best||0,right:p.right||0,total:p.total||0,stars:p?STAGES.reduce((s,x)=>s+((p.stars||{})[x.id]||0),0):0}})}
+async function openBoard(from){
+  boardFrom=from;show('sBoard');
+  $('board').innerHTML='<p class="boardnote">讀取中…</p>';$('boardNote').textContent='';
+  let rows=localRows(),shared=false;
+  if(BOARD_URL){
+    try{const r=await fetch(BOARD_URL+'?t='+Date.now());const d=await r.json();
+      const m={};(d.rows||[]).forEach(x=>{m[x.name]=x});
+      rows=PLAYERS.map(n=>{const x=m[n]||{},l=rows.find(y=>y.name===n);return{name:n,best:Math.max(+x.best||0,l.best),right:+x.right||l.right,total:+x.total||l.total,stars:Math.max(+x.stars||0,l.stars)}});shared=true}
+    catch(e){}
+  }
+  rows.sort((a,b)=>b.best-a.best||b.stars-a.stars);
+  $('board').innerHTML=rows.map((r,i)=>{const d=r.total?Math.round(r.right/r.total*28):0;
+    return`<div class="brow${i===0&&r.best?' first':''}${r.name===G.player?' me':''}${r.best||r.stars?'':' none'}" style="animation-delay:${i*.06}s">
+      <span class="pos">${pad(i+1)}</span>
+      <span class="who"><b>${r.name}</b><span>${r.best?rankOf(d)[1]+'　答對 '+r.right+'/'+r.total:r.stars?'闖關中　★ '+r.stars+' / 15':'還沒挑戰'}</span></span>
+      <span class="pts"><small>最高分</small>${r.best||'—'}</span></div>`}).join('');
+  $('boardNote').textContent=BOARD_URL?(shared?'所有挑戰者的成績都在這裡，即時更新。':'暫時連不上排行榜，先顯示這台裝置的紀錄。'):'目前只顯示在這台裝置上玩過的紀錄。';
+}
+async function pushScore(){
+  if(!BOARD_URL||!G.player)return;
+  const st=STAGES.reduce((s,x)=>s+(S.stars[x.id]||0),0);
+  try{await fetch(BOARD_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({name:G.player,score:S.lastScore||0,best:S.best,right:S.right,total:S.total,stars:st})})}catch(e){}
+}
+$('homeBoard').onclick=()=>openBoard('sHome');
+$('mapBoard').onclick=()=>openBoard('sMap');
+$('boardBack').onclick=()=>{if(boardFrom==='sMap')renderMap();else if(boardFrom==='sHome')renderPlayers();show(boardFrom)};
+$('boardRefresh').onclick=()=>openBoard(boardFrom);
 
 function unlocked(i){return i===0||(S.stars[STAGES[i-1].id]||0)>0}
 function renderMap(){
-  $('hiName').textContent='嗨，'+(S.name||'新同學')+' 👋';
-  $('starTotal').textContent=totalStars();
+  $('hiName').textContent='挑戰者　'+(G.player||'新同學');
   const d=days();$('dayNum').innerHTML=d+'<small>天</small>';
-  requestAnimationFrame(()=>$('dayBar').style.width=(d/28*100)+'%');
+  $('cells').innerHTML=Array.from({length:28},(_,i)=>'<i></i>').join('');
+  [...$('cells').children].forEach((c,i)=>{if(i<d)setTimeout(()=>c.classList.add('on'),350+i*28)});
   $('rankNow').textContent=rankOf(d)[1];
   const p=$('path');p.innerHTML='';
   let nextMarked=false;
   STAGES.forEach((s,i)=>{
     const st=S.stars[s.id]||0,lock=!unlocked(i);
-    const b=document.createElement('button');b.className='stage'+(lock?' locked':'');
+    const b=document.createElement('button');b.className='stage in'+Math.min(i+3,6)+(lock?' locked':'');
     if(!lock&&!st&&!nextMarked){b.classList.add('next');nextMarked=true}
-    b.innerHTML=`<span class="ic" style="background:${s.color}">${s.icon}</span><span><span class="no">${s.no}</span><span class="tt" style="display:block">${s.title}</span><span class="st" style="display:block">${s.sub}</span></span><span class="stars">${lock?'':'⭐'.repeat(st)+'<span style="opacity:.25">'+'⭐'.repeat(3-st)+'</span>'}</span>`;
-    b.onclick=()=>{if(lock){beep('bad');b.animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}],{duration:300});return}beep('tap');startLearn(i)};
+    b.innerHTML=`<span class="n">${pad(i+1)}</span><span class="t"><span class="no">STAGE ${pad(i+1)}</span><span class="tt">${s.title}</span><span class="st">${s.sub}</span></span><span class="stars">${lock?'LOCKED':'★'.repeat(st)+'<s>'+'★'.repeat(3-st)+'</s>'}</span>`;
+    b.onclick=()=>{if(lock){beep('bad');b.animate([{transform:'translateX(-8px)'},{transform:'translateX(8px)'},{transform:'none'}],{duration:280});return}startLearn(i)};
     p.appendChild(b);
   });
   const allDone=STAGES.every(s=>(S.stars[s.id]||0)>0);
-  const f=document.createElement('button');f.className='stage final'+(allDone?'':' locked')+(allDone&&!S.best&&!nextMarked?' next':'');
-  f.innerHTML=`<span class="ic" style="background:#fff3d1">🏆</span><span><span class="no">最終挑戰</span><span class="tt" style="display:block">熟成大考</span><span class="st" style="display:block">15 題限時搶答${S.best?' · 最佳 '+S.best+' 分':''}</span></span><span class="stars"></span>`;
-  f.onclick=()=>{if(!allDone){beep('bad');return}beep('tap');startFinal()};
+  const f=document.createElement('button');f.className='stage final in6'+(allDone?'':' locked')+(allDone&&!nextMarked&&!S.best?' next':'');
+  f.innerHTML=`<span class="n">FIN</span><span class="t"><span class="no">FINAL</span><span class="tt">熟成大考</span><span class="st">15 題限時搶答${S.best?'　最佳 '+S.best+' 分':''}</span></span><span class="stars">${allDone?'':'LOCKED'}</span>`;
+  f.onclick=()=>{if(!allDone){beep('bad');f.animate([{transform:'translateX(-8px)'},{transform:'translateX(8px)'},{transform:'none'}],{duration:280});return}startFinal()};
   p.appendChild(f);
 }
 
@@ -478,29 +647,28 @@ function renderMap(){
 let cur=0,card=0;
 function startLearn(i){cur=i;card=0;renderCard();show('sLearn')}
 function renderCard(){
-  const s=STAGES[cur],c=s.cards[card];
-  $('dots').innerHTML=s.cards.map((_,k)=>`<i class="${k<=card?'done':''}"></i>`).join('');
-  let h=`<div class="lcard"><div class="em">${c.em}</div><div class="kick">${c.kick}</div><h3>${c.h}</h3>`;
+  const s=STAGES[cur],c=s.cards[card],n=s.cards.length;
+  $('dots').innerHTML=s.cards.map((_,k)=>`<i class="${k<card?'on':k===card?'cur':''}"></i>`).join('');
+  let h=`<div class="lcard"><span class="pg">${pad(card+1)}</span><span class="tag"><span>${c.kick}</span></span><h3>${c.h}</h3>`;
   if(c.body)h+=`<div class="body">${c.body}</div>`;
-  if(c.facts)h+=`<div class="facts">${c.facts.map(f=>`<div><span>${f[0]}</span><span><b>${f[1]}</b>${f[2]==='—'?'':f[2]}</span></div>`).join('')}</div>`;
+  if(c.facts)h+=`<div class="facts">${c.facts.map(f=>`<div><span></span><span><b>${f[1]}</b>${f[2]}</span></div>`).join('')}</div>`;
   if(c.duo)h+=`<div class="duo">${c.duo.map(d=>`<div class="no">${d[0]}</div><div class="ok">${d[1]}</div>`).join('')}</div>`;
   if(c.post)h+=`<div class="post">${c.post}</div>`;
-  if(c.tip)h+=`<div class="tip">💡 ${c.tip}</div>`;
+  if(c.tip)h+=`<div class="tip">${c.tip}</div>`;
   $('lcard').innerHTML=h+'</div>';
   $('lPrev').style.visibility=card?'visible':'hidden';
-  const last=card===s.cards.length-1;
-  $('lNext').textContent=last?'學會了，開始答題！':'下一張';
-  $('lNext').className='btn'+(last?' gold':'');
+  const last=card===n-1;
+  $('lNext').innerHTML=last?'學會了，開始答題<span class="arr">→</span>':'下一張<span class="arr">→</span>';
+  $('lNext').className='btn'+(last?' o':'');
 }
 $('lNext').onclick=()=>{beep('tap');const s=STAGES[cur];if(card<s.cards.length-1){card++;renderCard()}else startStageQuiz()};
-$('lPrev').onclick=()=>{if(card){card--;renderCard()}};
+$('lPrev').onclick=()=>{if(card){beep('tap');card--;renderCard()}};
 $('learnClose').onclick=()=>{renderMap();show('sMap')};
 
 /* ====== 答題 ====== */
 let Q=[],qi=0,right=0,combo=0,maxCombo=0,score=0,mode='stage',wrongs=[],tmr,tleft,locked=false;
-const CATS={s1:['酿牛是誰','#eb4d00'],s2:['熟成知識','#3b82f6'],s3:['行銷重點','#8b5cf6'],s4:['寫作技巧','#16a34a'],s5:['紅線判斷','#ef4444']};
 function prep(q,sid){
-  if(q.t==='tf')return{...q,sid,opts:[{t:'可以發',k:'👍',ok:q.a===0},{t:'踩雷了',k:'💥',ok:q.a===1}]};
+  if(q.t==='tf')return{...q,sid,opts:[{t:'可以發',k:'○',ok:q.a===0},{t:'踩雷了',k:'✕',ok:q.a===1}]};
   return{...q,sid,opts:shuffle(q.o.map((t,k)=>({t,ok:k===0})))};
 }
 function startStageQuiz(){
@@ -513,76 +681,78 @@ function startFinal(){
   let pool=[];STAGES.forEach(s=>pool.push(...shuffle(s.q).slice(0,3).map(q=>prep(q,s.id))));
   Q=shuffle(pool);
   const c=$('count');c.classList.add('on');let n=3;$('countN').textContent=n;beep('tick');
-  const it=setInterval(()=>{n--;if(n>0){$('countN').textContent=n;$('countN').style.animation='none';void $('countN').offsetWidth;$('countN').style.animation='';beep('tick')}else{clearInterval(it);c.classList.remove('on');begin()}},800);
+  const it=setInterval(()=>{n--;const b=$('countN');if(n>0){b.textContent=n}else if(n===0){b.textContent='GO'}else{clearInterval(it);c.classList.remove('on');begin(true);return}
+    b.style.animation='none';void b.offsetWidth;b.style.animation='';beep(n===0?'stamp':'tick')},700);
 }
-function begin(){qi=0;right=0;combo=0;maxCombo=0;score=0;wrongs=[];
+function begin(instant){qi=0;right=0;combo=0;maxCombo=0;score=0;wrongs=[];
   $('timer').hidden=mode!=='final';$('scoreP').hidden=mode!=='final';$('scoreN').textContent=0;
   $('combo').textContent='';$('combo').classList.remove('show');
-  show('sQuiz');renderQ()}
+  show('sQuiz',instant);setTimeout(renderQ,instant?0:300)}
 function renderQ(){
   locked=false;const q=Q[qi];
-  $('qdots').innerHTML=Q.map((_,k)=>`<i class="${k<qi?'done':''}"></i>`).join('');
-  $('qcount').textContent=`第 ${qi+1} / ${Q.length} 題`;
-  const cat=CATS[q.sid];
-  $('qcard').innerHTML=`<span class="cat" style="background:${cat[1]}">${cat[0]}</span><h3>${q.q}</h3>${q.quote?`<div class="quote">「${q.quote}」</div>`:''}`;
+  $('qdots').innerHTML=Q.map((_,k)=>`<i class="${k<qi?'on':k===qi?'cur':''}"></i>`).join('');
+  $('qcount').innerHTML=`${pad(qi+1)}<small> / ${pad(Q.length)}</small>`;
+  $('qcard').innerHTML=`<span class="tag o"><span>${CATS[q.sid]}</span></span><h3>${q.q}</h3>${q.quote?`<div class="quote">「${q.quote}」</div>`:''}`;
   $('qcard').style.animation='none';void $('qcard').offsetWidth;$('qcard').style.animation='';
   const o=$('opts');o.className='opts'+(q.t==='tf'?' tf':'');
-  o.innerHTML=q.opts.map((x,k)=>`<button class="opt c${k}" data-k="${k}"><span class="k">${q.t==='tf'?x.k:'ABCD'[k]}</span><span>${x.t}</span></button>`).join('');
+  o.innerHTML=q.opts.map((x,k)=>`<button class="opt" data-k="${k}"><span class="k">${q.t==='tf'?x.k:'ABCD'[k]}</span><span>${x.t}</span></button>`).join('');
   o.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.k));
   if(mode==='final'){clearInterval(tmr);tleft=20;tick();tmr=setInterval(()=>{tleft--;tick();if(tleft<=0){clearInterval(tmr);answer(-1)}},1000)}
 }
-function tick(){$('tnum').textContent=tleft;$('tf').style.strokeDashoffset=138.2*(1-tleft/20);$('timer').classList.toggle('low',tleft<=5);if(tleft<=5&&tleft>0)beep('tick')}
+function tick(){$('tnum').textContent=tleft;$('tf').style.strokeDashoffset=144.5*(1-tleft/20);$('timer').classList.toggle('low',tleft<=5);if(tleft<=5&&tleft>0)beep('tick')}
 function answer(k){
   if(locked)return;locked=true;clearInterval(tmr);
   const q=Q[qi],btns=[...$('opts').children],ri=q.opts.findIndex(x=>x.ok),ok=k===ri;
   btns.forEach((b,i)=>{if(i===ri)b.classList.add('right');else if(i===k)b.classList.add('wrong');else b.classList.add('dim')});
   let pts=0;
   if(ok){right++;combo++;maxCombo=Math.max(maxCombo,combo);pts=100+(mode==='final'?tleft*5:0)+(combo>1?(combo-1)*20:0);score+=pts;beep('ok');
-    if(combo>=3)confetti(30)}
-  else{combo=0;beep('bad');wrongs.push(q);if(navigator.vibrate)try{navigator.vibrate(120)}catch(e){}}
+    stamp(combo>=3?combo+' 連對':'正解');burst(combo>=3?60:28)}
+  else{combo=0;beep('bad');wrongs.push(q);stamp(k===-1?'時間到':'可惜',true);try{navigator.vibrate&&navigator.vibrate(100)}catch(e){}}
   $('scoreN').textContent=score;
-  const cb=$('combo');cb.textContent=combo>1?`🔥 ${combo} 連對`:'';cb.classList.toggle('show',combo>1);
-  const fb=$('fb');fb.classList.toggle('bad',!ok);
+  const cb=$('combo');cb.textContent=combo>1?combo+' COMBO':'';cb.classList.toggle('show',combo>1);
+  $('fb').classList.toggle('bad',!ok);
   $('fbT').textContent=ok?['答對了！','太強了！','完全正確！','漂亮！'][Math.random()*4|0]:(k===-1?'時間到！':'差一點點！');
   $('fbP').textContent='+'+pts;
   $('fbE').innerHTML=(ok?'':'正確答案：<b>'+q.opts[ri].t+'</b><br>')+q.e;
-  $('fbNext').textContent=qi===Q.length-1?'看結果':'下一題';
-  setTimeout(()=>fb.classList.add('show'),350);
+  $('fbNext').innerHTML=(qi===Q.length-1?'看結果':'下一題')+'<span class="arr">→</span>';
+  setTimeout(()=>$('fb').classList.add('show'),650);
 }
-$('fbNext').onclick=()=>{beep('tap');$('fb').classList.remove('show');qi++;if(qi<Q.length)setTimeout(renderQ,200);else setTimeout(mode==='final'?finalResult:stageResult,250)};
+$('fbNext').onclick=()=>{beep('tap');$('fb').classList.remove('show');qi++;if(qi<Q.length)setTimeout(renderQ,220);else setTimeout(mode==='final'?finalResult:stageResult,200)};
 $('quizClose').onclick=()=>{clearInterval(tmr);$('fb').classList.remove('show');renderMap();show('sMap')};
 
 function reviewHTML(list){
   if(!list.length)return'';
-  return`<h4>📒 答錯的題目，再看一次</h4>`+list.map(q=>`<div class="it"><div class="q">${q.q}${q.quote?'<br>「'+q.quote+'」':''}</div><div class="a">✓ ${q.opts.find(x=>x.ok).t}</div><div class="e">${q.e}</div></div>`).join('');
+  return`<h4>答錯的題目，再看一次</h4>`+list.map(q=>`<div class="it"><div class="q">${q.q}${q.quote?'<br>「'+q.quote+'」':''}</div><div class="a">○ ${q.opts.find(x=>x.ok).t}</div><div class="e">${q.e}</div></div>`).join('');
 }
 function stageResult(){
   const s=STAGES[cur],n=Q.length,st=right===n?3:right>=n-1?2:right>=Math.ceil(n/2)?1:0;
-  S.stars[s.id]=Math.max(S.stars[s.id]||0,st);save();
-  $('stEmoji').textContent=st===3?'🎉':st?'👏':'💪';
+  S.stars[s.id]=Math.max(S.stars[s.id]||0,st);save();pushScore();
+  $('stSeal').textContent=st===3?'完美':st?'過關':'再來';
   $('stTitle').textContent=st===3?'完美過關！':st?'過關了！':'差一點，再試一次！';
-  $('stSub').innerHTML=`答對 <b style="color:#ffbf3c">${right} / ${n}</b> 題`+(st?'':'<br>答對一半以上就能過關');
+  $('stSub').innerHTML=`答對 <b style="color:#eb4d00">${right} / ${n}</b> 題`+(st?'':'<br>答對一半以上就能過關');
   const ss=[...$('stStars').children];ss.forEach(x=>x.classList.remove('on'));
-  ss.forEach((x,i)=>setTimeout(()=>{if(i<st){x.classList.add('on');beep('ok')}},400+i*300));
+  ss.forEach((x,i)=>setTimeout(()=>{if(i<st){x.classList.add('on');beep('ok')}},700+i*280));
   $('stReview').innerHTML=reviewHTML(wrongs);
   const isLast=cur===STAGES.length-1;
-  $('stNext').textContent=st?(isLast?'挑戰熟成大考 🏆':'下一關'):'回到地圖';
-  $('stNext').onclick=()=>{beep('tap');if(!st){renderMap();show('sMap')}else if(isLast){renderMap();startFinal()}else{startLearn(cur+1)}};
-  $('stRetry').onclick=()=>{beep('tap');startStageQuiz()};
-  show('sStage');if(st)setTimeout(()=>{confetti(st*40);if(st===3)beep('win')},500);
+  $('stNext').innerHTML=(st?(isLast?'挑戰熟成大考':'下一關'):'回到關卡')+'<span class="arr">→</span>';
+  $('stNext').onclick=()=>{if(!st){renderMap();show('sMap')}else if(isLast){renderMap();startFinal()}else{startLearn(cur+1)}};
+  $('stRetry').onclick=()=>{startStageQuiz()};
+  show('sStage');if(st)setTimeout(()=>{burst(st*40);if(st===3)beep('win')},800);
 }
 function finalResult(){
-  S.best=Math.max(S.best||0,score);save();
-  const n=Q.length,d=Math.round(right/n*28),r=rankOf(d);
+  const n=Q.length;
+  if(score>=(S.best||0)){S.best=score;S.right=right;S.total=n}
+  S.lastScore=score;save();pushScore();
+  const d=Math.round(right/n*28),r=rankOf(d);
   $('fRight').textContent=right+'/'+n;$('fScore').textContent=score;$('fCombo').textContent=maxCombo;
-  $('fEmoji').textContent=d>=28?'🏆':d>=21?'🥇':d>=14?'🥈':'🥉';
   $('fTitle').textContent=(S.name?S.name+'，':'')+'熟成大考完成！';
   $('fSub').textContent=right===n?'全部答對，太厲害了！':'答錯的題目都在下面，看完再挑戰一次吧';
-  $('fLv').textContent='你的熟成等級';$('fRank').textContent=r[1];$('fMsg').textContent=r[2];
+  $('fRank').textContent=r[1];$('fMsg').textContent=r[2];$('fDay').textContent=pad(d);
   $('fReview').innerHTML=reviewHTML(wrongs);
-  show('sFinal');setTimeout(()=>{confetti(160);beep('win')},300);
+  show('sFinal');setTimeout(()=>{burst(140);beep('win')},700);
 }
-$('fRetry').onclick=()=>{beep('tap');startFinal()};
+$('fRetry').onclick=()=>startFinal();
+$('fBoard').onclick=()=>openBoard('sFinal');
 $('fMap').onclick=()=>{renderMap();show('sMap')};
 
 document.addEventListener('keydown',e=>{
