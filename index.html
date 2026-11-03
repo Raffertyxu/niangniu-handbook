@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>酿牛生活文新人手冊</title>
+<meta name="description" content="酿牛生活文新人快速上手：紅線、寫法、交稿與檢查表。">
+<style>
+:root{
+  --bg:#faf8f5; --card:#ffffff; --ink:#1f1d1a; --muted:#6b655d; --line:#e7e1d8;
+  --accent:#9a4a26; --accent-soft:#f6ece6;
+  --red:#b42318; --red-soft:#fdecea; --yellow:#8a6100; --yellow-soft:#fdf5df;
+  --green:#2f6b3a; --green-soft:#e9f4ec;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#171614; --card:#211f1c; --ink:#ece8e2; --muted:#a39d94; --line:#36322d;
+    --accent:#e08a5f; --accent-soft:#2e231d;
+    --red:#ff8a80; --red-soft:#3a1f1d; --yellow:#f0c75e; --yellow-soft:#352c17;
+    --green:#8fd19e; --green-soft:#1d3022;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:17px;line-height:1.75}
+a{color:var(--accent)}
+header.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+header.top nav{max-width:760px;margin:0 auto;padding:10px 16px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+header.top nav::-webkit-scrollbar{display:none}
+header.top a{flex:none;text-decoration:none;color:var(--muted);font-size:14px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+header.top a:hover{color:var(--accent);border-color:var(--accent)}
+main{max-width:760px;margin:0 auto;padding:24px 16px 80px}
+h1{font-size:30px;line-height:1.3;margin:12px 0 6px}
+.sub{color:var(--muted);margin:0 0 24px;font-size:15px}
+h2{font-size:22px;margin:48px 0 12px;padding-top:4px;display:flex;align-items:baseline;gap:10px}
+h2 .n{font-size:14px;color:var(--accent);font-weight:700;letter-spacing:.05em}
+h3{font-size:18px;margin:24px 0 8px}
+p{margin:8px 0}
+ul,ol{padding-left:1.3em;margin:8px 0}
+li{margin:4px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.hero{background:var(--accent-soft);border-color:transparent}
+.hero p{margin:4px 0}
+.big{font-size:20px;font-weight:700;line-height:1.5}
+.tag{display:inline-block;font-size:13px;font-weight:700;padding:1px 8px;border-radius:6px;margin-right:6px;vertical-align:1px}
+.t-red{background:var(--red-soft);color:var(--red)}
+.t-yellow{background:var(--yellow-soft);color:var(--yellow)}
+.t-green{background:var(--green-soft);color:var(--green)}
+.red{border-left:4px solid var(--red)}
+.yellow{border-left:4px solid var(--yellow)}
+.green{border-left:4px solid var(--green)}
+.pair{display:grid;gap:6px;margin:10px 0;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.pair .x{color:var(--red)} .pair .o{color:var(--green)}
+.pair .x::before{content:"✗ ";font-weight:700} .pair .o::before{content:"✓ ";font-weight:700}
+.pair .why{color:var(--muted);font-size:15px}
+.copy{white-space:pre-line;background:var(--card);border:1px dashed var(--line);border-radius:10px;padding:14px 16px;margin:8px 0}
+.note{color:var(--muted);font-size:15px}
+.todo{background:var(--yellow-soft);color:var(--yellow);padding:0 6px;border-radius:4px;font-size:15px}
+table{width:100%;border-collapse:collapse;font-size:15px;margin:8px 0}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600}
+.scroll{overflow-x:auto}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:8px 0;padding:0 16px}
+details summary{cursor:pointer;padding:12px 0;font-weight:700;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::before{content:"＋ ";color:var(--accent)}
+details[open] summary::before{content:"－ "}
+details[open]{padding-bottom:12px}
+.check label{display:flex;gap:10px;align-items:flex-start;padding:4px 0;cursor:pointer}
+.check input{margin-top:6px;width:18px;height:18px;accent-color:var(--accent);flex:none}
+.check h3{font-size:16px;color:var(--muted);margin:16px 0 4px}
+button{font:inherit;font-size:14px;padding:6px 14px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+button:hover{border-color:var(--accent);color:var(--accent)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+footer{color:var(--muted);font-size:14px;border-top:1px solid var(--line);margin-top:56px;padding-top:16px}
+@media (max-width:560px){h1{font-size:26px} body{font-size:16px} .big{font-size:18px}}
+</style>
+</head>
+<body>
+<header class="top"><nav>
+  <a href="#quick">一分鐘</a><a href="#red">紅線</a><a href="#know">認識酿牛</a><a href="#how">怎麼寫</a>
+  <a href="#fix">改稿對照</a><a href="#demo">完整示範</a><a href="#submit">交稿</a><a href="#check">檢查表</a>
+  <a href="#more">遇到再查</a><a href="#words">名詞</a>
+</nav></header>
+
+<main>
+<h1>酿牛生活文新人手冊</h1>
+<p class="sub">快速閱讀版 · 2026 年 11 月 · 看完約 10 分鐘</p>
+
+<section id="quick">
+<div class="card hero">
+  <p class="big">你的工作一句話：<br>用大家真的會遇到的吃飯日常，讓讀者自然想到酿牛的牛肉。</p>
+  <p>先聊生活，再帶一點知識。一篇只講好一件事。</p>
+</div>
+
+<h2><span class="n">00</span>一分鐘看懂</h2>
+<ol>
+  <li><b>酿牛賣的是肉品和熟成服務</b>，不是餐廳，也不是外送店。</li>
+  <li><b>先看素材，再寫字</b>。文字只能寫畫面裡真的有的東西。</li>
+  <li><b>不知道就問，不要猜</b>。價格、重量、活動，一律查資料表或問窗口。</li>
+  <li><b>可以寫「如果…」，不能寫「昨天客人說…」</b>。沒發生過的事不能寫成真的。</li>
+  <li><b>寫稿不等於可以發文</b>。發文、回留言、報價都要另外取得授權。</li>
+</ol>
+
+<h3>你的資源（主管填）</h3>
+<div class="scroll"><table>
+  <tr><th>要找什麼</th><th>去哪裡／找誰</th></tr>
+  <tr><td>商品資料表（規格、價格、活動）</td><td><span class="todo">待主管填連結</span></td></tr>
+  <tr><td>核准照片、影片、標誌、字體、模板</td><td><span class="todo">待主管填連結</span></td></tr>
+  <tr><td>寫好的範例貼文和被退件的稿</td><td><span class="todo">待主管填連結</span></td></tr>
+  <tr><td>審稿人</td><td><span class="todo">待主管填</span></td></tr>
+  <tr><td>商品、料理問題窗口</td><td><span class="todo">待主管填</span></td></tr>
+  <tr><td>設計窗口／客服窗口</td><td><span class="todo">待主管填</span></td></tr>
+</table></div>
+</section>
+
+<section id="red">
+<h2><span class="n">01</span>紅線：犯了就會出事</h2>
+<p class="note">分三級。<span class="tag t-red">紅線</span>絕對不能犯，<span class="tag t-yellow">必查</span>發文前一定要核對，<span class="tag t-green">建議</span>是寫得更好的方法。</p>
+
+<div class="card red">
+<p><span class="tag t-red">紅線</span></p>
+<ol>
+  <li>品牌名一律寫「<b>酿牛</b>」（這個「酿」字要照寫，打不出來就從這裡複製）。不要寫成「釀牛」。</li>
+  <li>不能把酿牛寫成<b>餐廳、外送或便當店</b>。</li>
+  <li><b>商品照片不能改</b>：不改肉色、不改油花、不加厚、不放大、不用 AI 重畫肉，包裝也不能改。</li>
+  <li>不能<b>捏造</b>顧客、主廚、同事的經驗、試吃心得或銷量。</li>
+  <li>沒有根據就不寫<b>價格、折扣、免運、庫存、到貨時間</b>。</li>
+  <li>不能把<b>舊活動</b>的數字直接拿來用。</li>
+  <li>不寫食安、健康的保證，例如「無菌」「絕對安全」「吃了增肌」。</li>
+  <li>沒有授權就不發文、不回客訴、不報價。</li>
+</ol>
+</div>
+
+<div class="card yellow">
+<p><span class="tag t-yellow">必查</span></p>
+<ul>
+  <li>商品名稱、部位、重量、數量，和資料表一致嗎？</li>
+  <li>日期對嗎？「今天」「明天」「最後一天」有沒有照抄舊稿？</li>
+  <li>圖上的字、字幕、內文三個地方一致嗎？</li>
+  <li>畫面裡的盤子、醬料、配菜，會不會讓人以為買了也會送？</li>
+  <li>「最好吃」「全台第一」「入口即化」這類說法有沒有根據？</li>
+</ul>
+</div>
+</section>
+
+<section id="know">
+<h2><span class="n">02</span>認識酿牛</h2>
+<div class="card">
+<p><b>酿牛是什麼：</b>提供牛肉肉品和熟成相關服務的品牌。<span class="todo">待主管補一句品牌介紹、商品線</span></p>
+<p><b>乾式熟成是什麼（白話版）：</b>把牛肉放在溫度、濕度、通風都控制好的環境裡，讓它慢慢變化，通常會變得比較嫩、風味比較明顯。重點是「<b>受控條件</b>」，不是把肉放久就好，也不是在家裡可以自己做。</p>
+<p><b>濕式熟成：</b>肉真空包著熟成，是另一種方法。寫文章時不要貶低它。</p>
+<p class="note">酿牛商品的熟成天數、香氣、製程，一律用核准資料，不要自己寫。</p>
+</div>
+
+<h3>每篇先決定寫給誰</h3>
+<div class="scroll"><table>
+  <tr><th>讀者</th><th>可以聊</th><th>常犯錯</th></tr>
+  <tr><td>自己吃／家庭料理</td><td>下班晚餐、週末在家、第一次煎牛排</td><td>寫到最後突然叫人來談批發</td></tr>
+  <tr><td>送禮／聚會</td><td>到朋友家、節慶聚餐、挑禮物</td><td>用了過期的禮盒價格</td></tr>
+  <tr><td>餐飲業者</td><td>菜單、備料、找肉品來源</td><td>保證生意會變好</td></tr>
+</table></div>
+<p>一篇只對一種人說話，從頭到尾不換人。</p>
+</section>
+
+<section id="how">
+<h2><span class="n">03</span>怎麼寫一篇</h2>
+
+<h3>動筆前，先回答六個問題</h3>
+<ol>
+  <li>寫給誰？（例：第一次在家煎牛排的人）</li>
+  <li>什麼生活時刻？（例：朋友週末要來吃飯）</li>
+  <li>讀者在意什麼？（例：想準備主菜，又不想整晚困在廚房）</li>
+  <li>這篇只想留下哪一個印象？</li>
+  <li>手上的素材能拍出什麼？</li>
+  <li>看完希望讀者做什麼？（留言、看商品，選一個就好）</li>
+</ol>
+<p class="note">如果你想講三件事，那就拆成三篇。</p>
+
+<h3>好題目的判斷方法</h3>
+<p>問自己兩題：讀者看了<b>腦中有沒有畫面</b>？這個畫面<b>為什麼會接到酿牛</b>？兩題都答得出來才算過關。</p>
+<div class="pair"><span class="o">有人端著盤子，等朋友拍完照才能開動</span><span class="x">生活值得美好滋味</span></div>
+
+<h3>開頭：前兩行就講清楚在聊什麼</h3>
+<div class="scroll"><table>
+  <tr><th>不要這樣開頭</th><th>可以改成</th></tr>
+  <tr><td>在繁忙的現代生活中，美食是最好的慰藉</td><td>下班最難的那題，通常是晚餐吃什麼</td></tr>
+  <tr><td>你是否渴望一場頂級味蕾饗宴</td><td>週末想吃牛排，又不太想出門</td></tr>
+  <tr><td>不會吧，還有人不知道乾式熟成</td><td>第一次看到乾式熟成，會先好奇它吃起來差在哪</td></tr>
+</table></div>
+
+<h3>正文：一件小事寫完整</h3>
+<p>順序可以是：<b>生活情境 → 讀者在意的事 → 接到牛肉或知識 → 收尾</b>。知識一次只帶一點，用來回答這一篇的疑問就夠了。</p>
+
+<h3>收尾：只選一個動作</h3>
+<ul>
+  <li>生活共鳴：回到開頭的畫面，可以不叫人買。</li>
+  <li>互動：問一個讀者真的有經驗的問題。</li>
+  <li>商品：請讀者看商品（前提是入口和資料都確認過）。</li>
+  <li>餐飲合作：請讀者聯絡窗口（前提是整篇本來就寫給業者）。</li>
+</ul>
+
+<h3>語氣</h3>
+<div class="card green">
+<p><span class="tag t-green">建議</span></p>
+<ul>
+  <li>像一個懂吃肉的朋友在聊天，用台灣日常的說法。</li>
+  <li>少堆形容詞。「味蕾饗宴」「儀式感拉滿」「每一口都是幸福」這種句子，換成具體的畫面。</li>
+  <li>幽默放在生活小事上，不嘲笑讀者不懂肉，也不拿身材、收入開玩笑。</li>
+  <li>用換行讓文章好讀，標點少一點，但優惠條件的標點不能省。</li>
+  <li>貼到平台後再看一次換行，圖上的字也要校對。</li>
+</ul>
+</div>
+</section>
+
+<section id="fix">
+<h2><span class="n">04</span>改稿對照：一看就懂</h2>
+<div class="pair"><span class="x">在忙碌的日常裡，為自己留下一場奢華的味蕾饗宴。</span><span class="o">週五晚上不想排行程了，晚餐倒是可以認真想一下。</span><span class="why">原因：先有具體的時刻，後面才接得到牛排。</span></div>
+<div class="pair"><span class="x">今晚讓酿牛替你煎好一桌，來店就能享受主廚手藝。</span><span class="o">今晚想在家煎牛排，可以先從挑一塊自己想吃的肉開始。</span><span class="why">原因：酿牛不是餐廳。</span></div>
+<div class="pair"><span class="x">昨天客人跟我們說，吃一口就立刻回購十盒。</span><span class="o">一桌人吃牛排時，你是先拍照，還是先拿叉子的那個？</span><span class="why">原因：沒發生過的事，不能寫成真的。</span></div>
+<div class="pair"><span class="x">下單就免運，明天立刻送到。</span><span class="o">週末要聚餐，選好主菜後，也記得提早確認配送安排。</span><span class="why">原因：不能替品牌多加物流承諾。</span></div>
+<div class="pair"><span class="x">今天吃牛排。乾式熟成的溫度、濕度、風速如下…</span><span class="o">想換一種牛肉風味時，可以從認識乾式熟成開始。這篇先聊一個差別。</span><span class="why">原因：一篇只回答一個問題。</span></div>
+<div class="pair"><span class="x">濕式熟成沒什麼風味，懂吃的人只選乾式。</span><span class="o">乾式和濕式熟成各有風味，喜歡哪一種留給自己決定。</span><span class="why">原因：不貶低別的選擇。</span></div>
+<div class="pair"><span class="x">（只有拆封影片）剛剛煎了一塊，吃完還想再來一塊。</span><span class="o">還沒下鍋，光看這層貼緊牛肉的真空膜，已經在想晚餐要配什麼了。</span><span class="why">原因：文字要對得上畫面。</span></div>
+<div class="pair"><span class="x">快留言、標記三位朋友、分享、收藏、私訊、加 LINE、立刻下單！</span><span class="o">你們家聚餐，通常誰負責主菜？</span><span class="why">原因：收尾只留一個動作。</span></div>
+</section>
+
+<section id="demo">
+<h2><span class="n">05</span>完整示範：從任務到交稿</h2>
+<p class="note">以下是示範，不是真的活動，也不是真實事件。</p>
+
+<div class="card">
+<p><b>① 收到任務</b><br>寫一篇週末居家生活文，素材是一段實拍煎牛排和裝盤的影片。</p>
+<p><b>② 回答六個問題</b></p>
+<ul>
+  <li>寫給誰：平常會自己煮晚餐的人</li>
+  <li>生活時刻：週五晚上，不想出門</li>
+  <li>在意什麼：想吃好一點，但不想太麻煩</li>
+  <li>一個印象：在家煎牛排也可以是週末的安排</li>
+  <li>素材：下鍋、翻面、裝盤（沒有試吃畫面）</li>
+  <li>希望讀者做：留言聊聊自己的週末</li>
+</ul>
+<p><b>③ 寫初稿</b></p>
+<div class="copy">週五晚上行程可以空白
+晚餐想吃什麼倒是很清楚
+
+牛排下鍋　配菜端上桌
+今天最重要的安排
+就是坐下來好好吃飯
+
+你這週想出去吃
+還是在家開煎？</div>
+<p><b>④ 自己審一次</b></p>
+<ul>
+  <li>✓ 只寫了畫面裡有的東西（下鍋、裝盤），沒寫「好好吃」這種試吃心得</li>
+  <li>✓ 沒有價格、沒有活動，所以不用查資料表</li>
+  <li>✓ 收尾只問一個問題</li>
+  <li>✓ 大聲唸一遍，讀起來像在聊天</li>
+</ul>
+<p><b>⑤ 填交稿表，送審</b>（格式見下一段）</p>
+</div>
+
+<details>
+<summary>再看四篇範例</summary>
+<p><b>聚餐分工</b>（素材：朋友聚會料理畫面）</p>
+<div class="copy">朋友來家裡吃飯
+分工通常很明確
+有人準備主菜　有人找盤子
+還有人負責問好了沒
+
+如果今晚主菜是牛排
+你會是哪一個？</div>
+<p><b>初次認識熟成</b>（素材：核准的原肉圖）</p>
+<div class="copy">第一次看到乾式熟成
+會先想問的應該是吃起來差在哪
+
+熟成會影響牛肉的嫩度與風味
+至於你喜歡哪種　還是留給自己的味覺決定</div>
+<p><b>拆封聲音</b>（素材：真的有錄到聲音的拆封影片）</p>
+<div class="copy">這支先開聲音
+注意那層貼緊牛肉的真空膜
+光是拆開前的小動作就能看上一會
+#阿酿維 先看完　晚餐再慢慢想</div>
+<p><b>兩人晚餐</b>（素材：兩人一起準備晚餐的畫面）</p>
+<div class="copy">兩個人在家吃飯
+菜單不用排得很滿
+一道想吃的主菜　配上平常喜歡的菜
+就可以坐下來聊今天發生的事
+
+如果今晚吃牛排
+誰負責煎　誰負責洗碗？</div>
+</details>
+</section>
+
+<section id="submit">
+<h2><span class="n">06</span>交稿</h2>
+<p>交稿時把下面這張表填好，主管才能一次看懂。</p>
+<div class="row"><button id="copyForm" type="button">複製交稿表</button><span id="copied" class="note" hidden>已複製</span></div>
+<div class="copy" id="form">【貼文編號／版本】
+【平台／預計發布日】
+【寫給誰】
+【生活切角】
+【這篇只講一件事】
+【正式文案】
+【圖上主標／副標】
+【使用的圖片或影片檔名】
+【收尾動作】
+【標籤】
+【資料來源與確認日期】
+【待確認問題】
+【這次改了什麼】</div>
+<ul>
+  <li><b>檔名：</b>日期_平台_主題_v01，改一次就加一號。不要用「最終版」「真的最終版」。</li>
+  <li><b>有問題要問時，附上你查到的東西。</b>例如「資料表寫 8oz，舊圖寫 10oz，這篇用哪個？」比「重量多少？」好回答。</li>
+  <li>正式文案和備註要分開，不要混在同一段。</li>
+</ul>
+
+<h3>交稿流程</h3>
+<ol>
+  <li>讀任務，先看完素材</li>
+  <li>提 2～3 個不同切角給主管挑</li>
+  <li>寫初稿</li>
+  <li>自己用檢查表審一次</li>
+  <li>主管審（商品問題另外問窗口）</li>
+  <li>改稿時，圖、字幕、內文、排程一起改</li>
+  <li>有授權才發布，沒授權就交稿</li>
+  <li>發布後檢查實際畫面，記下留言裡的問題</li>
+</ol>
+</section>
+
+<section id="check">
+<h2><span class="n">07</span>發文前檢查表</h2>
+<p class="note">可以直接勾選，重新整理頁面後會清空。</p>
+<div class="card check" id="checklist">
+<h3>內容</h3>
+<label><input type="checkbox">一句話說得出這篇寫給誰</label>
+<label><input type="checkbox">有具體的生活畫面，而且接得到牛肉或酿牛</label>
+<label><input type="checkbox">全篇只有一個目的，結尾沒有換讀者</label>
+<label><input type="checkbox">沒有把酿牛寫成餐廳或外送</label>
+<h3>資料</h3>
+<label><input type="checkbox">品牌寫「酿牛」</label>
+<label><input type="checkbox">商品名、重量、價格、活動都是最新資料</label>
+<label><input type="checkbox">沒有虛構的客人、試吃、銷量</label>
+<label><input type="checkbox">不確定的事已經另外列出來問</label>
+<h3>圖片和影片</h3>
+<label><input type="checkbox">完整看過素材，文字對得上畫面</label>
+<label><input type="checkbox">肉色、油花、厚度、包裝都沒被改</label>
+<label><input type="checkbox">圖上的字、字幕、內文一致</label>
+<h3>發布</h3>
+<label><input type="checkbox">大聲唸過一次</label>
+<label><input type="checkbox">日期和「今天、明天」都正確</label>
+<label><input type="checkbox">正式文案裡沒有內部備註</label>
+<label><input type="checkbox">發的是核准版本，而且有發文授權</label>
+</div>
+<div class="row"><button id="resetCheck" type="button">全部清除</button></div>
+</section>
+
+<section id="more">
+<h2><span class="n">08</span>遇到再查</h2>
+<p class="note">不用先背，遇到時點開就好。</p>
+
+<details><summary>圖片怎麼處理</summary>
+<ul>
+  <li>可以裁切、排版、去背，但肉本身不能改：顏色、油花、厚度、形狀都要保持原樣。</li>
+  <li>不加假的焦痕、汁水、煙霧、油亮感。不把兩塊肉合成一塊。</li>
+  <li>原圖太暗、太黃、模糊，先回報，不要自己大修。</li>
+  <li>字太多就刪內容，不要把字縮小硬塞進去。</li>
+  <li>不加廉價 icon、貼紙、裝飾框。留白是設計的一部分。</li>
+  <li>要透明背景，就必須是真的透明，白底不算。</li>
+  <li>常用尺寸：1080×1080、1080×1350、1080×1920。實際尺寸以每次任務為準。</li>
+  <li>品牌色、字體以核准模板為準。<span class="todo">品牌色碼待主管確認</span></li>
+</ul>
+</details>
+
+<details><summary>影片怎麼配文案</summary>
+<ul>
+  <li>至少完整看一次。要寫聲音，就一定要先聽過。</li>
+  <li>影片只有拆封，就不要寫成試吃心得。</li>
+  <li>不能寫影片裡沒有的煎肉聲。包裝的聲音也不能拿來證明肉很嫩。</li>
+  <li>字幕、封面、內文的商品名稱要一致，改稿時一起改。</li>
+</ul>
+</details>
+
+<details><summary>節慶和排程</summary>
+<ul>
+  <li>中秋可以寫誰拿夾子、誰顧聊天，不用每篇都寫月亮和團圓。</li>
+  <li>沒有活動，就不要假裝有促銷。</li>
+  <li>舊素材上的年份、日期、QR code、價格都要檢查。</li>
+  <li>有天災或運輸受影響時，不要硬炒買氣。</li>
+  <li>排程前再確認一次：活動有沒有改、商品有沒有停售。</li>
+</ul>
+</details>
+
+<details><summary>FB、IG、限動和標籤</summary>
+<ul>
+  <li>同一個主題可以發到不同平台，但不要逐字複製，要配合各平台的閱讀方式。</li>
+  <li>FB 可以寫完整一點，IG 的圖和第一段要互相搭配，限動一張只講一件事。</li>
+  <li>標籤從 #酿牛 #乾式熟成 #牛排 #居家料理 挑適合的，不用全部放。</li>
+  <li>不相信「幾點發最好」「放這幾個標籤就會爆」這種沒有數據的說法。</li>
+</ul>
+</details>
+
+<details><summary>用 AI 幫忙寫</summary>
+<p>AI 可以幫你想切角、改短句子、找問題。但最後內容對不對，<b>是你負責</b>。</p>
+<p>給 AI 的提示詞範例（可以複製使用）：</p>
+<div class="copy">你是酿牛的社群編輯。
+對象是平常會自己準備晚餐的一般消費者。
+這篇從週末在家煎牛排的生活情境切入。
+口吻自然，台灣日常聊天，少標點，用合理換行。
+一篇只保留一個主要訊息。
+商品資訊只能用我提供的資料。
+不虛構試吃、顧客故事、價格、活動、熟成天數或服務承諾。
+不把品牌寫成餐廳或熟食外送店。
+先給三個不同切角，選定後再寫完整文案。
+待確認的資訊另外列出來，不要混進正文。</div>
+<p>AI 寫完後你要做：</p>
+<ul>
+  <li>每個數字、商品名、承諾都核對一次。</li>
+  <li>大聲唸，刪掉平常講話不會出現的句子。</li>
+  <li>確認沒有混入簡體字（品牌的「酿」除外）。</li>
+  <li>不要把客人的個資或私訊貼給 AI。</li>
+</ul>
+</details>
+
+<details><summary>留言和私訊</summary>
+<div class="scroll"><table>
+  <tr><th>對方問什麼</th><th>怎麼做</th><th>不要做</th></tr>
+  <tr><td>一般聊天</td><td>回應他在聊的事</td><td>每則都硬推下單</td></tr>
+  <tr><td>商品、價格</td><td>查資料表，不確定就交給窗口</td><td>看照片猜部位、自己給折扣</td></tr>
+  <tr><td>餐飲合作</td><td>整理需求，交給合作窗口</td><td>拿零售價當批發價</td></tr>
+  <tr><td>訂單、配送</td><td>引導到處理訂單的管道</td><td>在公開留言要個資</td></tr>
+  <tr><td>吃了不舒服、商品有問題</td><td>保留資料，立刻交給窗口</td><td>保證可以吃，或怪客人</td></tr>
+  <tr><td>負評</td><td>保留紀錄，交給窗口判斷</td><td>吵架、刪留言、自己承諾賠償</td></tr>
+</table></div>
+<p>如果發現已經發出去的內容有<b>錯的價格或商品資訊</b>：先截圖保留，立刻通知負責人，不要偷偷改掉。</p>
+</details>
+
+<details><summary>36 個題目靈感</summary>
+<p class="note">這是題材庫，不是現在的活動。挑題時要配合手上的素材。</p>
+<p><b>晚餐與一人生活</b></p>
+<ul>
+  <li>下班最難決定的，還是今晚吃什麼</li>
+  <li>週五不想排行程，只想在家吃一餐喜歡的</li>
+  <li>一個人吃也會認真擺盤嗎</li>
+  <li>主菜決定了，配菜卻開始選擇困難</li>
+  <li>想做一餐好吃的，但不想拍成料理節目</li>
+  <li>晚餐先拍照還是先吃</li>
+</ul>
+<p><b>兩人與朋友聚會</b></p>
+<ul>
+  <li>一個人煎肉，一個人找盤子</li>
+  <li>朋友說會帶菜來，結果問你要帶什麼</li>
+  <li>誰負責煎，誰負責在旁邊看</li>
+  <li>牛排上桌後，大家很有默契地放下手機（用提問寫，不要寫成真實事件）</li>
+  <li>每次分最後一塊肉，都先客氣一下</li>
+  <li>整塊上桌，還是切好一起吃</li>
+</ul>
+<p><b>新手會問的小問題</b></p>
+<ul>
+  <li>第一次買乾式熟成，最想先知道哪件事</li>
+  <li>同樣叫牛排，為什麼看起來差很多（先確認部位資料）</li>
+  <li>包裝為什麼貼得這麼緊（要用核准說明）</li>
+  <li>看見「乾式熟成」四個字，第一個疑問是什麼</li>
+  <li>買肉時先看部位、重量，還是料理方式</li>
+  <li>為什麼料理影片的秒數不能直接照抄（需要可靠的料理資料）</li>
+</ul>
+<p><b>聲音與畫面</b></p>
+<ul>
+  <li>下鍋的第一聲（要用真的收音）</li>
+  <li>拆開真空包裝之前的那個停頓</li>
+  <li>切片裝盤的順序</li>
+  <li>原味派還是醬料派</li>
+  <li>看牛排照片，會先看哪裡</li>
+  <li>同一塊牛排，配飯還是配其他主食</li>
+</ul>
+<p><b>週末與節慶</b></p>
+<ul>
+  <li>放假在家煎牛排，想把時間留給哪件事</li>
+  <li>到朋友家吃飯，要帶哪一道（先確認當期商品）</li>
+  <li>聚餐最怕大家都帶一樣的東西</li>
+  <li>節慶採買清單總是越寫越長</li>
+  <li>中秋烤肉，誰拿夾子、誰顧聊天</li>
+  <li>送吃的之前，先想對方會怎麼料理</li>
+</ul>
+<p><b>品牌與知識</b></p>
+<ul>
+  <li>想換一種牛肉風味時，會從哪裡開始</li>
+  <li>在餐廳吃到喜歡的牛排，開始想自己煎（不能暗示那家餐廳用酿牛）</li>
+  <li>今天想把注意力放在牛肉本身</li>
+  <li>大家最常問的一個選購問題（要有真實詢問紀錄）</li>
+  <li>拍攝當天的一個小細節（有真實紀錄才能用第一人稱）</li>
+  <li>餐飲工作的備料日常（整篇都寫給業者）</li>
+</ul>
+</details>
+</section>
+
+<section id="words">
+<h2><span class="n">09</span>看不懂的名詞</h2>
+<div class="scroll"><table>
+  <tr><th>名詞</th><th>意思</th></tr>
+  <tr><td>切角</td><td>這篇從哪個生活角度切入，例如「朋友來家裡吃飯」</td></tr>
+  <tr><td>落點</td><td>這篇最後要讓讀者記住什麼</td></tr>
+  <tr><td>CTA</td><td>文末請讀者做的動作，例如留言、看商品</td></tr>
+  <tr><td>素材</td><td>要用的照片或影片</td></tr>
+  <tr><td>核准</td><td>主管或負責窗口已經確認可以用</td></tr>
+  <tr><td>窗口</td><td>負責回答某類問題的人</td></tr>
+  <tr><td>SKU</td><td>商品編號，用來區分同一個商品的不同規格</td></tr>
+  <tr><td>ASMR</td><td>主打聲音的影片，例如拆封聲、下鍋聲</td></tr>
+  <tr><td>#阿酿維</td><td>酿牛固定使用的品牌用語，照原樣寫，不要自己幫它加人設</td></tr>
+  <tr><td>長青內容</td><td>沒有寫日期、可以長期使用的內容，還是要定期檢查</td></tr>
+</table></div>
+</section>
+
+<footer>
+<p>完整版規範、資料來源（EFSA、USDA）與主管帶人方式，請見原始 Word 手冊。</p>
+<p>手冊有更新時，請記下日期、改了什麼、為什麼改。</p>
+</footer>
+</main>
+
+<script>
+document.getElementById('copyForm').addEventListener('click', function(){
+  var t = document.getElementById('form').innerText;
+  var done = function(){ var c=document.getElementById('copied'); c.hidden=false; setTimeout(function(){c.hidden=true},1500); };
+  if (navigator.clipboard) { navigator.clipboard.writeText(t).then(done, function(){}); }
+});
+document.getElementById('resetCheck').addEventListener('click', function(){
+  document.querySelectorAll('#checklist input').forEach(function(i){ i.checked=false; });
+});
+</script>
+</body>
+</html>
