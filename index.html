@@ -3,705 +3,594 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>酿牛生活文新人手冊</title>
-<meta name="description" content="酿牛生活文新人快速上手：紅線、寫法、交稿與檢查表。">
+<meta name="theme-color" content="#1d1714">
+<title>酿牛熟成學院</title>
+<meta name="description" content="闖關學會酿牛和生活文，最後挑戰熟成大考。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@500;700;900&text=%E9%85%BF&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#f7f4ee; --paper-2:#efe9df; --card:#fffdf9; --ink:#1c1a17; --ink-2:#4a453e; --muted:#8a8378;
-  --line:#e4ddd1; --accent:#b4451c; --accent-ink:#ffffff; --accent-soft:#f5e4da; --mark:rgba(180,69,28,.16);
-  --red:#b3261e; --red-soft:#f9e3e0; --ok:#2d6a3e; --ok-soft:#e2efe5; --warn:#8b6100; --warn-soft:#f8eed2;
-  --shadow:0 1px 2px rgba(28,26,23,.04),0 8px 24px rgba(28,26,23,.06);
-  --serif:"Noto Serif TC","Songti TC",serif;
-  --sans:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --bg:#1d1714; --bg2:#2a211c; --panel:#fff8ef; --panel2:#f3e7d8; --ink:#241b16; --ink2:#5c4d43; --muted:#9a8a7d;
+  --orange:#eb4d00; --orange-d:#b33a00; --gold:#ffbf3c; --gold-d:#d99512;
+  --green:#22b866; --green-d:#178a4b; --red:#ef4444; --red-d:#b91c1c; --blue:#3b82f6; --blue-d:#1d4ed8;
+  --purple:#8b5cf6; --purple-d:#6d28d9; --teal:#14b8a6; --teal-d:#0f766e; --pink:#f43f5e; --pink-d:#be123c;
+  --font:"Noto Sans TC","Noto Sans SC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --r:22px;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --paper:#141311; --paper-2:#1b1a17; --card:#1f1d1a; --ink:#f1ede6; --ink-2:#c9c2b7; --muted:#8f887d;
-  --line:#2f2c27; --accent:#e9875c; --accent-ink:#1a0f0a; --accent-soft:#2c1f18; --mark:rgba(233,135,92,.22);
-  --red:#ff8f85; --red-soft:#33201d; --ok:#8fd3a0; --ok-soft:#1a2b1f; --warn:#efc560; --warn-soft:#2f2816;
-  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
-}}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:72px;-webkit-text-size-adjust:100%}
-body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:18px;line-height:1.85;letter-spacing:.02em;-webkit-font-smoothing:antialiased}
-b,strong{font-weight:700;color:var(--ink)}
-.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);font-weight:700;color:var(--ink)}
-a{color:inherit}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--ink);overflow-x:hidden;
+  background-image:radial-gradient(circle at 20% 0%,rgba(235,77,0,.28),transparent 45%),radial-gradient(circle at 100% 100%,rgba(255,191,60,.14),transparent 40%);
+  background-attachment:fixed}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.app{max-width:480px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 16px calc(env(safe-area-inset-bottom) + 16px)}
+.screen{display:none;flex:1;flex-direction:column;animation:enter .45s cubic-bezier(.2,.9,.3,1.2)}
+.screen.on{display:flex}
+@keyframes enter{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
 
-/* 進度列與頂部 */
-.bar{position:fixed;inset:0 0 auto 0;height:56px;z-index:20;display:flex;align-items:center;gap:12px;padding:0 20px;
-  background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);
-  border-bottom:1px solid transparent;transition:border-color .2s}
-.bar.scrolled{border-bottom-color:var(--line)}
-.bar .brand{font-family:var(--serif);font-weight:900;font-size:17px;white-space:nowrap}
-.bar .now{flex:1;min-width:0;color:var(--muted);font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transition:opacity .2s}
-.bar.scrolled .now{opacity:1}
-.bar button{font:inherit;font-size:14px;font-weight:500;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
-.progress{position:absolute;left:0;bottom:-1px;height:2px;background:var(--accent);width:0;transition:width .1s linear}
+/* 共用 */
+.top{display:flex;align-items:center;gap:10px;padding:14px 0}
+.iconbtn{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.08);color:#fff;display:grid;place-items:center;font-size:18px;flex:none}
+.iconbtn:active{transform:scale(.94)}
+.pillstat{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);color:#fff;border-radius:999px;padding:8px 14px;font-weight:900;font-size:15px}
+.grow{flex:1}
+.btn{display:block;width:100%;border-radius:18px;padding:17px 20px;font-size:19px;font-weight:900;letter-spacing:.04em;color:#fff;background:var(--orange);
+  box-shadow:0 6px 0 var(--orange-d);transition:transform .08s,box-shadow .08s;position:relative}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--orange-d)}
+.btn.ghost{background:rgba(255,255,255,.1);box-shadow:0 6px 0 rgba(0,0,0,.35)}
+.btn.ghost:active{box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.btn.gold{background:var(--gold);color:#3b2400;box-shadow:0 6px 0 var(--gold-d)}
+.btn.gold:active{box-shadow:0 2px 0 var(--gold-d)}
+.btn.green{background:var(--green);box-shadow:0 6px 0 var(--green-d)}
+.btn+.btn{margin-top:14px}
 
-/* 目錄抽屜 */
-.toc{position:fixed;inset:0;z-index:30;display:none}
-.toc.open{display:block}
-.toc .scrim{position:absolute;inset:0;background:rgba(0,0,0,.35)}
-.toc .sheet{position:absolute;right:0;top:0;bottom:0;width:min(360px,88vw);background:var(--card);padding:28px 24px;overflow:auto;box-shadow:var(--shadow)}
-.toc h4{font-size:13px;color:var(--muted);letter-spacing:.12em;margin-bottom:12px}
-.toc a{display:flex;gap:14px;align-items:baseline;text-decoration:none;padding:10px 0;border-bottom:1px solid var(--line);font-weight:500}
-.toc a span{font-family:var(--serif);color:var(--accent);font-size:14px;width:24px;flex:none}
-.toc a.on{color:var(--accent)}
+/* 首頁 */
+.home{justify-content:center;text-align:center;color:#fff;padding:24px 0}
+.badge{display:inline-flex;gap:8px;align-items:center;align-self:center;background:rgba(255,255,255,.1);border-radius:999px;padding:7px 16px;font-size:14px;font-weight:700;color:var(--gold)}
+.logo{margin:28px auto 8px;width:132px;height:132px;border-radius:40px;background:linear-gradient(145deg,var(--orange),#ff7a2e);display:grid;place-items:center;
+  box-shadow:0 10px 0 var(--orange-d),0 24px 60px rgba(235,77,0,.45);transform:rotate(-6deg);animation:float 3.4s ease-in-out infinite}
+.logo span{font-size:68px;font-weight:900;color:#fff;transform:rotate(6deg);text-shadow:0 4px 0 rgba(0,0,0,.18)}
+@keyframes float{0%,100%{transform:rotate(-6deg) translateY(0)}50%{transform:rotate(-3deg) translateY(-8px)}}
+.home h1{font-size:44px;font-weight:900;line-height:1.15;margin-top:26px;letter-spacing:.02em}
+.home h1 em{font-style:normal;color:var(--gold)}
+.home p.lead{font-size:18px;line-height:1.7;color:rgba(255,255,255,.75);margin:14px auto 30px;max-width:20em}
+.namebox{background:rgba(255,255,255,.08);border-radius:18px;padding:6px 6px 6px 18px;display:flex;align-items:center;gap:8px;margin-bottom:18px}
+.namebox label{font-size:15px;color:rgba(255,255,255,.6);white-space:nowrap}
+.namebox input{flex:1;min-width:0;background:none;border:0;outline:0;color:#fff;font:inherit;font-size:18px;font-weight:700;padding:12px 0}
+.namebox input::placeholder{color:rgba(255,255,255,.3)}
+.homefoot{margin-top:22px;font-size:14px;color:rgba(255,255,255,.45)}
 
-/* 桌機側欄 */
-.side{display:none}
-@media (min-width:1180px){
-  .side{display:block;position:fixed;top:120px;left:max(24px,calc(50% - 600px));width:200px}
-  .side a{display:flex;gap:10px;text-decoration:none;color:var(--muted);font-size:14px;padding:5px 0 5px 12px;border-left:2px solid var(--line);transition:color .15s,border-color .15s}
-  .side a span{font-family:var(--serif);width:20px}
-  .side a:hover{color:var(--ink)}
-  .side a.on{color:var(--accent);border-left-color:var(--accent);font-weight:700}
-  #menuBtn{display:none}
-}
+/* 地圖 */
+.hello{color:#fff;padding:4px 2px 14px}
+.hello h2{font-size:28px;font-weight:900;line-height:1.3}
+.hello p{color:rgba(255,255,255,.65);font-size:16px;margin-top:4px}
+.aging{background:var(--panel);border-radius:var(--r);padding:18px;margin-bottom:18px;box-shadow:0 8px 0 rgba(0,0,0,.25)}
+.aging .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.aging b{font-size:15px;color:var(--ink2)}
+.aging .day{font-size:28px;font-weight:900;color:var(--orange)}
+.aging .day small{font-size:15px;color:var(--ink2);margin-left:2px}
+.meter{height:16px;background:var(--panel2);border-radius:999px;overflow:hidden;position:relative}
+.meter i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#ff9a5a,var(--orange));border-radius:999px;transition:width .8s cubic-bezier(.2,.9,.3,1)}
+.meter i::after{content:"";position:absolute;inset:3px 8px auto 8px;height:4px;border-radius:4px;background:rgba(255,255,255,.4)}
+.aging .rank{margin-top:10px;font-size:15px;color:var(--ink2)}
+.aging .rank b{color:var(--ink)}
+.path{display:flex;flex-direction:column;gap:14px;padding-bottom:20px}
+.stage{display:flex;align-items:center;gap:16px;background:var(--panel);border-radius:var(--r);padding:16px;text-align:left;box-shadow:0 7px 0 rgba(0,0,0,.28);transition:transform .1s;position:relative;width:100%}
+.stage:active{transform:translateY(3px)}
+.stage .ic{width:62px;height:62px;border-radius:20px;display:grid;place-items:center;font-size:32px;flex:none;box-shadow:inset 0 -5px 0 rgba(0,0,0,.18)}
+.stage .no{font-size:13px;font-weight:900;letter-spacing:.1em;color:var(--muted)}
+.stage .tt{font-size:20px;font-weight:900;line-height:1.3;color:var(--ink)}
+.stage .st{font-size:14px;color:var(--ink2);margin-top:2px}
+.stage .stars{margin-left:auto;font-size:15px;letter-spacing:1px;white-space:nowrap;flex:none}
+.stage.locked{opacity:.5;filter:grayscale(.8)}
+.stage.locked .stars::before{content:"🔒";font-size:20px}
+.stage.final{background:linear-gradient(135deg,#ffcf5c,var(--gold));box-shadow:0 7px 0 var(--gold-d)}
+.stage.final .no{color:#7a5000}
+.stage.final .st{color:#5a3c00}
+.stage.next::after{content:"開始";position:absolute;top:-10px;right:14px;background:var(--orange);color:#fff;font-size:12px;font-weight:900;padding:3px 10px;border-radius:999px;animation:bob 1.2s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-3px)}}
 
-/* 版面 */
-.wrap{max-width:680px;margin:0 auto;padding:0 20px}
-section.ch{padding:96px 0 24px}
-.eyebrow{display:flex;align-items:center;gap:12px;font-size:13px;letter-spacing:.14em;color:var(--accent);font-weight:700;margin-bottom:14px}
-.eyebrow .num{font-family:var(--serif);font-size:15px}
-.eyebrow .time{color:var(--muted);font-weight:500;letter-spacing:.04em}
-h2{font-family:var(--serif);font-weight:900;font-size:clamp(30px,6vw,42px);line-height:1.3;letter-spacing:.01em;margin-bottom:18px}
-.lead{font-size:clamp(20px,3.6vw,23px);line-height:1.7;color:var(--ink-2);margin-bottom:36px}
-.lead b{color:var(--ink)}
-h3{font-size:20px;font-weight:700;margin:44px 0 14px;display:flex;align-items:center;gap:10px}
-h3::before{content:"";width:18px;height:2px;background:var(--accent)}
-p{margin:12px 0;color:var(--ink-2)}
-.muted{color:var(--muted);font-size:15px}
+/* 學習卡 */
+.dots{display:flex;gap:6px;flex:1}
+.dots i{flex:1;height:6px;border-radius:6px;background:rgba(255,255,255,.15);overflow:hidden;position:relative}
+.dots i.done::after{content:"";position:absolute;inset:0;background:var(--gold)}
+.learn{flex:1;display:flex;flex-direction:column}
+.lcard{flex:1;background:var(--panel);border-radius:28px;padding:28px 24px;display:flex;flex-direction:column;box-shadow:0 10px 0 rgba(0,0,0,.28);animation:pop .4s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes pop{from{opacity:0;transform:scale(.94) translateY(10px)}to{opacity:1;transform:none}}
+.lcard .em{font-size:60px;line-height:1;margin-bottom:18px}
+.lcard .kick{font-size:14px;font-weight:900;letter-spacing:.12em;color:var(--orange);margin-bottom:8px}
+.lcard h3{font-size:30px;font-weight:900;line-height:1.35;color:var(--ink);margin-bottom:16px}
+.lcard h3 mark{background:linear-gradient(transparent 55%,rgba(255,191,60,.6) 55%);color:inherit}
+.lcard .body{font-size:18px;line-height:1.8;color:var(--ink2)}
+.lcard .body b{color:var(--ink)}
+.lcard .facts{display:grid;gap:10px;margin-top:6px}
+.lcard .facts div{display:flex;gap:12px;align-items:center;background:var(--panel2);border-radius:16px;padding:12px 14px;font-size:17px;color:var(--ink)}
+.lcard .facts div span:first-child{font-size:24px;flex:none;width:30px;text-align:center}
+.lcard .facts div span:last-child{flex:1;min-width:0;line-height:1.5}
+.lcard .facts div b{display:block;font-size:13px;color:var(--muted);font-weight:700}
+.lcard .duo{display:grid;gap:10px;margin-top:4px}
+.lcard .duo div{border-radius:16px;padding:14px 16px;font-size:17px;line-height:1.6}
+.lcard .duo .no{background:#fde4e1;color:#8f2a1f}
+.lcard .duo .ok{background:#dcf5e6;color:#155c34}
+.lcard .duo div::before{display:block;font-size:12px;font-weight:900;letter-spacing:.1em;margin-bottom:4px}
+.lcard .duo .no::before{content:"✗ 不要這樣"}
+.lcard .duo .ok::before{content:"✓ 這樣寫"}
+.lcard .post{background:#fff;border:2px solid var(--panel2);border-radius:18px;padding:16px;white-space:pre-line;font-size:17px;line-height:1.75;color:var(--ink)}
+.lcard .tip{margin-top:auto;padding-top:18px;font-size:15px;color:var(--muted)}
+.learnnav{display:flex;gap:12px;margin-top:20px}
+.learnnav .btn{flex:1}
+.learnnav .back{flex:0 0 64px;padding:17px 0}
 
-/* 首屏 */
-.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:96px 0 48px}
-.hero .kicker{font-size:14px;letter-spacing:.2em;color:var(--accent);font-weight:700;margin-bottom:24px}
-.hero h1{font-family:var(--serif);font-weight:900;font-size:clamp(40px,9vw,68px);line-height:1.2;margin-bottom:28px}
-.hero .mission{font-size:clamp(22px,4.4vw,30px);line-height:1.6;font-weight:500;color:var(--ink);max-width:16em}
-.hero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:36px}
-.chip{font-size:14px;color:var(--ink-2);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px}
-.start{display:inline-flex;align-items:center;gap:10px;margin-top:44px;align-self:flex-start;text-decoration:none;background:var(--ink);color:var(--paper);font-weight:700;padding:14px 26px;border-radius:999px;font-size:17px;transition:transform .15s}
-.start:hover{transform:translateY(-1px)}
-.start::after{content:"↓"}
+/* 題目 */
+.qhead{display:flex;align-items:center;gap:10px;color:#fff;margin-bottom:14px}
+.qcount{font-weight:900;font-size:15px;color:rgba(255,255,255,.7)}
+.combo{margin-left:auto;font-weight:900;color:var(--gold);font-size:15px;opacity:0;transition:opacity .2s}
+.combo.show{opacity:1;animation:pulse .5s}
+@keyframes pulse{50%{transform:scale(1.25)}}
+.timer{position:relative;width:52px;height:52px;flex:none}
+.timer svg{transform:rotate(-90deg)}
+.timer circle{fill:none;stroke-width:6}
+.timer .tb{stroke:rgba(255,255,255,.12)}
+.timer .tf{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .3s}
+.timer.low .tf{stroke:var(--red)}
+.timer b{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:17px;font-weight:900}
+.qcard{background:var(--panel);border-radius:28px;padding:24px 22px 26px;box-shadow:0 10px 0 rgba(0,0,0,.28);margin-bottom:18px;animation:pop .4s cubic-bezier(.2,.9,.3,1.3)}
+.qcard .cat{display:inline-block;font-size:13px;font-weight:900;color:#fff;border-radius:999px;padding:4px 12px;margin-bottom:12px}
+.qcard h3{font-size:24px;font-weight:900;line-height:1.5;color:var(--ink)}
+.qcard .quote{margin-top:14px;background:var(--panel2);border-radius:16px;padding:14px 16px;font-size:19px;font-weight:700;line-height:1.6;color:var(--ink)}
+.opts{display:grid;gap:12px}
+.opts.tf{grid-template-columns:1fr 1fr}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border-radius:18px;padding:15px 16px;font-size:18px;font-weight:700;line-height:1.45;color:#fff;transition:transform .08s,box-shadow .08s,opacity .2s}
+.opt .k{width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.22);display:grid;place-items:center;font-size:16px;font-weight:900;flex:none}
+.opt:active{transform:translateY(4px)}
+.opt.c0{background:var(--blue);box-shadow:0 6px 0 var(--blue-d)}
+.opt.c1{background:var(--purple);box-shadow:0 6px 0 var(--purple-d)}
+.opt.c2{background:var(--teal);box-shadow:0 6px 0 var(--teal-d)}
+.opt.c3{background:var(--pink);box-shadow:0 6px 0 var(--pink-d)}
+.opts.tf .opt{flex-direction:column;justify-content:center;text-align:center;padding:22px 10px;font-size:20px;gap:6px}
+.opts.tf .opt .k{width:auto;height:auto;background:none;font-size:38px}
+.opts.tf .opt.c0{background:var(--green);box-shadow:0 6px 0 var(--green-d)}
+.opts.tf .opt.c1{background:var(--red);box-shadow:0 6px 0 var(--red-d)}
+.opt.dim{opacity:.35}
+.opt.right{background:var(--green)!important;box-shadow:0 6px 0 var(--green-d)!important;animation:bounce .5s}
+.opt.wrong{background:var(--red)!important;box-shadow:0 6px 0 var(--red-d)!important;animation:shake .45s}
+@keyframes bounce{40%{transform:scale(1.05)}}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 
-/* 五句話 */
-.five{list-style:none;counter-reset:f;display:grid;gap:2px;background:var(--line);border-radius:18px;overflow:hidden;border:1px solid var(--line)}
-.five li{counter-increment:f;background:var(--card);padding:22px 22px 22px 70px;position:relative}
-.five li::before{content:counter(f);position:absolute;left:22px;top:18px;font-family:var(--serif);font-weight:900;font-size:30px;color:var(--accent);line-height:1}
-.five .k{display:block;font-size:21px;font-weight:700;color:var(--ink);line-height:1.5}
-.five .d{display:block;font-size:16px;color:var(--muted);margin-top:4px;line-height:1.6}
+/* 回饋面板 */
+.fb{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.9,.3,1.1)}
+.fb.show{transform:none}
+.fb .in{width:100%;max-width:480px;border-radius:28px 28px 0 0;padding:22px 20px calc(env(safe-area-inset-bottom) + 20px);background:#e7f8ee}
+.fb.bad .in{background:#fde8e6}
+.fb .ttl{display:flex;align-items:center;gap:10px;font-size:24px;font-weight:900;color:var(--green-d)}
+.fb.bad .ttl{color:var(--red-d)}
+.fb .ttl .pts{margin-left:auto;font-size:16px;background:var(--green);color:#fff;border-radius:999px;padding:3px 12px}
+.fb.bad .ttl .pts{display:none}
+.fb .exp{font-size:17px;line-height:1.75;color:var(--ink);margin:10px 0 16px}
+.fb .exp b{color:var(--ink)}
+.fb .btn{background:var(--green);box-shadow:0 6px 0 var(--green-d)}
+.fb.bad .btn{background:var(--red);box-shadow:0 6px 0 var(--red-d)}
 
-/* 資源表 */
-.res{display:grid;gap:10px;margin-top:8px}
-.res div{display:flex;justify-content:space-between;gap:16px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;font-size:16px}
-.todo{flex:none;font-size:13px;font-weight:700;color:var(--warn);background:var(--warn-soft);padding:3px 10px;border-radius:999px}
+/* 結算 */
+.result{color:#fff;text-align:center;justify-content:center;padding:20px 0}
+.result .big{font-size:76px;line-height:1;margin-bottom:6px;animation:pop .6s cubic-bezier(.2,.9,.3,1.5)}
+.result h2{font-size:34px;font-weight:900;line-height:1.3}
+.result .sub{color:rgba(255,255,255,.7);font-size:17px;margin:8px 0 22px;line-height:1.7}
+.starrow{display:flex;justify-content:center;gap:10px;margin:14px 0 6px}
+.starrow span{font-size:52px;filter:grayscale(1) brightness(.5);transform:scale(.6);transition:all .4s cubic-bezier(.2,.9,.3,1.6)}
+.starrow span.on{filter:none;transform:scale(1)}
+.scorebox{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:8px 0 22px}
+.scorebox div{background:rgba(255,255,255,.08);border-radius:18px;padding:14px 6px}
+.scorebox b{display:block;font-size:26px;font-weight:900;color:var(--gold)}
+.scorebox span{font-size:13px;color:rgba(255,255,255,.6)}
+.rankcard{background:var(--panel);color:var(--ink);border-radius:26px;padding:22px;margin:4px 0 22px;box-shadow:0 8px 0 rgba(0,0,0,.28)}
+.rankcard .lv{font-size:14px;font-weight:900;color:var(--orange);letter-spacing:.1em}
+.rankcard .nm{font-size:30px;font-weight:900;margin:4px 0}
+.rankcard p{font-size:16px;color:var(--ink2);line-height:1.7}
+.review{text-align:left;margin-bottom:22px}
+.review h4{font-size:15px;color:rgba(255,255,255,.6);margin-bottom:10px}
+.review .it{background:var(--panel);color:var(--ink);border-radius:18px;padding:14px 16px;margin-bottom:10px}
+.review .it .q{font-size:16px;font-weight:900;line-height:1.5}
+.review .it .a{font-size:15px;color:var(--green-d);margin-top:6px;font-weight:700}
+.review .it .e{font-size:15px;color:var(--ink2);margin-top:4px;line-height:1.65}
 
-/* 紅線卡 */
-.redgrid{display:grid;gap:12px;grid-template-columns:1fr}
-@media (min-width:640px){.redgrid{grid-template-columns:1fr 1fr}}
-.rc{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;position:relative;box-shadow:var(--shadow)}
-.rc .n{font-family:var(--serif);font-size:13px;color:var(--red);font-weight:900;letter-spacing:.1em}
-.rc .k{font-size:22px;font-weight:900;line-height:1.4;margin:6px 0 6px;color:var(--ink)}
-.rc .d{font-size:15px;color:var(--muted);line-height:1.65}
-.rc::after{content:"";position:absolute;left:0;top:20px;bottom:20px;width:3px;border-radius:0 3px 3px 0;background:var(--red)}
-.legend{display:flex;gap:8px;flex-wrap:wrap;margin:-16px 0 28px}
-.pill{font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px}
-.p-red{background:var(--red-soft);color:var(--red)} .p-warn{background:var(--warn-soft);color:var(--warn)} .p-ok{background:var(--ok-soft);color:var(--ok)}
+/* 倒數開場 */
+.count{position:fixed;inset:0;z-index:30;display:none;place-items:center;background:rgba(29,23,20,.92)}
+.count.on{display:grid}
+.count b{font-size:120px;font-weight:900;color:var(--gold);animation:zoom .8s ease-out}
+@keyframes zoom{from{transform:scale(2.2);opacity:0}to{transform:scale(1);opacity:1}}
 
-.qlist{list-style:none;display:grid;gap:10px}
-.qlist li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px 14px 50px;position:relative;font-size:17px;color:var(--ink)}
-.qlist li::before{content:"?";position:absolute;left:16px;top:14px;width:22px;height:22px;border-radius:50%;background:var(--warn-soft);color:var(--warn);font-weight:900;font-size:14px;display:grid;place-items:center;line-height:1}
-
-/* 讀者三種 */
-.aud{display:grid;gap:12px}
-@media (min-width:640px){.aud{grid-template-columns:repeat(3,1fr)}}
-.aud div{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
-.aud .t{font-size:19px;font-weight:900;color:var(--ink);margin-bottom:8px}
-.aud .s{font-size:15px;color:var(--ink-2);line-height:1.65}
-.aud .w{font-size:14px;color:var(--red);margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);line-height:1.6}
-.aud .w::before{content:"✗ ";font-weight:900}
-
-.define{background:var(--accent-soft);border-radius:18px;padding:24px}
-.define .t{font-family:var(--serif);font-size:22px;font-weight:900;color:var(--ink);margin-bottom:8px}
-.define p{margin:6px 0;color:var(--ink-2)}
-
-/* 六問 */
-.six{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-@media (min-width:640px){.six{grid-template-columns:repeat(3,1fr)}}
-.six div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
-.six .q{font-size:18px;font-weight:900;color:var(--ink);line-height:1.4}
-.six .e{font-size:14px;color:var(--muted);margin-top:6px;line-height:1.55}
-.six .i{font-family:var(--serif);color:var(--accent);font-size:14px;font-weight:900}
-
-/* 流程 */
-.flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0}
-.flow span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-weight:700;font-size:16px}
-.flow i{color:var(--muted);font-style:normal}
-
-/* 對照 */
-.vs{display:grid;gap:10px;margin:10px 0}
-@media (min-width:640px){.vs{grid-template-columns:1fr 1fr}}
-.vs div{border-radius:14px;padding:16px 18px;font-size:17px;line-height:1.65}
-.vs .bad{background:var(--paper-2);color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--red) 60%,transparent)}
-.vs .good{background:var(--card);border:1.5px solid var(--ok);color:var(--ink);font-weight:500}
-.vs .bad::before,.vs .good::before{display:block;font-size:12px;font-weight:900;letter-spacing:.12em;margin-bottom:6px;text-decoration:none}
-.vs .bad::before{content:"原稿";color:var(--red)}
-.vs .good::before{content:"改成";color:var(--ok)}
-.case{margin:0 0 36px}
-.case .why{font-size:15px;color:var(--ink-2);margin-top:2px;padding-left:2px}
-.case .why b{color:var(--accent)}
-.case .label{font-size:15px;font-weight:900;color:var(--ink);margin-bottom:4px}
-
-/* 示範步驟 */
-.steps{list-style:none;position:relative;margin-top:8px}
-.steps::before{content:"";position:absolute;left:17px;top:8px;bottom:8px;width:2px;background:var(--line)}
-.steps>li{position:relative;padding:0 0 32px 56px}
-.steps>li::before{content:attr(data-n);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--ink);color:var(--paper);display:grid;place-items:center;font-family:var(--serif);font-weight:900;font-size:15px}
-.steps .t{font-size:19px;font-weight:900;color:var(--ink);line-height:36px}
-.steps ul{list-style:none;margin-top:8px;display:grid;gap:6px}
-.steps ul li{font-size:16px;color:var(--ink-2)}
-.steps ul:not(.ok) li{display:grid;grid-template-columns:5.5em 1fr;gap:8px}
-.steps ul li b{color:var(--muted);font-weight:500}
-.ok li::before{content:"✓ ";color:var(--ok);font-weight:900}
-
-/* 貼文樣稿 */
-.post{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px 22px;margin-top:10px;box-shadow:var(--shadow);max-width:420px}
-.post .who{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-weight:700;font-size:15px}
-.post .who i{width:32px;height:32px;border-radius:50%;background:var(--accent);display:block}
-.post .who small{display:block;font-weight:400;color:var(--muted);font-size:12px;line-height:1.2}
-.post .body{white-space:pre-line;font-size:17px;line-height:1.8;color:var(--ink)}
-.post .src{font-size:13px;color:var(--muted);margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}
-.posts{display:grid;gap:14px}
-@media (min-width:640px){.posts{grid-template-columns:1fr 1fr}.posts .post{max-width:none}}
-
-/* 表單與檢查 */
-.form{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
-.form .row{display:flex;gap:12px;padding:12px 18px;border-bottom:1px solid var(--line);font-size:16px}
-.form .row:last-child{border-bottom:0}
-.form .row span{color:var(--muted);width:2em;font-family:var(--serif);flex:none}
-.btn{font:inherit;font-weight:700;font-size:15px;border-radius:999px;padding:10px 20px;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink)}
-.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.actions{display:flex;gap:10px;align-items:center;margin:16px 0;flex-wrap:wrap}
-.tips{list-style:none;display:grid;gap:10px}
-.tips li{padding-left:18px;position:relative;color:var(--ink-2)}
-.tips li::before{content:"";position:absolute;left:0;top:.8em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
-
-.meter{position:sticky;top:64px;z-index:5;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 18px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);margin-bottom:14px}
-.meter .track{flex:1;height:6px;background:var(--paper-2);border-radius:6px;overflow:hidden}
-.meter .fill{height:100%;width:0;background:var(--ok);transition:width .25s}
-.meter b{font-size:15px;white-space:nowrap}
-.cl h4{font-size:13px;letter-spacing:.14em;color:var(--muted);margin:22px 0 8px}
-.cl label{display:flex;gap:14px;align-items:center;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:8px;cursor:pointer;font-size:17px;transition:background .15s,border-color .15s}
-.cl input{appearance:none;-webkit-appearance:none;width:24px;height:24px;border:2px solid var(--line);border-radius:7px;flex:none;display:grid;place-items:center;transition:all .15s;background:var(--paper)}
-.cl input:checked{background:var(--ok);border-color:var(--ok)}
-.cl input:checked::after{content:"✓";color:#fff;font-weight:900;font-size:15px}
-.cl label:has(input:checked){background:var(--ok-soft);border-color:transparent;color:var(--muted)}
-
-/* 遇到再查 */
-details{background:var(--card);border:1px solid var(--line);border-radius:16px;margin:10px 0;overflow:hidden}
-summary{cursor:pointer;list-style:none;padding:18px 20px;display:flex;align-items:center;gap:14px;font-weight:700;font-size:18px}
-summary::-webkit-details-marker{display:none}
-summary .ico{width:36px;height:36px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;font-size:18px;flex:none}
-summary .s{display:block;font-size:14px;font-weight:400;color:var(--muted)}
-summary::after{content:"";margin-left:auto;width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .2s;flex:none}
-details[open] summary::after{transform:rotate(-135deg)}
-details .in{padding:0 20px 20px}
-details .in ul{list-style:none;display:grid;gap:10px}
-details .in ul li{padding-left:18px;position:relative;color:var(--ink-2);font-size:16px}
-details .in ul li::before{content:"";position:absolute;left:0;top:.75em;width:6px;height:6px;border-radius:50%;background:var(--accent)}
-.prompt{white-space:pre-line;background:var(--paper-2);border-radius:12px;padding:16px 18px;font-size:15px;line-height:1.8;color:var(--ink);margin:10px 0}
-.tbl{display:grid;gap:8px}
-.tbl div{display:grid;grid-template-columns:7em 1fr;gap:4px 14px;background:var(--paper-2);border-radius:12px;padding:12px 14px;font-size:15px}
-.tbl .h{font-weight:900;color:var(--ink);grid-row:span 2}
-.tbl .do{color:var(--ink-2)} .tbl .do::before{content:"✓ ";color:var(--ok);font-weight:900}
-.tbl .dont{color:var(--muted)} .tbl .dont::before{content:"✗ ";color:var(--red);font-weight:900}
-.topics h5{font-size:15px;color:var(--accent);margin:18px 0 8px}
-.topics .tg{display:flex;flex-wrap:wrap;gap:8px}
-.topics .tg span{background:var(--paper-2);border-radius:10px;padding:8px 12px;font-size:15px;color:var(--ink-2);line-height:1.5}
-
-/* 名詞 */
-.glo{display:grid;gap:0;border-top:1px solid var(--line)}
-.glo div{display:grid;grid-template-columns:6.5em 1fr;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);font-size:16px}
-.glo b{font-size:17px}
-.glo span{color:var(--ink-2)}
-
-/* 下一章 */
-.next{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:56px;padding:20px 22px;border-radius:16px;background:var(--ink);color:var(--paper);text-decoration:none;transition:transform .15s}
-.next:hover{transform:translateY(-2px)}
-.next small{display:block;font-size:13px;opacity:.6;letter-spacing:.1em}
-.next b{color:var(--paper);font-size:19px}
-.next::after{content:"→";font-size:22px}
-
-footer{padding:64px 0 96px;color:var(--muted);font-size:14px;text-align:center}
-.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
-.reveal.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
-@media (max-width:560px){body{font-size:17px}section.ch{padding-top:80px}.five li{padding-left:60px}.five li::before{left:18px}}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:40}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (min-width:520px){.app{padding-top:20px}}
 </style>
 </head>
 <body>
+<canvas id="fx"></canvas>
+<div class="count" id="count"><b id="countN">3</b></div>
 
-<div class="bar" id="bar">
-  <span class="brand">酿牛．新人手冊</span>
-  <span class="now" id="now"></span>
-  <button id="menuBtn" type="button" aria-label="打開目錄">目錄</button>
-  <div class="progress" id="progress"></div>
-</div>
+<div class="app">
 
-<nav class="side" id="side" aria-label="章節"></nav>
-
-<div class="toc" id="toc" aria-hidden="true">
-  <div class="scrim" data-close></div>
-  <div class="sheet"><h4>章節</h4><div id="tocList"></div></div>
-</div>
-
-<main class="wrap">
-
-<header class="hero">
-  <div class="kicker">新人手冊 · 快速閱讀版</div>
-  <h1>酿牛<br>生活文</h1>
-  <p class="mission">用大家真的會遇到的<span class="hl">吃飯日常</span>，讓讀者自然想到<span class="hl">酿牛的牛肉</span>。</p>
-  <div class="meta"><span class="chip">約 10 分鐘讀完</span><span class="chip">9 個章節</span><span class="chip">2026 年 11 月</span></div>
-  <a class="start" href="#c1">從第一章開始</a>
-</header>
-
-<!-- 01 -->
-<section class="ch" id="c1" data-title="一分鐘看懂">
-  <div class="eyebrow"><span class="num">01</span>先記住<span class="time">· 1 分鐘</span></div>
-  <h2>一分鐘看懂<br>你的工作</h2>
-  <p class="lead">先聊生活，再帶一點知識。<b>一篇只講好一件事。</b></p>
-  <ol class="five reveal">
-    <li><span class="k">酿牛賣肉品，不是餐廳</span><span class="d">也不是外送店或便當店。</span></li>
-    <li><span class="k">先看素材，再寫字</span><span class="d">文字只寫畫面裡真的有的東西。</span></li>
-    <li><span class="k">不知道就問，不要猜</span><span class="d">價格、重量、活動，一律查資料或問窗口。</span></li>
-    <li><span class="k">可以寫「如果…」，不能寫「昨天客人說…」</span><span class="d">沒發生過的事，不能寫成真的。</span></li>
-    <li><span class="k">寫稿不等於可以發文</span><span class="d">發文、回留言、報價，都要另外取得授權。</span></li>
-  </ol>
-  <h3>你的資源</h3>
-  <div class="res reveal">
-    <div>商品資料表（規格、價格、活動）<span class="todo">待主管填</span></div>
-    <div>核准照片、影片、標誌、模板<span class="todo">待主管填</span></div>
-    <div>範例貼文和被退件的稿<span class="todo">待主管填</span></div>
-    <div>審稿人<span class="todo">待主管填</span></div>
-    <div>商品、料理問題窗口<span class="todo">待主管填</span></div>
-    <div>設計窗口、客服窗口<span class="todo">待主管填</span></div>
-  </div>
-  <a class="next" href="#c2"><span><small>下一章</small><b>紅線：犯了就會出事</b></span></a>
+<!-- 首頁 -->
+<section class="screen home on" id="sHome">
+  <span class="badge">🎮 新人闖關遊戲</span>
+  <div class="logo"><span>酿</span></div>
+  <h1>酿牛<br><em>熟成學院</em></h1>
+  <p class="lead">5 個小關卡，玩完就懂酿牛、會寫生活文。最後挑戰熟成大考，看你熟成幾天！</p>
+  <div class="namebox"><label for="name">你的名字</label><input id="name" maxlength="10" placeholder="輸入暱稱" autocomplete="off"></div>
+  <button class="btn" id="goMap">開始闖關</button>
+  <p class="homefoot">全程約 15 分鐘 · 答錯也沒關係，看解說就學會了</p>
 </section>
 
-<!-- 02 -->
-<section class="ch" id="c2" data-title="紅線">
-  <div class="eyebrow"><span class="num">02</span>最重要<span class="time">· 2 分鐘</span></div>
-  <h2>八條紅線<br>犯了就會出事</h2>
-  <p class="lead">其他都可以慢慢學，<b>這八條第一天就要記住。</b></p>
-  <div class="legend"><span class="pill p-red">紅線：絕對不能犯</span><span class="pill p-warn">必查：發文前核對</span><span class="pill p-ok">建議：寫得更好</span></div>
-  <div class="redgrid reveal">
-    <div class="rc"><div class="n">01</div><div class="k">品牌名只寫「酿牛」</div><div class="d">不要寫成「釀牛」。打不出來就從這裡複製。</div></div>
-    <div class="rc"><div class="n">02</div><div class="k">不能寫成餐廳</div><div class="d">也不能寫成外送或便當店。</div></div>
-    <div class="rc"><div class="n">03</div><div class="k">商品照片不能改</div><div class="d">肉色、油花、厚度、包裝都不能改，也不能用 AI 重畫肉。</div></div>
-    <div class="rc"><div class="n">04</div><div class="k">不能捏造經驗</div><div class="d">顧客、主廚、同事的心得、試吃、銷量，都不能編。</div></div>
-    <div class="rc"><div class="n">05</div><div class="k">沒根據不寫價格</div><div class="d">折扣、免運、庫存、到貨時間也一樣。</div></div>
-    <div class="rc"><div class="n">06</div><div class="k">舊活動不能照抄</div><div class="d">以前核准過，不代表那些數字現在還有效。</div></div>
-    <div class="rc"><div class="n">07</div><div class="k">不寫食安、健康保證</div><div class="d">例如「無菌」「絕對安全」「吃了增肌」。</div></div>
-    <div class="rc"><div class="n">08</div><div class="k">沒授權不發文</div><div class="d">也不能自己回客訴或報價。</div></div>
+<!-- 地圖 -->
+<section class="screen" id="sMap">
+  <div class="top">
+    <button class="iconbtn" id="mapHome" aria-label="回首頁">⌂</button>
+    <span class="grow"></span>
+    <span class="pillstat">⭐ <span id="starTotal">0</span></span>
+    <button class="iconbtn" id="sound" aria-label="音效開關">🔊</button>
   </div>
-  <h3>發文前一定要核對</h3>
-  <ul class="qlist reveal">
-    <li>商品名、部位、重量，和資料表一樣嗎？</li>
-    <li>「今天」「明天」「最後一天」有沒有照抄舊稿？</li>
-    <li>圖上的字、字幕、內文，三個地方一致嗎？</li>
-    <li>畫面裡的盤子和醬料，會不會讓人以為買了會送？</li>
-    <li>「最好吃」「入口即化」這類說法，有根據嗎？</li>
-  </ul>
-  <a class="next" href="#c3"><span><small>下一章</small><b>認識酿牛和讀者</b></span></a>
+  <div class="hello"><h2 id="hiName">嗨，新同學</h2><p>一關一關來，每關先學再答題。</p></div>
+  <div class="aging">
+    <div class="row"><b>你的熟成進度</b><span class="day" id="dayNum">0<small>天</small></span></div>
+    <div class="meter"><i id="dayBar"></i></div>
+    <div class="rank">目前等級：<b id="rankNow">生肉新手</b></div>
+  </div>
+  <div class="path" id="path"></div>
 </section>
 
-<!-- 03 -->
-<section class="ch" id="c3" data-title="認識酿牛">
-  <div class="eyebrow"><span class="num">03</span>基礎知識<span class="time">· 1 分鐘</span></div>
-  <h2>認識酿牛<br>和你的讀者</h2>
-  <p class="lead">酿牛提供<b>牛肉肉品</b>和<b>熟成相關服務</b>。<span class="todo">品牌介紹待主管補</span></p>
-  <div class="define reveal">
-    <div class="t">乾式熟成，白話說</div>
-    <p>把牛肉放在<span class="hl">溫度、濕度、通風都控制好</span>的環境裡慢慢變化，通常會變得比較嫩、風味比較明顯。</p>
-    <p>重點是「受控條件」。不是把肉放久就好，也不是在家能自己做。濕式熟成是另一種方法，寫文章時不要貶低它。</p>
-    <p class="muted">酿牛商品的熟成天數、香氣、製程，一律用核准資料，不要自己寫。</p>
+<!-- 學習卡 -->
+<section class="screen" id="sLearn">
+  <div class="top">
+    <button class="iconbtn" id="learnClose" aria-label="回地圖">✕</button>
+    <div class="dots" id="dots"></div>
   </div>
-  <h3>每篇只對一種人說話</h3>
-  <div class="aud reveal">
-    <div><div class="t">自己吃</div><div class="s">下班晚餐、週末在家、第一次煎牛排</div><div class="w">寫到最後突然叫人談批發</div></div>
-    <div><div class="t">送禮聚會</div><div class="s">到朋友家、節慶聚餐、挑禮物</div><div class="w">用了過期的禮盒價格</div></div>
-    <div><div class="t">餐飲業者</div><div class="s">菜單、備料、找肉品來源</div><div class="w">保證生意會變好</div></div>
-  </div>
-  <a class="next" href="#c4"><span><small>下一章</small><b>怎麼寫一篇</b></span></a>
-</section>
-
-<!-- 04 -->
-<section class="ch" id="c4" data-title="怎麼寫">
-  <div class="eyebrow"><span class="num">04</span>寫法<span class="time">· 2 分鐘</span></div>
-  <h2>怎麼寫一篇</h2>
-  <p class="lead">好題目要過兩關：讀者<b>腦中有沒有畫面</b>？這個畫面<b>為什麼會接到酿牛</b>？</p>
-  <div class="vs reveal"><div class="bad">生活值得美好滋味</div><div class="good">有人端著盤子，等朋友拍完照才能開動</div></div>
-
-  <h3>動筆前，先回答六個問題</h3>
-  <div class="six reveal">
-    <div><span class="i">1</span><div class="q">寫給誰？</div><div class="e">第一次在家煎牛排的人</div></div>
-    <div><span class="i">2</span><div class="q">什麼時刻？</div><div class="e">朋友週末要來吃飯</div></div>
-    <div><span class="i">3</span><div class="q">讀者在意？</div><div class="e">想準備主菜，又不想整晚困在廚房</div></div>
-    <div><span class="i">4</span><div class="q">留下哪個印象？</div><div class="e">只能選一個</div></div>
-    <div><span class="i">5</span><div class="q">素材有什麼？</div><div class="e">畫面能證明什麼</div></div>
-    <div><span class="i">6</span><div class="q">希望讀者做？</div><div class="e">留言或看商品，選一個</div></div>
-  </div>
-  <p class="muted">如果想講三件事，那就拆成三篇。</p>
-
-  <h3>一篇的順序</h3>
-  <div class="flow reveal"><span>生活情境</span><i>→</i><span>讀者在意的事</span><i>→</i><span>接到牛肉</span><i>→</i><span>收尾</span></div>
-  <p>前兩行就要講清楚在聊什麼。知識一次只帶一點，回答這一篇的疑問就夠了。</p>
-
-  <h3>開頭這樣改</h3>
-  <div class="vs reveal"><div class="bad">在繁忙的現代生活中，美食是最好的慰藉</div><div class="good">下班最難的那題，通常是晚餐吃什麼</div></div>
-  <div class="vs reveal"><div class="bad">你是否渴望一場頂級味蕾饗宴</div><div class="good">週末想吃牛排，又不太想出門</div></div>
-
-  <h3>收尾只選一個動作</h3>
-  <ul class="tips reveal">
-    <li><b>生活共鳴</b>：回到開頭的畫面，可以不叫人買。</li>
-    <li><b>互動</b>：問一個讀者真的有經驗的問題。</li>
-    <li><b>看商品</b>：入口和資料都確認過才能用。</li>
-    <li><b>餐飲合作</b>：整篇本來就寫給業者才能用。</li>
-  </ul>
-
-  <h3>語氣</h3>
-  <ul class="tips reveal">
-    <li>像一個<span class="hl">懂吃肉的朋友在聊天</span>，用台灣日常的說法。</li>
-    <li>「味蕾饗宴」「儀式感拉滿」這種句子，換成具體畫面。</li>
-    <li>幽默放在生活小事，不嘲笑讀者不懂肉。</li>
-    <li>標點少一點、用換行，但優惠條件的標點不能省。</li>
-    <li>貼到平台後再看一次換行，圖上的字也要校對。</li>
-  </ul>
-  <a class="next" href="#c5"><span><small>下一章</small><b>改稿對照</b></span></a>
-</section>
-
-<!-- 05 -->
-<section class="ch" id="c5" data-title="改稿對照">
-  <div class="eyebrow"><span class="num">05</span>看例子<span class="time">· 2 分鐘</span></div>
-  <h2>改稿對照<br>一看就懂</h2>
-  <p class="lead">左邊是常見錯誤，右邊是改法。<b>記住原因，比記住句子更重要。</b></p>
-
-  <div class="case reveal"><div class="label">太抽象</div>
-    <div class="vs"><div class="bad">在忙碌的日常裡，為自己留下一場奢華的味蕾饗宴。</div><div class="good">週五晚上不想排行程了，晚餐倒是可以認真想一下。</div></div>
-    <p class="why"><b>原因</b>　先有具體時刻，後面才接得到牛排。</p></div>
-  <div class="case reveal"><div class="label">寫成餐廳</div>
-    <div class="vs"><div class="bad">今晚讓酿牛替你煎好一桌，來店就能享受主廚手藝。</div><div class="good">今晚想在家煎牛排，可以先從挑一塊自己想吃的肉開始。</div></div>
-    <p class="why"><b>原因</b>　酿牛不是餐廳。</p></div>
-  <div class="case reveal"><div class="label">虛構顧客</div>
-    <div class="vs"><div class="bad">昨天客人跟我們說，吃一口就立刻回購十盒。</div><div class="good">一桌人吃牛排時，你是先拍照，還是先拿叉子的那個？</div></div>
-    <p class="why"><b>原因</b>　沒發生過的事，不能寫成真的。</p></div>
-  <div class="case reveal"><div class="label">亂給承諾</div>
-    <div class="vs"><div class="bad">下單就免運，明天立刻送到。</div><div class="good">週末要聚餐，選好主菜後，也記得提早確認配送安排。</div></div>
-    <p class="why"><b>原因</b>　不能替品牌多加物流承諾。</p></div>
-  <div class="case reveal"><div class="label">硬塞知識</div>
-    <div class="vs"><div class="bad">今天吃牛排。乾式熟成的溫度、濕度、風速如下…</div><div class="good">想換一種牛肉風味時，可以從認識乾式熟成開始。</div></div>
-    <p class="why"><b>原因</b>　一篇只回答一個問題。</p></div>
-  <div class="case reveal"><div class="label">貶低別人</div>
-    <div class="vs"><div class="bad">濕式熟成沒什麼風味，懂吃的人只選乾式。</div><div class="good">乾式和濕式熟成各有風味，喜歡哪一種留給自己決定。</div></div>
-    <p class="why"><b>原因</b>　不替讀者決定什麼才叫懂吃。</p></div>
-  <div class="case reveal"><div class="label">圖文不符（只有拆封影片）</div>
-    <div class="vs"><div class="bad">剛剛煎了一塊，吃完還想再來一塊。</div><div class="good">還沒下鍋，光看這層貼緊牛肉的真空膜，已經在想晚餐要配什麼了。</div></div>
-    <p class="why"><b>原因</b>　文字要對得上畫面。</p></div>
-  <div class="case reveal"><div class="label">結尾太多動作</div>
-    <div class="vs"><div class="bad">快留言、標記三位朋友、分享、收藏、私訊、加 LINE、立刻下單！</div><div class="good">你們家聚餐，通常誰負責主菜？</div></div>
-    <p class="why"><b>原因</b>　收尾只留一個動作。</p></div>
-  <a class="next" href="#c6"><span><small>下一章</small><b>完整示範一次</b></span></a>
-</section>
-
-<!-- 06 -->
-<section class="ch" id="c6" data-title="完整示範">
-  <div class="eyebrow"><span class="num">06</span>從頭到尾<span class="time">· 1 分鐘</span></div>
-  <h2>完整示範<br>從任務到交稿</h2>
-  <p class="lead">照著這五步走一次，<b>你就會寫了。</b></p>
-  <ol class="steps reveal">
-    <li data-n="1"><div class="t">收到任務</div><p>寫一篇週末居家生活文。素材是一段實拍煎牛排和裝盤的影片。</p></li>
-    <li data-n="2"><div class="t">回答六個問題</div>
-      <ul>
-        <li><b>寫給誰</b>平常會自己煮晚餐的人</li>
-        <li><b>什麼時刻</b>週五晚上，不想出門</li>
-        <li><b>在意什麼</b>想吃好一點，但不想麻煩</li>
-        <li><b>一個印象</b>在家煎牛排也能是週末安排</li>
-        <li><b>素材</b>下鍋、翻面、裝盤（沒有試吃）</li>
-        <li><b>希望讀者</b>留言聊自己的週末</li>
-      </ul></li>
-    <li data-n="3"><div class="t">寫初稿</div>
-      <div class="post"><div class="who"><i></i><span>酿牛<small>示範貼文</small></span></div>
-<div class="body">週五晚上行程可以空白
-晚餐想吃什麼倒是很清楚
-
-牛排下鍋　配菜端上桌
-今天最重要的安排
-就是坐下來好好吃飯
-
-你這週想出去吃
-還是在家開煎？</div></div></li>
-    <li data-n="4"><div class="t">自己審一次</div>
-      <ul class="ok">
-        <li>只寫畫面裡有的動作，沒寫「好好吃」這種試吃心得</li>
-        <li>沒有價格和活動，不用查資料表</li>
-        <li>收尾只問一個問題</li>
-        <li>大聲唸一遍，讀起來像在聊天</li>
-      </ul></li>
-    <li data-n="5"><div class="t">填交稿表，送審</div><p>格式在下一章。</p></li>
-  </ol>
-
-  <h3>再看四篇範例</h3>
-  <div class="posts reveal">
-    <div class="post"><div class="who"><i></i><span>聚餐分工</span></div><div class="body">朋友來家裡吃飯
-分工通常很明確
-有人準備主菜　有人找盤子
-還有人負責問好了沒
-
-如果今晚主菜是牛排
-你會是哪一個？</div><div class="src">素材：朋友聚會料理畫面</div></div>
-    <div class="post"><div class="who"><i></i><span>初次認識熟成</span></div><div class="body">第一次看到乾式熟成
-會先想問的應該是吃起來差在哪
-
-熟成會影響牛肉的嫩度與風味
-至於你喜歡哪種
-還是留給自己的味覺決定</div><div class="src">素材：核准的原肉圖</div></div>
-    <div class="post"><div class="who"><i></i><span>拆封聲音</span></div><div class="body">這支先開聲音
-注意那層貼緊牛肉的真空膜
-光是拆開前的小動作就能看上一會
-#阿酿維 先看完　晚餐再慢慢想</div><div class="src">素材：真的有錄到聲音的拆封影片</div></div>
-    <div class="post"><div class="who"><i></i><span>兩人晚餐</span></div><div class="body">兩個人在家吃飯
-菜單不用排得很滿
-一道想吃的主菜　配上平常喜歡的菜
-就可以坐下來聊今天發生的事
-
-如果今晚吃牛排
-誰負責煎　誰負責洗碗？</div><div class="src">素材：兩人一起準備晚餐的畫面</div></div>
-  </div>
-  <p class="muted">以上是示範，不是真的活動，也不是真實事件。</p>
-  <a class="next" href="#c7"><span><small>下一章</small><b>交稿</b></span></a>
-</section>
-
-<!-- 07 -->
-<section class="ch" id="c7" data-title="交稿">
-  <div class="eyebrow"><span class="num">07</span>交出去<span class="time">· 1 分鐘</span></div>
-  <h2>交稿</h2>
-  <p class="lead">把這張表填好，<b>主管一次就能看懂。</b></p>
-  <div class="form reveal" id="form">
-    <div class="row"><span>01</span>貼文編號／版本</div>
-    <div class="row"><span>02</span>平台／預計發布日</div>
-    <div class="row"><span>03</span>寫給誰</div>
-    <div class="row"><span>04</span>生活切角</div>
-    <div class="row"><span>05</span>這篇只講一件事</div>
-    <div class="row"><span>06</span>正式文案</div>
-    <div class="row"><span>07</span>圖上主標／副標</div>
-    <div class="row"><span>08</span>圖片或影片檔名</div>
-    <div class="row"><span>09</span>收尾動作</div>
-    <div class="row"><span>10</span>標籤</div>
-    <div class="row"><span>11</span>資料來源與確認日期</div>
-    <div class="row"><span>12</span>待確認問題</div>
-    <div class="row"><span>13</span>這次改了什麼</div>
-  </div>
-  <div class="actions"><button class="btn primary" id="copyForm" type="button">複製交稿表</button><span class="muted" id="copied" hidden>已複製，可以直接貼上</span></div>
-  <ul class="tips reveal">
-    <li><b>檔名</b>用「日期_平台_主題_v01」，改一次加一號。不要用「最終版」。</li>
-    <li><b>要問問題時，附上你查到的東西。</b>「資料表寫 8oz，舊圖寫 10oz，用哪個？」比「重量多少？」好回答。</li>
-    <li>正式文案和備註分開，不要混在同一段。</li>
-  </ul>
-  <h3>交稿流程</h3>
-  <div class="flow reveal"><span>看素材</span><i>→</i><span>提 2～3 個切角</span><i>→</i><span>寫初稿</span><i>→</i><span>自己審</span><i>→</i><span>主管審</span><i>→</i><span>有授權才發布</span></div>
-  <p>改稿時，圖、字幕、內文、排程要一起改。發布後檢查實際畫面，記下留言裡的問題。</p>
-  <a class="next" href="#c8"><span><small>下一章</small><b>發文前檢查表</b></span></a>
-</section>
-
-<!-- 08 -->
-<section class="ch" id="c8" data-title="檢查表">
-  <div class="eyebrow"><span class="num">08</span>最後一關<span class="time">· 1 分鐘</span></div>
-  <h2>發文前<br>檢查表</h2>
-  <p class="lead">每次交稿前勾一次，<b>全部打勾才送出。</b></p>
-  <div class="meter"><div class="track"><div class="fill" id="fill"></div></div><b id="count">0 / 15</b></div>
-  <div class="cl" id="checklist">
-    <h4>內容</h4>
-    <label><input type="checkbox">一句話說得出這篇寫給誰</label>
-    <label><input type="checkbox">有具體的生活畫面，而且接得到牛肉</label>
-    <label><input type="checkbox">只有一個目的，結尾沒換讀者</label>
-    <label><input type="checkbox">沒有把酿牛寫成餐廳或外送</label>
-    <h4>資料</h4>
-    <label><input type="checkbox">品牌寫「酿牛」</label>
-    <label><input type="checkbox">商品、重量、價格、活動都是最新資料</label>
-    <label><input type="checkbox">沒有虛構的客人、試吃、銷量</label>
-    <label><input type="checkbox">不確定的事已經另外列出來問</label>
-    <h4>圖片和影片</h4>
-    <label><input type="checkbox">完整看過素材，文字對得上畫面</label>
-    <label><input type="checkbox">肉色、油花、厚度、包裝都沒被改</label>
-    <label><input type="checkbox">圖上的字、字幕、內文一致</label>
-    <h4>發布</h4>
-    <label><input type="checkbox">大聲唸過一次</label>
-    <label><input type="checkbox">日期和「今天、明天」都正確</label>
-    <label><input type="checkbox">正式文案裡沒有內部備註</label>
-    <label><input type="checkbox">發的是核准版本，而且有授權</label>
-  </div>
-  <div class="actions"><button class="btn" id="resetCheck" type="button">全部清除</button></div>
-  <a class="next" href="#c9"><span><small>下一章</small><b>遇到再查</b></span></a>
-</section>
-
-<!-- 09 -->
-<section class="ch" id="c9" data-title="遇到再查">
-  <div class="eyebrow"><span class="num">09</span>工具箱<span class="time">· 需要時再看</span></div>
-  <h2>遇到再查</h2>
-  <p class="lead">不用先背，<b>遇到時點開就好。</b></p>
-
-  <details><summary><span class="ico">🖼</span><span>圖片怎麼處理<span class="s">裁切、修圖、尺寸</span></span></summary><div class="in"><ul>
-    <li>可以裁切、排版、去背，但<b>肉本身不能改</b>：顏色、油花、厚度、形狀都保持原樣。</li>
-    <li>不加假的焦痕、汁水、煙霧、油亮感。不把兩塊肉合成一塊。</li>
-    <li>原圖太暗、太黃、模糊，先回報，不要自己大修。</li>
-    <li>字太多就刪內容，不要把字縮小硬塞。</li>
-    <li>不加廉價 icon、貼紙、裝飾框。留白是設計的一部分。</li>
-    <li>要透明背景，就要真的透明，白底不算。</li>
-    <li>常用尺寸 1080×1080、1080×1350、1080×1920，實際以任務為準。</li>
-    <li>品牌色、字體以核准模板為準。<span class="todo">色碼待主管確認</span></li>
-  </ul></div></details>
-
-  <details><summary><span class="ico">🎬</span><span>影片怎麼配文案<span class="s">畫面、聲音、字幕</span></span></summary><div class="in"><ul>
-    <li>至少完整看一次。要寫聲音，就要先聽過。</li>
-    <li>影片只有拆封，就不要寫成試吃心得。</li>
-    <li>不寫影片裡沒有的煎肉聲。包裝的聲音不能證明肉很嫩。</li>
-    <li>字幕、封面、內文的商品名要一致，改稿時一起改。</li>
-  </ul></div></details>
-
-  <details><summary><span class="ico">📅</span><span>節慶和排程<span class="s">日期、舊素材、突發狀況</span></span></summary><div class="in"><ul>
-    <li>中秋可以寫誰拿夾子、誰顧聊天，不用每篇都寫月亮和團圓。</li>
-    <li>沒有活動，就不要假裝有促銷。</li>
-    <li>舊素材上的年份、日期、QR code、價格都要檢查。</li>
-    <li>有天災或運輸受影響時，不要硬炒買氣。</li>
-    <li>排程前再確認一次：活動有沒有改、商品有沒有停售。</li>
-  </ul></div></details>
-
-  <details><summary><span class="ico">#</span><span>FB、IG、限動和標籤<span class="s">各平台怎麼發</span></span></summary><div class="in"><ul>
-    <li>同一個主題可以發到不同平台，但不要逐字複製。</li>
-    <li>FB 可以寫完整一點；IG 的圖和第一段要互相搭配；限動一張只講一件事。</li>
-    <li>標籤從 #酿牛 #乾式熟成 #牛排 #居家料理 挑適合的，不用全放。</li>
-    <li>不相信「幾點發最好」「放這幾個標籤就會爆」這種沒有數據的說法。</li>
-  </ul></div></details>
-
-  <details><summary><span class="ico">✦</span><span>用 AI 幫忙寫<span class="s">提示詞範例和檢查方式</span></span></summary><div class="in">
-    <p>AI 可以幫你想切角、改短句子、找問題，但<b>最後內容對不對，是你負責</b>。</p>
-    <div class="prompt" id="prompt">你是酿牛的社群編輯。
-對象是平常會自己準備晚餐的一般消費者。
-這篇從週末在家煎牛排的生活情境切入。
-口吻自然，台灣日常聊天，少標點，用合理換行。
-一篇只保留一個主要訊息。
-商品資訊只能用我提供的資料。
-不虛構試吃、顧客故事、價格、活動、熟成天數或服務承諾。
-不把品牌寫成餐廳或熟食外送店。
-先給三個不同切角，選定後再寫完整文案。
-待確認的資訊另外列出來，不要混進正文。</div>
-    <div class="actions"><button class="btn" id="copyPrompt" type="button">複製提示詞</button><span class="muted" id="copied2" hidden>已複製</span></div>
-    <ul>
-      <li>AI 寫完後，每個數字、商品名、承諾都核對一次。</li>
-      <li>大聲唸，刪掉平常講話不會出現的句子。</li>
-      <li>確認沒有混入簡體字（品牌的「酿」除外）。</li>
-      <li>不要把客人的個資或私訊貼給 AI。</li>
-    </ul></div></details>
-
-  <details><summary><span class="ico">💬</span><span>留言和私訊<span class="s">不同問題怎麼處理</span></span></summary><div class="in">
-    <div class="tbl">
-      <div><span class="h">一般聊天</span><span class="do">回應他在聊的事</span><span class="dont">每則都硬推下單</span></div>
-      <div><span class="h">商品、價格</span><span class="do">查資料表，不確定交窗口</span><span class="dont">看照片猜部位、自己給折扣</span></div>
-      <div><span class="h">餐飲合作</span><span class="do">整理需求，交合作窗口</span><span class="dont">拿零售價當批發價</span></div>
-      <div><span class="h">訂單、配送</span><span class="do">引導到處理訂單的管道</span><span class="dont">在公開留言要個資</span></div>
-      <div><span class="h">吃了不舒服</span><span class="do">保留資料，立刻交窗口</span><span class="dont">保證可以吃，或怪客人</span></div>
-      <div><span class="h">負評</span><span class="do">保留紀錄，交窗口判斷</span><span class="dont">吵架、刪留言、承諾賠償</span></div>
+  <div class="learn">
+    <div id="lcard"></div>
+    <div class="learnnav">
+      <button class="btn ghost back" id="lPrev" aria-label="上一張">←</button>
+      <button class="btn" id="lNext">下一張</button>
     </div>
-    <p>發現已發出的內容<b>價格或商品資訊有錯</b>：先截圖保留，立刻通知負責人，不要偷偷改掉。</p>
-  </div></details>
-
-  <details><summary><span class="ico">💡</span><span>36 個題目靈感<span class="s">沒靈感時翻這裡</span></span></summary><div class="in topics">
-    <p class="muted">這是題材庫，不是現在的活動。挑題要配合手上的素材。</p>
-    <h5>晚餐與一人生活</h5><div class="tg"><span>今晚吃什麼</span><span>週五只想在家吃</span><span>一個人也認真擺盤嗎</span><span>主菜定了，配菜選擇困難</span><span>好吃但不想拍成料理節目</span><span>先拍照還是先吃</span></div>
-    <h5>兩人與朋友聚會</h5><div class="tg"><span>一個煎肉一個找盤子</span><span>朋友問你要帶什麼</span><span>誰煎誰在旁邊看</span><span>上桌後大家放下手機（用提問寫）</span><span>最後一塊肉先客氣一下</span><span>整塊上桌還是切好</span></div>
-    <h5>新手的小問題</h5><div class="tg"><span>第一次買乾式熟成最想知道什麼</span><span>同樣叫牛排為何差很多（先查部位資料）</span><span>包裝為什麼貼這麼緊（用核准說明）</span><span>看到「乾式熟成」的第一個疑問</span><span>買肉先看部位還是重量</span><span>料理影片秒數為何不能照抄</span></div>
-    <h5>聲音與畫面</h5><div class="tg"><span>下鍋的第一聲（真實收音）</span><span>拆封前的停頓</span><span>切片裝盤的順序</span><span>原味派還是醬料派</span><span>看牛排照片先看哪裡</span><span>配飯還是配其他主食</span></div>
-    <h5>週末與節慶</h5><div class="tg"><span>放假在家煎牛排</span><span>到朋友家要帶哪道（先查當期商品）</span><span>聚餐怕大家帶一樣的</span><span>節慶採買清單越寫越長</span><span>中秋誰拿夾子</span><span>送吃的先想對方怎麼煮</span></div>
-    <h5>品牌與知識</h5><div class="tg"><span>想換一種牛肉風味</span><span>吃過喜歡的牛排想自己煎（不暗示該餐廳用酿牛）</span><span>把注意力放在牛肉本身</span><span>最常被問的選購問題（要有真實紀錄）</span><span>拍攝當天的小細節（有紀錄才用第一人稱）</span><span>餐飲備料日常（整篇寫給業者）</span></div>
-  </div></details>
-
-  <h3>看不懂的名詞</h3>
-  <div class="glo reveal">
-    <div><b>切角</b><span>從哪個生活角度切入，例如「朋友來家裡吃飯」</span></div>
-    <div><b>落點</b><span>最後要讓讀者記住什麼</span></div>
-    <div><b>CTA</b><span>文末請讀者做的動作，例如留言、看商品</span></div>
-    <div><b>素材</b><span>要用的照片或影片</span></div>
-    <div><b>核准</b><span>主管或窗口已經確認可以用</span></div>
-    <div><b>窗口</b><span>負責回答某類問題的人</span></div>
-    <div><b>SKU</b><span>商品編號，用來區分不同規格</span></div>
-    <div><b>ASMR</b><span>主打聲音的影片，例如拆封聲、下鍋聲</span></div>
-    <div><b>#阿酿維</b><span>酿牛固定的品牌用語，照原樣寫，不自己加人設</span></div>
-    <div><b>長青內容</b><span>沒寫日期、能長期用的內容，仍要定期檢查</span></div>
   </div>
 </section>
 
-<footer>
-  <p>完整規範、資料來源與主管帶人方式，請見原始 Word 手冊。</p>
-  <p>手冊更新時，記下日期、改了什麼、為什麼改。</p>
-</footer>
-</main>
+<!-- 答題 -->
+<section class="screen" id="sQuiz">
+  <div class="top">
+    <button class="iconbtn" id="quizClose" aria-label="離開">✕</button>
+    <div class="dots" id="qdots"></div>
+  </div>
+  <div class="qhead">
+    <div class="timer" id="timer" hidden><svg width="52" height="52"><circle class="tb" cx="26" cy="26" r="22"/><circle class="tf" id="tf" cx="26" cy="26" r="22" stroke-dasharray="138.2" stroke-dashoffset="0"/></svg><b id="tnum">20</b></div>
+    <span class="qcount" id="qcount"></span>
+    <span class="combo" id="combo"></span>
+    <span class="pillstat" id="scoreP" hidden>🔥 <span id="scoreN">0</span></span>
+  </div>
+  <div class="qcard" id="qcard"></div>
+  <div class="opts" id="opts"></div>
+</section>
+
+<!-- 關卡結算 -->
+<section class="screen result" id="sStage">
+  <div class="big" id="stEmoji">🎉</div>
+  <h2 id="stTitle">過關！</h2>
+  <div class="starrow" id="stStars"><span>⭐</span><span>⭐</span><span>⭐</span></div>
+  <p class="sub" id="stSub"></p>
+  <div class="review" id="stReview"></div>
+  <button class="btn" id="stNext">下一關</button>
+  <button class="btn ghost" id="stRetry">再玩一次這關</button>
+</section>
+
+<!-- 大考結算 -->
+<section class="screen result" id="sFinal">
+  <div class="big" id="fEmoji">🏆</div>
+  <h2 id="fTitle">熟成大考完成！</h2>
+  <p class="sub" id="fSub"></p>
+  <div class="scorebox">
+    <div><b id="fRight">0</b><span>答對</span></div>
+    <div><b id="fScore">0</b><span>總分</span></div>
+    <div><b id="fCombo">0</b><span>最高連對</span></div>
+  </div>
+  <div class="rankcard"><div class="lv" id="fLv"></div><div class="nm" id="fRank"></div><p id="fMsg"></p></div>
+  <div class="review" id="fReview"></div>
+  <button class="btn gold" id="fRetry">再挑戰一次</button>
+  <button class="btn ghost" id="fMap">回到地圖</button>
+</section>
+
+</div>
+
+<!-- 答題回饋 -->
+<div class="fb" id="fb"><div class="in">
+  <div class="ttl"><span id="fbT">答對了！</span><span class="pts" id="fbP">+100</span></div>
+  <p class="exp" id="fbE"></p>
+  <button class="btn" id="fbNext">繼續</button>
+</div></div>
 
 <script>
-(function(){
-  var secs=[].slice.call(document.querySelectorAll('section.ch'));
-  var side=document.getElementById('side'), list=document.getElementById('tocList');
-  secs.forEach(function(s,i){
-    var n=String(i+1).padStart(2,'0'), t=s.dataset.title;
-    side.insertAdjacentHTML('beforeend','<a href="#'+s.id+'"><span>'+n+'</span>'+t+'</a>');
-    list.insertAdjacentHTML('beforeend','<a href="#'+s.id+'"><span>'+n+'</span>'+t+'</a>');
+/* ====== 關卡內容 ====== */
+const STAGES=[
+{ id:'s1', no:'第 1 關', title:'酿牛是誰？', sub:'認識品牌和我們賣什麼', icon:'🥩', color:'#ffe1cf',
+  cards:[
+   {em:'👋',kick:'歡迎加入',h:'酿牛是一個<mark>乾式熟成牛肉</mark>品牌',body:'我們把好牛肉<b>熟成好、修好、切好</b>，送到客人手上。<br>客人拆開就能煎。'},
+   {em:'🍶',kick:'名字的由來',h:'為什麼叫「<mark>酿</mark>」牛？',body:'「酿」就是<b>像釀酒一樣</b>，用時間慢慢把風味養出來。<br><br>品牌名固定寫<b>「酿牛」</b>，不是「釀牛」。打不出來就直接複製。'},
+   {em:'🏢',kick:'背後的公司',h:'酿牛來自<mark>必夫智能</mark>',facts:[['🔬','技術','用超音波影像判斷熟成進度'],['🧪','理念','科學＋工藝，讓每批品質一致'],['🥩','英文字標','VINAGE']],tip:'技術的說法很專業，寫文時用官方文字，不要自己加油添醋。'},
+   {em:'🛒',kick:'客人在哪裡',h:'我們有<mark>兩種客人</mark>',facts:[['🏠','在家料理的一般人','在 momo 購物網買得到'],['🍽️','餐廳老闆','LINE 洽詢餐飲合作']],tip:'你負責的生活文，是寫給「在家吃飯的一般人」。'},
+   {em:'🚫',kick:'最常搞錯的一件事',h:'酿牛<mark>不是餐廳</mark>',body:'我們賣的是<b>肉</b>，不是現煎牛排、不是外送、也不是便當。<br><br>所以不能寫「來店享受主廚手藝」或「我們幫你煎好」。'}
+  ],
+  q:[
+   {q:'品牌名稱，哪個寫法才正確？',o:['酿牛','釀牛','娘牛','讓牛'],e:'固定寫<b>「酿牛」</b>。打不出來就從別的地方複製過來。'},
+   {q:'酿牛主要賣的是什麼？',o:['乾式熟成牛肉','現煎牛排外送','牛排餐廳套餐','牛肉便當'],e:'酿牛賣的是<b>熟成好的牛肉</b>，不是餐廳、外送或便當。'},
+   {q:'「酿」這個字想表達什麼？',o:['像釀酒一樣，用時間養出風味','老闆的姓氏','一種牛的品種','一種秘製醬料'],e:'「酿」＝<b>像釀酒般用時間雕琢風味</b>，這也是乾式熟成的精神。'},
+   {q:'酿牛背後的公司是哪一家？',o:['必夫智能','台中牛排館','熟成食品行','酿牛餐飲集團'],e:'酿牛是<b>必夫智能</b>的風味品牌。'},
+   {q:'客人收到酿牛的肉，通常是什麼樣子？',o:['修好、切好的單片，拆開就能煎','一整大塊要自己分切','已經煎好的熟牛排','冷凍漢堡排'],e:'我們送的是<b>修好、分切好的單片</b>，拆開就能下鍋。'},
+   {q:'一般人可以在哪裡買到酿牛？',o:['momo 購物網','只能去台北門市','便利商店熟食櫃','完全買不到'],e:'一般消費者可以在 <b>momo 購物網</b>的酿牛商店買到。'},
+   {q:'哪一句會讓人誤以為酿牛是餐廳？',o:['來店就能享受主廚手藝','今晚想在家煎塊牛排','週末在家開煎','挑一塊自己想吃的肉'],e:'酿牛<b>沒有提供現煎服務</b>，「來店享受主廚手藝」會讓人誤會。'}
+  ]},
+{ id:'s2', no:'第 2 關', title:'熟成是什麼？', sub:'三分鐘搞懂乾式熟成', icon:'🧊', color:'#d8ecff',
+  cards:[
+   {em:'⏳',kick:'一句話說完',h:'乾式熟成＝<mark>控制好環境，讓時間變魔術</mark>',body:'把牛肉放在溫度、濕度、通風都控制好的熟成室裡，慢慢等它變化。'},
+   {em:'🌡️',kick:'酿牛官方簡介寫的條件',h:'熟成室裡長這樣',facts:[['❄️','溫度','0–7°C'],['💧','濕度','80–85%'],['📅','時間','約 21–28 天']],tip:'這是品牌簡介的數字。寫到個別商品時，還是要看該商品的資料。'},
+   {em:'✨',kick:'熟成之後',h:'牛肉會<mark>更嫩、風味更集中</mark>',body:'官方的說法是<b>外乾內嫩、香氣集中</b>。<br><br>但香氣每個人感受不同，不要寫成「保證吃到堅果香」。'},
+   {em:'🥩',kick:'常見部位',h:'酿牛簡介提到的部位',facts:[['1','沙朗','—'],['2','板腱','—'],['3','牛小排','—'],['4','紐約客','—']],tip:'照片看不出是哪個部位時，不要用猜的，去查商品資料。'},
+   {em:'⚠️',kick:'兩個常見誤會',h:'熟成<mark>不是</mark>把肉放久就好',duo:[['在家把肉放冰箱一個月就是乾式熟成','熟成需要專業設備和控制，不教讀者在家自己做'],['濕式熟成沒味道，懂吃的才選乾式','乾式和濕式各有風味，喜歡哪種讓讀者自己決定']]}
+  ],
+  q:[
+   {q:'乾式熟成最重要的關鍵是什麼？',o:['溫度、濕度、通風都控制好','把肉放越久越好','放家裡冰箱就可以','放在太陽下曬'],e:'重點是<b>受控的環境</b>，不是放久就好。'},
+   {q:'酿牛官方簡介寫的熟成時間大約是？',o:['21–28 天','2 小時','3 天','一整年'],e:'官方簡介寫的是<b>約 21–28 天</b>。個別商品還是以商品資料為準。'},
+   {q:'熟成後的牛肉，官方怎麼形容？',o:['外乾內嫩、香氣集中','變成全熟','變得像糖一樣甜','完全沒有變化'],e:'官方說法是<b>外乾內嫩、香氣集中</b>。'},
+   {q:'下面哪一個「不是」酿牛簡介提到的部位？',o:['雞胸','沙朗','板腱','紐約客'],e:'簡介提到的是<b>沙朗、板腱、牛小排、紐約客</b>。雞胸不是牛肉喔！'},
+   {q:'寫到濕式熟成時，應該怎麼寫？',o:['兩種各有風味，讓讀者自己選','說它沒什麼味道','說懂吃的人不會選','說它不安全'],e:'<b>不貶低別的選擇</b>，也不替讀者決定什麼叫懂吃。'},
+   {q:'讀者問「我可以在家自己乾式熟成嗎？」文章該怎麼處理？',o:['不教讀者在家隨便熟成','教他放冰箱一個月','說放室溫就好','說包保鮮膜就行'],e:'熟成需要<b>專業設備和控制</b>，不能教讀者在家自己做。'},
+   {q:'想寫「這款熟成 28 天、有起司香」，要先做什麼？',o:['查這個商品的核准資料','憑感覺寫','抄網路文章','問 AI 就好'],e:'商品的天數和香氣，一律<b>查核准資料</b>，不能自己補。'}
+  ]},
+{ id:'s3', no:'第 3 關', title:'我們平常發什麼文？', sub:'看懂酿牛的行銷重點', icon:'📣', color:'#ece3ff',
+  cards:[
+   {em:'💡',kick:'品牌標語',h:'「<mark>熟成之後 才是料理的開始</mark>」',body:'包裝盒上還有一句：<b>「品味時間的美味」</b>。<br><br>酿牛的所有文章，都圍繞著「時間養出來的好味道」。'},
+   {em:'🍽️',kick:'第一種：餐廳合作文',h:'寫給<mark>餐廳老闆</mark>看的',post:'你負責料理，熟成交給我們。\n品質一致、穩定出貨，\n讓菜單上多一道會被記住的招牌。',tip:'重點是：省下設備和時間、品質穩定、菜單多一道亮點。這類文由主管負責。'},
+   {em:'🏠',kick:'第二種：生活文（你負責這個！）',h:'寫給<mark>在家吃飯的一般人</mark>',post:'週五晚上行程可以空白\n晚餐想吃什麼倒是很清楚\n\n牛排下鍋　配菜端上桌\n你這週想出去吃\n還是在家開煎？',tip:'重點是：先聊生活，再自然想到牛排。'},
+   {em:'🎯',kick:'生活文的公式',h:'<mark>先聊生活</mark>，再帶一點牛肉',facts:[['1','生活畫面','下班、週末、朋友來家裡'],['2','讀者在意的事','晚餐吃什麼、怎麼分工'],['3','接到牛排','自然出現，不硬塞'],['4','一個收尾','問一個問題就好']]},
+   {em:'#️⃣',kick:'標籤',h:'常用的標籤',body:'從這些挑適合的就好，不用全放：<br><br><b>#酿牛　#乾式熟成　#牛排　#居家料理</b><br><br>想讓打繁體字的人也搜得到，可以另外加 <b>#釀牛</b>。但內文一律寫「酿牛」。'}
+  ],
+  q:[
+   {q:'酿牛的品牌標語是哪一句？',o:['熟成之後 才是料理的開始','每一口都是幸福','吃了就停不下來','全台最好吃牛排'],e:'品牌標語是<b>「熟成之後 才是料理的開始」</b>。'},
+   {q:'寫給餐廳老闆的文，核心是哪一句？',o:['你負責料理，熟成交給我們','來店享受主廚手藝','全台最便宜','吃了會變瘦'],e:'餐廳文的核心：<b>你負責料理，熟成交給我們</b>。'},
+   {q:'你負責的「生活文」主要寫給誰？',o:['在家吃飯、聚餐的一般人','餐廳老闆','投資人','牛肉供應商'],e:'生活文寫給<b>一般人</b>。餐廳合作文另外有人負責。'},
+   {q:'生活文的核心精神是？',o:['先聊生活，再自然帶到牛肉','開頭就貼價格和優惠','一次講完熟成原理','聊心靈雞湯，最後貼品牌名'],e:'<b>先聊生活，再自然帶一點</b>，讀者才不會覺得在看廣告。'},
+   {q:'生活文寫到最後，突然加一句「餐廳批發歡迎洽詢」，可以嗎？',o:['不行，讀者突然換人了','可以，多曝光比較好','可以，越多資訊越好','要加在開頭才對'],e:'一篇只對<b>一種讀者</b>說話，結尾不能突然換人。'},
+   {q:'內文中品牌名該怎麼寫？',o:['一律寫「酿牛」','寫「釀牛」比較正確','兩個混著用','用英文就好'],e:'內文一律寫<b>「酿牛」</b>。#釀牛 只是標籤，讓人搜得到。'}
+  ]},
+{ id:'s4', no:'第 4 關', title:'生活文怎麼寫？', sub:'開頭、正文、收尾一次學會', icon:'✍️', color:'#dff5e8',
+  cards:[
+   {em:'🎬',kick:'第一步',h:'<mark>先看素材</mark>，再寫字',body:'照片、影片先完整看過一次。<br><br>文字只能寫<b>畫面裡真的有的東西</b>。影片只有拆包裝，就不能寫「吃起來超嫩」。'},
+   {em:'🧠',kick:'好題目的兩個關卡',h:'讀者腦中<mark>有畫面</mark>嗎？',duo:[['生活值得美好滋味','有人端著盤子，等朋友拍完照才能開動']],tip:'第二關：這個畫面能自然接到牛排嗎？兩關都過才算好題目。'},
+   {em:'🪝',kick:'開頭',h:'前兩行就講清楚<mark>在聊什麼</mark>',duo:[['在繁忙的現代生活中，美食是最好的慰藉','下班最難的那題，通常是晚餐吃什麼']]},
+   {em:'🎯',kick:'收尾',h:'<mark>只留一個</mark>動作',duo:[['快留言、標記朋友、分享、私訊、立刻下單！','你們家聚餐，通常誰負責主菜？']]},
+   {em:'💬',kick:'語氣',h:'像一個<mark>懂吃肉的朋友</mark>在聊天',body:'用台灣日常的說法：下班、晚餐、朋友來家裡、開煎。<br><br>少用「味蕾饗宴」「儀式感拉滿」這種空話，換成具體的畫面。'},
+   {em:'1️⃣',kick:'最重要的一條',h:'一篇只講<mark>一件事</mark>',body:'想講三件事？那就拆成三篇。<br><br>生活、知識、優惠全塞在一起，讀者一件都記不住。'}
+  ],
+  q:[
+   {q:'哪一個開頭比較好？',o:['下班最難的那題，通常是晚餐吃什麼','在繁忙的現代生活中，美食是最好的慰藉','你是否渴望一場頂級味蕾饗宴','不會吧，還有人不知道乾式熟成'],e:'好開頭有<b>具體的生活畫面</b>。嘲笑讀者或空泛的句子都不好。'},
+   {q:'一篇生活文應該講幾件事？',o:['一件','三件','越多越好','看字數決定'],e:'<b>一篇只講好一件事</b>，想講更多就拆成好幾篇。'},
+   {q:'哪個結尾最好？',o:['你們家聚餐，通常誰負責主菜？','快留言＋標記＋分享＋私訊＋下單','點連結立刻搶購！','以上全部都放'],e:'收尾<b>只留一個動作</b>，最好接回文章的生活情境。'},
+   {q:'素材只有「拆開真空包裝」的影片，哪句可以寫？',o:['還沒下鍋，已經在想晚餐要配什麼了','剛煎好一塊，吃起來超嫩','客人吃完立刻回購','主廚現場試吃大推'],e:'影片沒有煎、沒有吃，就<b>只能寫畫面裡有的</b>，可以加上期待。'},
+   {q:'寫生活文的第一步是？',o:['先完整看過素材','先寫文案再找圖','先想優惠','先放標籤'],e:'<b>先看素材</b>，文字才對得上畫面。'},
+   {q:'文章的語氣應該像？',o:['懂吃肉的朋友在聊天','精品廣告','教授上課','業務推銷'],e:'酿牛的生活文語氣：<b>自然、在地、像朋友聊天</b>。'},
+   {q:'好題目要通過哪兩關？',o:['讀者有畫面＋接得到牛排','字數夠多＋形容詞夠多','有優惠＋有贈品','有時事＋有明星'],e:'讀者<b>腦中有畫面</b>，而且<b>自然接得到酿牛</b>。'}
+  ]},
+{ id:'s5', no:'第 5 關', title:'紅線別踩！', sub:'判斷這句能不能發', icon:'💥', color:'#ffe0e0',
+  cards:[
+   {em:'🚧',kick:'這關很重要',h:'有些事<mark>踩到就會出事</mark>',body:'其他都可以慢慢練，但下面這幾條<b>第一天就要記住</b>。'},
+   {em:'🙅',kick:'紅線 1–3',h:'不編故事、不亂改圖',facts:[['📖','不捏造','客人說、同事試吃、賣了幾盒'],['🖼️','不改商品照','肉色、油花、厚度、包裝'],['🤖','不用 AI 畫肉','只用實拍照片']]},
+   {em:'💰',kick:'紅線 4–6',h:'不亂給承諾',facts:[['🏷️','價格優惠','沒確認就不寫'],['🚚','免運、到貨','沒確認就不寫'],['📅','舊活動','不能直接拿來用']]},
+   {em:'🩺',kick:'紅線 7–8',h:'不保證、不搶跑',facts:[['🧫','食安健康','不寫「無菌」「絕對安全」「吃了增肌」'],['✋','發文權限','還沒授權就不自己發文、回客訴']]},
+   {em:'✅',kick:'但這樣可以',h:'用<mark>「如果…」</mark>就沒問題',duo:[['昨天朋友來我家，吃完立刻加訂五盒','如果朋友週末來家裡，可以把牛排排進主菜']],tip:'假設的情境可以寫，沒發生過的事不能寫成真的。'}
+  ],
+  q:[
+   {t:'tf',q:'這句可以發嗎？',quote:'昨天客人跟我們說，吃一口就立刻回購十盒！',a:1,e:'沒有真的發生，就是<b>捏造顧客故事</b>。'},
+   {t:'tf',q:'這句可以發嗎？',quote:'今晚讓酿牛幫你煎好一桌，來店就能享用。',a:1,e:'酿牛<b>不是餐廳</b>，沒有現煎服務。'},
+   {t:'tf',q:'這句可以發嗎？',quote:'朋友來家裡吃飯，你負責煎牛排，還是負責洗碗？',a:0,e:'有生活畫面、有互動、沒有亂承諾，<b>很棒</b>！'},
+   {t:'tf',q:'這樣做可以嗎？',quote:'把牛肉照片調得更紅、油花修得更多，看起來比較好吃。',a:1,e:'<b>商品照片不能改</b>，肉色和油花都要保持原樣。'},
+   {t:'tf',q:'這句可以發嗎？（還沒確認物流）',quote:'下單就免運，明天立刻送到！',a:1,e:'免運和到貨時間<b>沒確認就不能寫</b>。'},
+   {t:'tf',q:'這句可以發嗎？',quote:'乾式熟成無菌、絕對安全，誰吃都沒問題。',a:1,e:'<b>不寫食安和健康保證</b>。'},
+   {t:'tf',q:'這句可以發嗎？',quote:'週末想吃牛排，又不太想出門。',a:0,e:'具體的生活情境，<b>完全可以</b>。'},
+   {t:'tf',q:'這樣做可以嗎？',quote:'用 AI 生成一塊更厚、更漂亮的牛排當商品圖。',a:1,e:'<b>不能用 AI 重畫商品</b>，只用實拍。'},
+   {t:'tf',q:'這樣做可以嗎？',quote:'去年中秋的優惠價，今年直接沿用。',a:1,e:'<b>舊活動的數字不能照抄</b>，要查最新資料。'},
+   {t:'tf',q:'這句可以發嗎？',quote:'如果朋友週末來家裡，可以把牛排排進主菜。',a:0,e:'用「如果」寫<b>假設情境</b>，沒問題！'}
+  ]}
+];
+const RANKS=[[0,'生肉新手','剛進熟成室，還有很多可以學！'],[7,'熟成第 7 天','開始有點味道了，再多玩幾次就更熟。'],[14,'熟成第 14 天','已經很有樣子，可以開始練習寫稿了。'],[21,'熟成第 21 天','外乾內嫩，風味出來了！'],[28,'熟成 28 天大師','完全熟成，你已經是酿牛生活文達人！']];
+
+/* ====== 狀態 ====== */
+const KEY='nn-academy-v1';
+let S={name:'',stars:{},best:0,sound:true};
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const totalStars=()=>STAGES.reduce((s,x)=>s+(S.stars[x.id]||0),0);
+const days=()=>Math.round(totalStars()/(STAGES.length*3)*28);
+const rankOf=d=>RANKS.filter(r=>d>=r[0]).pop();
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0)}
+
+/* ====== 音效 ====== */
+let AC;
+function beep(type){
+  if(!S.sound)return;
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const seq={ok:[[660,.0],[880,.09]],bad:[[220,0],[180,.12]],tap:[[520,0]],win:[[523,0],[659,.1],[784,.2],[1046,.3]],tick:[[900,0]]}[type];
+    seq.forEach(([f,t])=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type==='bad'?'sawtooth':'triangle';o.frequency.value=f;
+      const s=AC.currentTime+t;g.gain.setValueAtTime(.0001,s);g.gain.exponentialRampToValueAtTime(type==='tick'?.05:.18,s+.02);g.gain.exponentialRampToValueAtTime(.0001,s+.22);
+      o.connect(g).connect(AC.destination);o.start(s);o.stop(s+.25)});
+  }catch(e){}
+}
+
+/* ====== 彩帶 ====== */
+const cv=$('fx'),cx=cv.getContext('2d');let parts=[],raf;
+function confetti(n){
+  cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.scale(devicePixelRatio,devicePixelRatio);
+  const cols=['#eb4d00','#ffbf3c','#22b866','#3b82f6','#8b5cf6','#f43f5e'];
+  for(let i=0;i<n;i++)parts.push({x:innerWidth/2,y:innerHeight*.35,vx:(Math.random()-.5)*14,vy:-Math.random()*14-4,r:Math.random()*6+4,c:cols[i%6],a:Math.random()*6,va:(Math.random()-.5)*.4,life:120+Math.random()*60});
+  cancelAnimationFrame(raf);(function loop(){
+    cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);cx.clearRect(0,0,innerWidth,innerHeight);
+    parts=parts.filter(p=>p.life-->0);
+    parts.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;cx.save();cx.translate(p.x,p.y);cx.rotate(p.a);cx.fillStyle=p.c;cx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);cx.restore()});
+    if(parts.length)raf=requestAnimationFrame(loop);else cx.clearRect(0,0,innerWidth,innerHeight);
+  })();
+}
+
+/* ====== 首頁與地圖 ====== */
+$('name').value=S.name||'';
+$('goMap').onclick=()=>{S.name=$('name').value.trim();save();beep('tap');renderMap();show('sMap')};
+$('mapHome').onclick=()=>show('sHome');
+$('sound').onclick=()=>{S.sound=!S.sound;save();$('sound').textContent=S.sound?'🔊':'🔇';beep('tap')};
+$('sound').textContent=S.sound?'🔊':'🔇';
+
+function unlocked(i){return i===0||(S.stars[STAGES[i-1].id]||0)>0}
+function renderMap(){
+  $('hiName').textContent='嗨，'+(S.name||'新同學')+' 👋';
+  $('starTotal').textContent=totalStars();
+  const d=days();$('dayNum').innerHTML=d+'<small>天</small>';
+  requestAnimationFrame(()=>$('dayBar').style.width=(d/28*100)+'%');
+  $('rankNow').textContent=rankOf(d)[1];
+  const p=$('path');p.innerHTML='';
+  let nextMarked=false;
+  STAGES.forEach((s,i)=>{
+    const st=S.stars[s.id]||0,lock=!unlocked(i);
+    const b=document.createElement('button');b.className='stage'+(lock?' locked':'');
+    if(!lock&&!st&&!nextMarked){b.classList.add('next');nextMarked=true}
+    b.innerHTML=`<span class="ic" style="background:${s.color}">${s.icon}</span><span><span class="no">${s.no}</span><span class="tt" style="display:block">${s.title}</span><span class="st" style="display:block">${s.sub}</span></span><span class="stars">${lock?'':'⭐'.repeat(st)+'<span style="opacity:.25">'+'⭐'.repeat(3-st)+'</span>'}</span>`;
+    b.onclick=()=>{if(lock){beep('bad');b.animate([{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'none'}],{duration:300});return}beep('tap');startLearn(i)};
+    p.appendChild(b);
   });
-  var links=[].slice.call(document.querySelectorAll('.side a,#tocList a'));
-  var bar=document.getElementById('bar'), prog=document.getElementById('progress'), now=document.getElementById('now');
-  function onScroll(){
-    var h=document.documentElement, max=h.scrollHeight-h.clientHeight;
-    prog.style.width=(max>0?h.scrollTop/max*100:0)+'%';
-    bar.classList.toggle('scrolled',h.scrollTop>40);
-    var cur=null;
-    secs.forEach(function(s){ if(s.getBoundingClientRect().top<window.innerHeight*0.35) cur=s; });
-    now.textContent=cur?String(secs.indexOf(cur)+1).padStart(2,'0')+'　'+cur.dataset.title:'';
-    links.forEach(function(a){ a.classList.toggle('on',cur&&a.getAttribute('href')==='#'+cur.id); });
-  }
-  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+  const allDone=STAGES.every(s=>(S.stars[s.id]||0)>0);
+  const f=document.createElement('button');f.className='stage final'+(allDone?'':' locked')+(allDone&&!S.best&&!nextMarked?' next':'');
+  f.innerHTML=`<span class="ic" style="background:#fff3d1">🏆</span><span><span class="no">最終挑戰</span><span class="tt" style="display:block">熟成大考</span><span class="st" style="display:block">15 題限時搶答${S.best?' · 最佳 '+S.best+' 分':''}</span></span><span class="stars"></span>`;
+  f.onclick=()=>{if(!allDone){beep('bad');return}beep('tap');startFinal()};
+  p.appendChild(f);
+}
 
-  var toc=document.getElementById('toc');
-  document.getElementById('menuBtn').onclick=function(){toc.classList.add('open');toc.setAttribute('aria-hidden','false');};
-  toc.addEventListener('click',function(e){ if(e.target.dataset.close!==undefined||e.target.closest('#tocList a')){toc.classList.remove('open');toc.setAttribute('aria-hidden','true');} });
+/* ====== 學習卡 ====== */
+let cur=0,card=0;
+function startLearn(i){cur=i;card=0;renderCard();show('sLearn')}
+function renderCard(){
+  const s=STAGES[cur],c=s.cards[card];
+  $('dots').innerHTML=s.cards.map((_,k)=>`<i class="${k<=card?'done':''}"></i>`).join('');
+  let h=`<div class="lcard"><div class="em">${c.em}</div><div class="kick">${c.kick}</div><h3>${c.h}</h3>`;
+  if(c.body)h+=`<div class="body">${c.body}</div>`;
+  if(c.facts)h+=`<div class="facts">${c.facts.map(f=>`<div><span>${f[0]}</span><span><b>${f[1]}</b>${f[2]==='—'?'':f[2]}</span></div>`).join('')}</div>`;
+  if(c.duo)h+=`<div class="duo">${c.duo.map(d=>`<div class="no">${d[0]}</div><div class="ok">${d[1]}</div>`).join('')}</div>`;
+  if(c.post)h+=`<div class="post">${c.post}</div>`;
+  if(c.tip)h+=`<div class="tip">💡 ${c.tip}</div>`;
+  $('lcard').innerHTML=h+'</div>';
+  $('lPrev').style.visibility=card?'visible':'hidden';
+  const last=card===s.cards.length-1;
+  $('lNext').textContent=last?'學會了，開始答題！':'下一張';
+  $('lNext').className='btn'+(last?' gold':'');
+}
+$('lNext').onclick=()=>{beep('tap');const s=STAGES[cur];if(card<s.cards.length-1){card++;renderCard()}else startStageQuiz()};
+$('lPrev').onclick=()=>{if(card){card--;renderCard()}};
+$('learnClose').onclick=()=>{renderMap();show('sMap')};
 
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -8% 0px'});
-    document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-  } else document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in');});
+/* ====== 答題 ====== */
+let Q=[],qi=0,right=0,combo=0,maxCombo=0,score=0,mode='stage',wrongs=[],tmr,tleft,locked=false;
+const CATS={s1:['酿牛是誰','#eb4d00'],s2:['熟成知識','#3b82f6'],s3:['行銷重點','#8b5cf6'],s4:['寫作技巧','#16a34a'],s5:['紅線判斷','#ef4444']};
+function prep(q,sid){
+  if(q.t==='tf')return{...q,sid,opts:[{t:'可以發',k:'👍',ok:q.a===0},{t:'踩雷了',k:'💥',ok:q.a===1}]};
+  return{...q,sid,opts:shuffle(q.o.map((t,k)=>({t,ok:k===0})))};
+}
+function startStageQuiz(){
+  mode='stage';const s=STAGES[cur];
+  Q=shuffle(s.q).slice(0,5).map(q=>prep(q,s.id));
+  begin();
+}
+function startFinal(){
+  mode='final';
+  let pool=[];STAGES.forEach(s=>pool.push(...shuffle(s.q).slice(0,3).map(q=>prep(q,s.id))));
+  Q=shuffle(pool);
+  const c=$('count');c.classList.add('on');let n=3;$('countN').textContent=n;beep('tick');
+  const it=setInterval(()=>{n--;if(n>0){$('countN').textContent=n;$('countN').style.animation='none';void $('countN').offsetWidth;$('countN').style.animation='';beep('tick')}else{clearInterval(it);c.classList.remove('on');begin()}},800);
+}
+function begin(){qi=0;right=0;combo=0;maxCombo=0;score=0;wrongs=[];
+  $('timer').hidden=mode!=='final';$('scoreP').hidden=mode!=='final';$('scoreN').textContent=0;
+  $('combo').textContent='';$('combo').classList.remove('show');
+  show('sQuiz');renderQ()}
+function renderQ(){
+  locked=false;const q=Q[qi];
+  $('qdots').innerHTML=Q.map((_,k)=>`<i class="${k<qi?'done':''}"></i>`).join('');
+  $('qcount').textContent=`第 ${qi+1} / ${Q.length} 題`;
+  const cat=CATS[q.sid];
+  $('qcard').innerHTML=`<span class="cat" style="background:${cat[1]}">${cat[0]}</span><h3>${q.q}</h3>${q.quote?`<div class="quote">「${q.quote}」</div>`:''}`;
+  $('qcard').style.animation='none';void $('qcard').offsetWidth;$('qcard').style.animation='';
+  const o=$('opts');o.className='opts'+(q.t==='tf'?' tf':'');
+  o.innerHTML=q.opts.map((x,k)=>`<button class="opt c${k}" data-k="${k}"><span class="k">${q.t==='tf'?x.k:'ABCD'[k]}</span><span>${x.t}</span></button>`).join('');
+  o.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(+b.dataset.k));
+  if(mode==='final'){clearInterval(tmr);tleft=20;tick();tmr=setInterval(()=>{tleft--;tick();if(tleft<=0){clearInterval(tmr);answer(-1)}},1000)}
+}
+function tick(){$('tnum').textContent=tleft;$('tf').style.strokeDashoffset=138.2*(1-tleft/20);$('timer').classList.toggle('low',tleft<=5);if(tleft<=5&&tleft>0)beep('tick')}
+function answer(k){
+  if(locked)return;locked=true;clearInterval(tmr);
+  const q=Q[qi],btns=[...$('opts').children],ri=q.opts.findIndex(x=>x.ok),ok=k===ri;
+  btns.forEach((b,i)=>{if(i===ri)b.classList.add('right');else if(i===k)b.classList.add('wrong');else b.classList.add('dim')});
+  let pts=0;
+  if(ok){right++;combo++;maxCombo=Math.max(maxCombo,combo);pts=100+(mode==='final'?tleft*5:0)+(combo>1?(combo-1)*20:0);score+=pts;beep('ok');
+    if(combo>=3)confetti(30)}
+  else{combo=0;beep('bad');wrongs.push(q);if(navigator.vibrate)try{navigator.vibrate(120)}catch(e){}}
+  $('scoreN').textContent=score;
+  const cb=$('combo');cb.textContent=combo>1?`🔥 ${combo} 連對`:'';cb.classList.toggle('show',combo>1);
+  const fb=$('fb');fb.classList.toggle('bad',!ok);
+  $('fbT').textContent=ok?['答對了！','太強了！','完全正確！','漂亮！'][Math.random()*4|0]:(k===-1?'時間到！':'差一點點！');
+  $('fbP').textContent='+'+pts;
+  $('fbE').innerHTML=(ok?'':'正確答案：<b>'+q.opts[ri].t+'</b><br>')+q.e;
+  $('fbNext').textContent=qi===Q.length-1?'看結果':'下一題';
+  setTimeout(()=>fb.classList.add('show'),350);
+}
+$('fbNext').onclick=()=>{beep('tap');$('fb').classList.remove('show');qi++;if(qi<Q.length)setTimeout(renderQ,200);else setTimeout(mode==='final'?finalResult:stageResult,250)};
+$('quizClose').onclick=()=>{clearInterval(tmr);$('fb').classList.remove('show');renderMap();show('sMap')};
 
-  function copy(text,flag){
-    var done=function(){var c=document.getElementById(flag);c.hidden=false;setTimeout(function(){c.hidden=true},1800);};
-    if(navigator.clipboard) navigator.clipboard.writeText(text).then(done,function(){});
-  }
-  document.getElementById('copyForm').onclick=function(){
-    var t=[].map.call(document.querySelectorAll('#form .row'),function(r){return '【'+r.lastChild.textContent.trim()+'】';}).join('\n');
-    copy(t,'copied');
-  };
-  document.getElementById('copyPrompt').onclick=function(){copy(document.getElementById('prompt').innerText,'copied2');};
+function reviewHTML(list){
+  if(!list.length)return'';
+  return`<h4>📒 答錯的題目，再看一次</h4>`+list.map(q=>`<div class="it"><div class="q">${q.q}${q.quote?'<br>「'+q.quote+'」':''}</div><div class="a">✓ ${q.opts.find(x=>x.ok).t}</div><div class="e">${q.e}</div></div>`).join('');
+}
+function stageResult(){
+  const s=STAGES[cur],n=Q.length,st=right===n?3:right>=n-1?2:right>=Math.ceil(n/2)?1:0;
+  S.stars[s.id]=Math.max(S.stars[s.id]||0,st);save();
+  $('stEmoji').textContent=st===3?'🎉':st?'👏':'💪';
+  $('stTitle').textContent=st===3?'完美過關！':st?'過關了！':'差一點，再試一次！';
+  $('stSub').innerHTML=`答對 <b style="color:#ffbf3c">${right} / ${n}</b> 題`+(st?'':'<br>答對一半以上就能過關');
+  const ss=[...$('stStars').children];ss.forEach(x=>x.classList.remove('on'));
+  ss.forEach((x,i)=>setTimeout(()=>{if(i<st){x.classList.add('on');beep('ok')}},400+i*300));
+  $('stReview').innerHTML=reviewHTML(wrongs);
+  const isLast=cur===STAGES.length-1;
+  $('stNext').textContent=st?(isLast?'挑戰熟成大考 🏆':'下一關'):'回到地圖';
+  $('stNext').onclick=()=>{beep('tap');if(!st){renderMap();show('sMap')}else if(isLast){renderMap();startFinal()}else{startLearn(cur+1)}};
+  $('stRetry').onclick=()=>{beep('tap');startStageQuiz()};
+  show('sStage');if(st)setTimeout(()=>{confetti(st*40);if(st===3)beep('win')},500);
+}
+function finalResult(){
+  S.best=Math.max(S.best||0,score);save();
+  const n=Q.length,d=Math.round(right/n*28),r=rankOf(d);
+  $('fRight').textContent=right+'/'+n;$('fScore').textContent=score;$('fCombo').textContent=maxCombo;
+  $('fEmoji').textContent=d>=28?'🏆':d>=21?'🥇':d>=14?'🥈':'🥉';
+  $('fTitle').textContent=(S.name?S.name+'，':'')+'熟成大考完成！';
+  $('fSub').textContent=right===n?'全部答對，太厲害了！':'答錯的題目都在下面，看完再挑戰一次吧';
+  $('fLv').textContent='你的熟成等級';$('fRank').textContent=r[1];$('fMsg').textContent=r[2];
+  $('fReview').innerHTML=reviewHTML(wrongs);
+  show('sFinal');setTimeout(()=>{confetti(160);beep('win')},300);
+}
+$('fRetry').onclick=()=>{beep('tap');startFinal()};
+$('fMap').onclick=()=>{renderMap();show('sMap')};
 
-  var boxes=[].slice.call(document.querySelectorAll('#checklist input')), KEY='nn-check';
-  try{var saved=JSON.parse(localStorage.getItem(KEY)||'[]');boxes.forEach(function(b,i){b.checked=!!saved[i];});}catch(e){}
-  function upd(){
-    var c=boxes.filter(function(b){return b.checked;}).length;
-    document.getElementById('count').textContent=c+' / '+boxes.length;
-    document.getElementById('fill').style.width=(c/boxes.length*100)+'%';
-    try{localStorage.setItem(KEY,JSON.stringify(boxes.map(function(b){return b.checked;})));}catch(e){}
-  }
-  boxes.forEach(function(b){b.addEventListener('change',upd);}); upd();
-  document.getElementById('resetCheck').onclick=function(){boxes.forEach(function(b){b.checked=false;});upd();};
-})();
+document.addEventListener('keydown',e=>{
+  if($('sQuiz').classList.contains('on')){
+    if($('fb').classList.contains('show')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();$('fbNext').click()}
+    else if(/^[1-4]$/.test(e.key)){const b=$('opts').children[+e.key-1];if(b)b.click()}
+  }else if($('sLearn').classList.contains('on')){if(e.key==='ArrowRight'||e.key==='Enter')$('lNext').click();if(e.key==='ArrowLeft')$('lPrev').click()}
+});
 </script>
 </body>
 </html>
